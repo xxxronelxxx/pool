@@ -34,11 +34,6 @@ spinner() {
 
 # MESSAGE BOX FUNCTIONS.
 
-# Function to start the Yiimpool installation script
-start_installation() {
-  bash "$HOME/Yiimpoolv2/install/start.sh"
-}
-
 # Function to display messages in a dialog box
 
 message_box() {

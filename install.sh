@@ -17,7 +17,7 @@
 set -e
 
 # Set the default TAG if not provided
-TAG=${TAG:-v0.0.3}
+TAG=${TAG:-v0.0.4}
 
 # Create the yiimpoolversion.conf file
 echo "VERSION=${TAG}" | sudo tee /etc/yiimpoolversion.conf >/dev/null
@@ -57,8 +57,10 @@ update_repo() {
   fi
 }
 
-# Include the functions file
-#source "$HOME/yiimp_install_script/functions.sh"
+# Function to start the Yiimpool installation script
+start_installation() {
+  bash "$HOME/Yiimpoolv2/install/start.sh"
+}
 
 install_git
 clone_repo
