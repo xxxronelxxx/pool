@@ -20,7 +20,7 @@ set -e
 source "$HOME/yiimp_install_script/functions.sh"
 
 # Set the default TAG if not provided
-TAG=${TAG:-v0.0.1}
+TAG=${TAG:-v0.0.2}
 
 # Main script execution
 echo "VERSION=${TAG}" | sudo tee /etc/yiimpoolversion.conf >/dev/null
