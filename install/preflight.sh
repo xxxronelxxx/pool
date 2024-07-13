@@ -32,6 +32,7 @@ esac
 echo -e "${YELLOW}Updating permissions...${COL_RESET}"
 # Update permissions
 sudo chmod g-w /etc /etc/default /usr
+echo -e "${YELLOW}Permissions updated.${COL_RESET}"
 
 echo -e "${YELLOW}Checking swap requirements...${COL_RESET}"
 # Check if swap is needed
@@ -43,7 +44,7 @@ AVAILABLE_DISK_SPACE=$(df / --output=avail | tail -n 1)
 
 if [ -z "$SWAP_MOUNTED" ] && [ -z "$SWAP_IN_FSTAB" ] && [ ! -e /swapfile ] && \
    [ -z "$ROOT_IS_BTRFS" ] && [ "$TOTAL_PHYSICAL_MEM" -lt 1536000 ] && [ "$AVAILABLE_DISK_SPACE" -gt 5242880 ]; then
-  echo "Adding a swap file to the system..."
+  echo -e "${YELLOW}Adding a swap file to the system...${COL_RESET}"
 
   # Allocate and activate the swap file
   sudo fallocate -l 3G /swapfile
@@ -56,17 +57,20 @@ if [ -z "$SWAP_MOUNTED" ] && [ -z "$SWAP_IN_FSTAB" ] && [ ! -e /swapfile ] && \
     # Check if swap is mounted and activate on boot
     if swapon -s | grep -q "\/swapfile"; then
       echo "/swapfile none swap sw 0 0" | sudo tee -a /etc/fstab
+      echo -e "${YELLOW}Swap file successfully added.${COL_RESET}"
     else
-      echo -e "${RED}ERROR: Swap allocation failed${COL_RESET}"
+      echo -e "${RED}ERROR: Swap allocation failed.${COL_RESET}"
     fi
   fi
+else
+  echo -e "${YELLOW}Swap is not needed or already configured.${COL_RESET}"
 fi
 
 echo -e "${YELLOW}Checking system architecture...${COL_RESET}"
 # Check architecture
 ARCHITECTURE=$(uname -m)
 if [ "$ARCHITECTURE" != "x86_64" ]; then
-  echo -e "${RED}Yiimpool Installer only supports x86_64 and will not work on any other architecture, like ARM or 32-bit OS.${COL_RESET}"
+  echo -e "${RED}Yiimpool Installer only supports x86_64 architecture.${COL_RESET}"
   echo "Your architecture is $ARCHITECTURE"
   exit 1
 fi
