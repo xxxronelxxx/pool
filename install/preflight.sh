@@ -14,7 +14,7 @@ echo -e "${YELLOW}Starting preflight checks...${COL_RESET}"
 # Check for supported Ubuntu versions
 DISTRO=""
 case "$(lsb_release -d | sed 's/.*:\s*//')" in
-  "Ubuntu 20.04 LTS" | "Ubuntu 20.04")
+  "Ubuntu 20.04 LTS" | "Ubuntu 20.04" | "Ubuntu 20.04.6 LTS")
     DISTRO=20
     ;;
   "Ubuntu 18.04 LTS" | "Ubuntu 18.04")
