@@ -5,6 +5,7 @@
 # Source https://mailinabox.email/ https://github.com/mail-in-a-box/mailinabox   #
 # Updated by Afiniel for yiimpool use...                                         #
 # Date 2024-07-13                                                                #
+# Update 2024-07-14
 ##################################################################################
 
 source /etc/functions.sh
