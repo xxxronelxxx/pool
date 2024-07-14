@@ -1,14 +1,16 @@
-#!/bin/env bash
+#####################################################
+# Updated by Afiniel for crypto use...
+#####################################################
 
-##################################################################################
-# This is the entry point for configuring the system.                            #
-# Source https://mailinabox.email/ https://github.com/mail-in-a-box/mailinabox   #
-# Updated by Afiniel for yiimpool use...                                         #
-##################################################################################
+FUNC=/etc/daemonbuilder.sh
+MULTISERVER=/etc/multiserver.sh
+if [[ -f "$MULTISERVER" ]]; then
+	source /etc/multiserver.sh
+elif [[ -f "$FUNC" ]]; then
+	source /etc/daemonbuilder.sh
+fi
 
-source /etc/functions.sh
-clear
-echo -e "$YELLOW => Setting our global variables <= $COL_RESET"
+echo -e "$CYAN => Setting our global variables : $COL_RESET"
 
 # If the machine is behind a NAT, inside a VM, etc., it may not know
 # its IP address on the public network / the Internet. Ask the Internet

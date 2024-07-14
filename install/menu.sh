@@ -1,46 +1,34 @@
-#!/usr/bin/env bash
+#!/bin/env bash
 
-################################################################################
-# Yiimpool Menu Script                                                         #
-#                                                                              #
-# Author: Afiniel                                                              #
-# Updated: 2024-07-13                                                          #
-################################################################################
+#
+# This is the main menu
+#
+# Author: Afiniel
+#
+# Updated: 2023-03-16
+#
 
-# Source necessary configuration files and functions
 source /etc/yiimpooldonate.conf
 source /etc/functions.sh
 
-# Display menu using dialog
-RESULT=$(dialog --stdout --nocancel --default-item 1 --title "Yiimpool Menu $VERSION" --menu "Choose an option" -1 55 7 \
+RESULT=$(dialog --stdout --nocancel --default-item 1 --title "YiimPool Menu $VERSION" --menu "Choose an option" -1 55 7 \
     ' ' "- Install Yiimp -" \
-    1 "Install Yiimp Single Server" \
+    1 "Yiimp Single Server" \
     ' ' "- Upgrade Yiimp Stratum -" \
     2 "Upgrade Stratum" \
-    3 "Exit")
+    3 exit)
 
-# Process user selection
-case "$RESULT" in
-    1)
-        clear
-        echo "Installing Yiimp Single Server..."
-        cd "$HOME/yiimpoolv2/yiimp_single"
-        source start.sh
-        ;;
-    2)
-        clear
-        echo "Upgrading Yiimp Stratum..."
-        cd "$HOME/yiimpoolv2/yiimp_upgrade"
-        source start.sh
-        ;;
-    3)
-        clear
-        echo "Exiting Yiimpool Menu."
-        exit 0
-        ;;
-    *)
-        clear
-        echo "Invalid option. Exiting Yiimpool Menu."
-        exit 1
-        ;;
-esac
+if [ "$RESULT" = "1" ]; then
+    clear;
+    cd $HOME/Yiimpoolv2/yiimp_single
+    source start.sh
+
+elif [ "$RESULT" = "2" ]; then
+    clear;
+    cd $HOME/Yiimpoolv2/yiimp_upgrade
+    source start.sh
+
+elif [ "$RESULT" = "3" ]; then
+    clear;
+    exit;
+fi

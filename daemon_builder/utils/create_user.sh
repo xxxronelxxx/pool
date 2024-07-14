@@ -115,14 +115,15 @@ if [[ ("$UsingSSH" == "yes") ]]; then
     PUBLIC_IP='"${PUBLIC_IP}"'
     PUBLIC_IPV6='"${PUBLIC_IPV6}"'
     DISTRO='"${DISTRO}"'
+    VERSION='"$VERSION"'
     PRIVATE_IP='"${PRIVATE_IP}"'' | sudo -E tee /etc/yiimpool.conf >/dev/null 2>&1
 
     # Set Donor Addresses
-    echo 'BTCDON="bc1q582gdvyp09038hp9n5sfdtp0plkx5x3yrhq05y"
+    echo 'BTCDON="BTC: bc1q3k7ag4tf45x60swzuk3djvkelw3xdfkgpjxjm0"
     LTCDON="ltc1qqw7cv4snx9ctmpcf25x26lphqluly4w6m073qw"
     ETHDON="0x50C7d0BF9714dBEcDc1aa6Ab0E72af8e6Ce3b0aB"
     BCHDON="qzz0aff2k0xnwyzg7k9fcxlndtaj4wa65uxteqe84m"
-    DOGEDON="DSzcmyCRi7JeN4XUiV2qYhRQAydNv7A1Yb"' | sudo -E tee /etc/yiimpooldonate.conf >/dev/null 2>&1
+    DOGEDON="D7bjqNwyevTYK9JDZbJPQJXbd1b7PosPDT"' | sudo -E tee /etc/yiimpooldonate.conf >/dev/null 2>&1
 
     sudo cp -r ~/Yiimpoolv2 /home/${yiimpadmin}/
     cd ~
@@ -218,15 +219,15 @@ case $response in
     PUBLIC_IP='"${PUBLIC_IP}"'
     PUBLIC_IPV6='"${PUBLIC_IPV6}"'
     DISTRO='"${DISTRO}"'
-
+    VERSION='"$VERSION"'
     PRIVATE_IP='"${PRIVATE_IP}"'' | sudo -E tee /etc/yiimpool.conf >/dev/null 2>&1
 
     # Set Donor Addresses
-    echo 'BTCDON="bc1q582gdvyp09038hp9n5sfdtp0plkx5x3yrhq05y"
+    echo 'BTCDON="bc1q3k7ag4tf45x60swzuk3djvkelw3xdfkgpjxjm0"
     LTCDON="ltc1qqw7cv4snx9ctmpcf25x26lphqluly4w6m073qw"
     ETHDON="0x50C7d0BF9714dBEcDc1aa6Ab0E72af8e6Ce3b0aB"
     BCHDON="qzz0aff2k0xnwyzg7k9fcxlndtaj4wa65uxteqe84m"
-    DOGEDON="DSzcmyCRi7JeN4XUiV2qYhRQAydNv7A1Yb"' | sudo -E tee /etc/yiimpooldonate.conf >/dev/null 2>&1
+    DOGEDON="D7bjqNwyevTYK9JDZbJPQJXbd1b7PosPDT"' | sudo -E tee /etc/yiimpooldonate.conf >/dev/null 2>&1
 
     sudo cp -r ~/Yiimpoolv2 /home/${yiimpadmin}/
     cd ~
