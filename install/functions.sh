@@ -52,10 +52,16 @@ spinner() {
         # Rotate spinner animation
         spinstr=${spinstr:1}${spinstr:0:1}
         sleep $delay
+
+        # Check if the process has completed
+        if ! ps -p $pid > /dev/null; then
+            break
+        fi
     done
 
     printf "\r                        \r"  # Clear timer, spinner, and ETA
 }
+
 
 
 
