@@ -128,3 +128,37 @@ apt_get_quiet() {
     DEBIAN_FRONTEND=noninteractive hide_output sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confnew" "$@"
 }
 
+get_default_privateip() {
+    # Return the IP address of the network interface connected
+    # to the Internet.
+    #
+    # Pass '4' or '6' as an argument to this function to specify
+    # what type of address to get (IPv4, IPv6).
+
+    # Default target IP address (IPv4)
+    target=8.8.8.8
+
+    # Set target IP address to IPv6 if specified
+    if [ "$1" == "6" ]; then
+        target=2001:4860:4860::8888
+    fi
+
+    # Get the route information using 'ip route get'
+    route=$(ip -$1 -o route get $target 2>/dev/null | grep -v unreachable)
+
+    if [ -n "$route" ]; then
+        # Parse the address out of the route information
+        address=$(echo "$route" | awk '{print $5}')
+
+        if [ "$1" == "6" ] && [[ "$address" == fe80:* ]]; then
+            # For IPv6 link-local addresses, append the interface
+            interface=$(echo "$route" | awk '{print $3}')
+            address="$address%$interface"
+        fi
+
+        echo "$address"
+    else
+        echo "Error: Unable to retrieve IP address." >&2
+        return 1
+    fi
+}
