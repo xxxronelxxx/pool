@@ -44,25 +44,20 @@ if [ ! -d "$STORAGE_ROOT" ]; then
     sudo mkdir -p "$STORAGE_ROOT"
 fi
 
-# Save the global options in /etc/yiimpool.conf
-sudo bash -c "cat <<EOF > /etc/yiimpool.conf
-STORAGE_USER=$STORAGE_USER
-STORAGE_ROOT=$STORAGE_ROOT
-PUBLIC_IP=$PUBLIC_IP
-PUBLIC_IPV6=$PUBLIC_IPV6
-DISTRO=$DISTRO
-FIRST_TIME_SETUP=$FIRST_TIME_SETUP
-PRIVATE_IP=$PRIVATE_IP
-EOF"
+echo 'STORAGE_USER='"${STORAGE_USER}"'
+STORAGE_ROOT='"${STORAGE_ROOT}"'
+PUBLIC_IP='"${PUBLIC_IP}"'
+PUBLIC_IPV6='"${PUBLIC_IPV6}"'
+DISTRO='"${DISTRO}"'
+FIRST_TIME_SETUP='"${FIRST_TIME_SETUP}"'
+PRIVATE_IP='"${PRIVATE_IP}"'' | sudo -E tee /etc/yiimpool.conf >/dev/null 2>&1
 
-# Set Donor Addresses
-sudo bash -c "cat <<EOF > /etc/yiimpooldonate.conf
-BTCDON=\"bc1qc4qqz8eu5j7u8pxfrfvv8nmcka7whhm225a3f9\"
-LTCDON=\"ltc1qma2lgr2mgmtu7sn6pzddaeac9d84chjjpatpzm\"
-ETHDON=\"0xdA929d4f03e1009Fc031210DDE03bC40ea66D044\"
-BCHDON=\"qpse55j0kg0txz0zyx8nsrv3pvd039c09ypplsfn87\"
-DOGEDON=\"DFPg3VnH4kTbWiejpwsXvq1sP9qbuwYe6Z\"
-EOF"
+# Setting Donor Addresses
+    echo 'BTCDON="bc1qc4qqz8eu5j7u8pxfrfvv8nmcka7whhm225a3f9"
+    LTCDON="ltc1qma2lgr2mgmtu7sn6pzddaeac9d84chjjpatpzm"
+    ETHDON="0xdA929d4f03e1009Fc031210DDE03bC40ea66D044"
+    BCHDON="qpse55j0kg0txz0zyx8nsrv3pvd039c09ypplsfn87"
+    DOGEDON="DFPg3VnH4kTbWiejpwsXvq1sP9qbuwYe6Z"' | sudo tee /etc/yiimpooldonate.conf >/dev/null || { echo "Failed to create /etc/yiimpooldonate.conf"; exit 1; }
 
 # Set file access control lists (ACLs)
 sudo setfacl -m u:"$current_user":rwx /home/"$current_user"/yiimpoolv2

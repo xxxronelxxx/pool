@@ -99,7 +99,7 @@ if [[ "$UsingSSH" == "yes" ]]; then
     sudo chmod +x /usr/bin/yiimpool || { echo "Failed to set execute permission on yiimpool command"; exit 1; }
 
     # Checking required files and setting global variables
-    cd "$HOME/Yiimpoolv2/install" || { echo "Failed to change directory to $HOME/Yiimpoolv2/install"; exit 1; }
+    cd "$HOME/Yiimpoolv2v2/install" || { echo "Failed to change directory to $HOME/Yiimpoolv2v2/install"; exit 1; }
     source pre_setup.sh || { echo "Failed to source pre_setup.sh"; exit 1; }
 
     # Creating STORAGE_USER and STORAGE_ROOT directories if they don't exist
@@ -116,7 +116,7 @@ if [[ "$UsingSSH" == "yes" ]]; then
     PUBLIC_IP='"${PUBLIC_IP}"'
     PUBLIC_IPV6='"${PUBLIC_IPV6}"'
     DISTRO='"${DISTRO}"'
-    PRIVATE_IP='"${PRIVATE_IP}"'' | sudo tee /etc/yiimpool.conf >/dev/null || { echo "Failed to create /etc/yiimpool.conf"; exit 1; }
+    PRIVATE_IP='"${PRIVATE_IP}"'' | sudo -E tee /etc/yiimpool.conf >/dev/null 2>&1
 
     # Setting Donor Addresses
     echo 'BTCDON="bc1qc4qqz8eu5j7u8pxfrfvv8nmcka7whhm225a3f9"
@@ -129,7 +129,7 @@ if [[ "$UsingSSH" == "yes" ]]; then
     sudo cp -r ~/Yiimpoolv2 /home/${yiimpadmin}/ || { echo "Failed to copy Yiimpoolv2 to /home/${yiimpadmin}/"; exit 1; }
     cd ~ || { echo "Failed to change directory to home"; exit 1; }
     sudo setfacl -m u:${yiimpadmin}:rwx /home/${yiimpadmin}/Yiimpoolv2 || { echo "Failed to set ACL for ${yiimpadmin}"; exit 1; }
-    sudo rm -r "$HOME/yiimpool" || { echo "Failed to remove $HOME/yiimpool"; exit 1; }
+    sudo rm -r "$HOME/Yiimpoolv2" || { echo "Failed to remove $HOME/Yiimpoolv2"; exit 1; }
     
     clear
     echo
@@ -212,7 +212,7 @@ case $response in
     sudo chmod +x /usr/bin/yiimpool || { echo "Failed to set execute permission on yiimpool command"; exit 1; }
 
     # Checking required files and setting global variables
-    cd "$HOME/Yiimpoolv2/install" || { echo "Failed to change directory to $HOME/Yiimpoolv2/install"; exit 1; }
+    cd "$HOME/Yiimpoolv2v2/install" || { echo "Failed to change directory to $HOME/Yiimpoolv2v2/install"; exit 1; }
     source pre_setup.sh || { echo "Failed to source pre_setup.sh"; exit 1; }
 
     # Creating STORAGE_USER and STORAGE_ROOT directories if they don't exist
@@ -223,13 +223,12 @@ case $response in
         sudo mkdir -p "$STORAGE_ROOT" || { echo "Failed to create storage root directory $STORAGE_ROOT"; exit 1; }
     fi
 
-    # Saving global options in /etc/yiimpool.conf
     echo 'STORAGE_USER='"${STORAGE_USER}"'
     STORAGE_ROOT='"${STORAGE_ROOT}"'
     PUBLIC_IP='"${PUBLIC_IP}"'
     PUBLIC_IPV6='"${PUBLIC_IPV6}"'
     DISTRO='"${DISTRO}"'
-    PRIVATE_IP='"${PRIVATE_IP}"'' | sudo tee /etc/yiimpool.conf >/dev/null || { echo "Failed to create /etc/yiimpool.conf"; exit 1; }
+    PRIVATE_IP='"${PRIVATE_IP}"'' | sudo -E tee /etc/yiimpool.conf >/dev/null 2>&1
 
     # Setting Donor Addresses
     echo 'BTCDON="bc1qc4qqz8eu5j7u8pxfrfvv8nmcka7whhm225a3f9"
@@ -242,7 +241,7 @@ case $response in
     sudo cp -r ~/Yiimpoolv2 /home/${yiimpadmin}/ || { echo "Failed to copy Yiimpoolv2 to /home/${yiimpadmin}/"; exit 1; }
     cd ~ || { echo "Failed to change directory to home"; exit 1; }
     sudo setfacl -m u:${yiimpadmin}:rwx /home/${yiimpadmin}/Yiimpoolv2 || { echo "Failed to set ACL for ${yiimpadmin}"; exit 1; }
-    sudo rm -r "$HOME/Yiimpoolv2" || { echo "Failed to remove $HOME/Yiimpoolv2"; exit 1; }
+    sudo rm -r "$HOME/Yiimpoolv2v2" || { echo "Failed to remove $HOME/Yiimpoolv2v2"; exit 1; }
     
     clear
     echo

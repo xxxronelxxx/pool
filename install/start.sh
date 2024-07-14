@@ -12,7 +12,7 @@ set -e
 # Recall the last settings used if we're running this a second time.
 if [ -f /etc/yiimpool.conf ]; then
     # Load the old .conf file to get existing configuration options loaded into variables with a DEFAULT_ prefix.
-    sed 's/^/DEFAULT_/' /etc/yiimpool.conf >/tmp/yiimpool.prev.conf
+    cat /etc/yiimpool.conf | sed s/^/DEFAULT_/ >/tmp/yiimpool.prev.conf
     source /tmp/yiimpool.prev.conf
     source /etc/yiimpooldonate.conf
     source /etc/yiimpoolversion.conf
@@ -55,7 +55,7 @@ if [[ "$FIRST_TIME_SETUP" == "1" ]]; then
     if [[ $EUID -ne 0 ]]; then
         # Welcome message for non-root user
         message_box "YiimpoolV2 Installer $VERSION" \
-        "Welcome to the Yiimpool Installer!
+        "Welcome to the YiimpoolV2 Installer!
         \n\nThis installer will guide you through the setup of Yiimpool, an open-source cryptocurrency mining pool server.
         \n\nThe installation process is mostly automated and will require minimal input from you. Ensure that you are installing on a fresh Ubuntu 20.04, 18.04, or 16.04 system.
         \n\nNOTE: Root privileges are required for installation. Please re-run the script as root if you encounter any permission issues."
