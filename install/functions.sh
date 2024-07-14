@@ -128,6 +128,17 @@ apt_get_quiet() {
     DEBIAN_FRONTEND=noninteractive hide_output sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confnew" "$@"
 }
 
+function get_publicip_from_web_service {
+	# This seems to be the most reliable way to determine the
+	# machine's public IP address: asking a very nice web API
+	# for how they see us. Thanks go out to icanhazip.com.
+	# See: https://major.io/icanhazip-com-faq/
+	#
+	# Pass '4' or '6' as an argument to this function to specify
+	# what type of address to get (IPv4, IPv6).
+	curl -$1 --fail --silent --max-time 15 icanhazip.com 2>/dev/null
+}
+
 get_default_privateip() {
     # Return the IP address of the network interface connected
     # to the Internet.
