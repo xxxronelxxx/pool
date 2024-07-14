@@ -26,10 +26,9 @@ fi
 # Define MariaDB version
 MARIADB_VERSION='10.4'
 
-echo -e "$MAGENTA    <----------------------------->${NC}"
-echo -e "$MAGENTA     <--$YELLOW Installing MariaDB$MAGENTA $MARIADB_VERSION -->${NC}"
-echo -e "$MAGENTA    <----------------------------->${NC}"
 echo
+echo -e "$MAGENTA     <--$YELLOW Installing MariaDB$MAGENTA $MARIADB_VERSION -->${NC}"
+echo 
 # Set MariaDB root password for installation
 sudo debconf-set-selections <<<"maria-db-$MARIADB_VERSION mysql-server/root_password password $DBRootPassword"
 sudo debconf-set-selections <<<"maria-db-$MARIADB_VERSION mysql-server/root_password_again password $DBRootPassword"

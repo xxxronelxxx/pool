@@ -36,8 +36,8 @@ sleep 1
 sudo sed -i 's#versiontag#'$TAG'#' conf/daemonbuilder.sh
 sleep 1
 
-sudo sed -i 's#distroserver#'$DISTRO'#' conf/daemonbuilder.sh
-sleep 1
+#sudo sed -i 's#distroserver#'$DISTRO'#' conf/daemonbuilder.sh
+#sleep 1
 
 source /etc/yiimpoolversion.conf
 source /etc/functions.sh

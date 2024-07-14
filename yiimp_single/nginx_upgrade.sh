@@ -19,15 +19,15 @@ function print_error {
 }
 trap print_error ERR
 term_art
-echo -e "$MAGENTA <----------------------------------> ${NC}"
+echo 
 echo -e "$MAGENTA Database$YELLOW build and tweak$GREEN completed ${NC}"
-echo -e "$MAGENTA <----------------------------------> ${NC}"
+echo 
 echo -e "$GREEN Passwords can be found in$RED $STORAGE_ROOT/yiimp/.my.cnf ${NC} ${NC}"
 
 if [[ ("$wireguard" == "true") ]]; then
 source $STORAGE_ROOT/yiimp/.wireguard.conf
 fi
-
+echo
 # NGINX upgrade TODO: CLEAN UP
 echo -e "$YELLOW => Upgrading NGINX  <= ${NC}"
 

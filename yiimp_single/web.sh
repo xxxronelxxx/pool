@@ -23,9 +23,9 @@ if [[ ("$wireguard" == "true") ]]; then
   source $STORAGE_ROOT/yiimp/.wireguard.conf
 fi
 
-echo -e "$MAGENTA    <--------------------------------------------------->${NC}"
-echo -e "$MAGENTA     <--$YELLOW Building web file structure and copying files$MAGENTA -->${NC}"
-echo -e "$MAGENTA    <--------------------------------------------------->${NC}"
+echo
+echo -e "$YELLOW Building web file structure and copying files${NC}"
+echo
 echo
 echo -e "$CYAN => Building web file structure and copying files <= ${NC}"
 

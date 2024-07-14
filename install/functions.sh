@@ -12,7 +12,7 @@ source /etc/yiimpoolversion.conf
 absolutepath=absolutepathserver
 installtoserver=installpath
 daemonname=daemonnameserver
-DISTRO=distroserver
+#DISTRO=distroserver
 
 ESC_SEQ="\x1b["
 NC=${NC:-"\033[0m"} # No Color
