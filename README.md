@@ -4,6 +4,6 @@
 <h4 align="left">To install:</h4>
 
 ```
-curl https://raw.githubusercontent.com/afiniel/yiimpoolv2/master/install.sh | bash
+curl https://raw.githubusercontent.com/afiniel/yiimpoolv2/master/install.sh | sudo bash
 
 ```

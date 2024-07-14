@@ -1,18 +1,20 @@
 #!/usr/bin/env bash
 
 ##################################################################################
-# PreSetup script for configuring the system for Yiimpool.                      #
+# PreSetup script for configuring the system for Yiimpool.                       #
 #                                                                                #
 # Author: Afiniel                                                                #
 # Date: 2024-07-14                                                               #
 ##################################################################################
 
-source /etc/functions.sh
+# Source helper functions
+source /etc/functions.sh || { echo "${YELLOW}Failed to source /etc/functions.sh${NC}"; exit 1; }
+
 clear
 
-echo -e "$YELLOW => Setting our global variables <= $NC"
+echo -e "${YELLOW}=> Setting our global variables <=${NC}"
 
-# If PUBLIC_IP variable is not set, attempt to guess or ask the user
+# Set PUBLIC_IP if not already set
 if [ -z "${PUBLIC_IP:-}" ]; then
     GUESSED_IP=$(get_publicip_from_web_service 4)
 
@@ -35,7 +37,7 @@ if [ -z "${PUBLIC_IP:-}" ]; then
     fi
 fi
 
-# Similar process for IPv6
+# Set PUBLIC_IPV6 if not already set
 if [ -z "${PUBLIC_IPV6:-}" ]; then
     GUESSED_IP=$(get_publicip_from_web_service 6)
     MATCHED=0
