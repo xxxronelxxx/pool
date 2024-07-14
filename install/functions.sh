@@ -15,7 +15,7 @@ daemonname=daemonnameserver
 DISTRO=distroserver
 
 ESC_SEQ="\x1b["
-COL_RESET=$ESC_SEQ"39;49;00m"
+NC=${NC:-"\033[0m"} # No Color
 RED=$ESC_SEQ"31;01m"
 GREEN=$ESC_SEQ"32;01m"
 YELLOW=$ESC_SEQ"33;01m"
