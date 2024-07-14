@@ -13,7 +13,7 @@ else
 sudo git clone ${YiiMPRepo} $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
 fi
 
-echo -e "$CYAN Updating Stratum... $COL_RESET"
+echo -e "$CYAN Updating Stratum... ${NC}"
 
 # Compil Stratum
 cd /home/crypto-data/yiimp/yiimp_setup/yiimp/stratum
@@ -35,5 +35,5 @@ sudo mv stratum $STORAGE_ROOT/yiimp/site/stratum
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/web/yaamp/core/functions/
 cp -r yaamp.php $STORAGE_ROOT/yiimp/site/web/yaamp/core/functions
 
-echo -e "$YELLOW Stratum build$GREEN complete... $COL_RESET"
+echo -e "$YELLOW Stratum build$GREEN complete... ${NC}"
 cd $HOME/Yiimpoolv2/yiimp_upgrade

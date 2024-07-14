@@ -10,7 +10,7 @@ elif [[ -f "$FUNC" ]]; then
 	source /etc/daemonbuilder.sh
 fi
 
-echo -e "$CYAN => Setting our global variables : $COL_RESET"
+echo -e "$CYAN => Setting our global variables : ${NC}"
 
 # If the machine is behind a NAT, inside a VM, etc., it may not know
 # its IP address on the public network / the Internet. Ask the Internet

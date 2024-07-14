@@ -13,7 +13,7 @@ else
 hide_output sudo git clone ${YiiMPRepo} $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
 fi
 
-echo -e "$YELLOW Upgrading stratum... $COL_RESET"
+echo -e "$YELLOW Upgrading stratum... ${NC}"
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/stratum/iniparser
 hide_output make -j$((`nproc`+1))
 

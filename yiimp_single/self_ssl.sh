@@ -24,9 +24,9 @@ print_error() {
 trap print_error ERR
 
 term_art
-echo -e "$MAGENTA    <-------------------------------------->$COL_RESET"
-echo -e "$MAGENTA     <--$YELLOW Creating initial SSL certificate$MAGENTA -->$COL_RESET"
-echo -e "$MAGENTA    <-------------------------------------->$COL_RESET"
+echo -e "$MAGENTA    <-------------------------------------->${NC}"
+echo -e "$MAGENTA     <--$YELLOW Creating initial SSL certificate$MAGENTA -->${NC}"
+echo -e "$MAGENTA    <-------------------------------------->${NC}"
 
 # Install OpenSSL
 apt_install openssl
@@ -60,5 +60,5 @@ if [ ! -f /etc/nginx/dhparam.pem ]; then
   hide_output sudo openssl dhparam -out /etc/nginx/dhparam.pem 2048
 fi
 
-echo -e "$GREEN => Initial self-signed SSL generation complete <= $COL_RESET"
+echo -e "$GREEN => Initial self-signed SSL generation complete <= ${NC}"
 cd "$HOME/Yiimpoolv2/yiimp_single"

@@ -22,7 +22,7 @@ if [[ ("$wireguard" == "true") ]]; then
 source $STORAGE_ROOT/yiimp/.wireguard.conf
 fi
 
-echo -e "$YELLOW => Installing mail system  <= $COL_RESET"
+echo -e "$YELLOW => Installing mail system  <= ${NC}"
 
 apt_install postfix 
 apt_install mailutils
@@ -47,6 +47,6 @@ sudo sed -i '/root:/a '$whoami':     '${SupportEmail}'' /etc/aliases
 sudo newaliases
 
 sudo adduser $whoami mail
-echo -e "$GREEN Mail system complete $COL_RESET"
+echo -e "$GREEN Mail system complete ${NC}"
 set +eu +o pipefail
 cd $HOME/Yiimpoolv2/yiimp_single

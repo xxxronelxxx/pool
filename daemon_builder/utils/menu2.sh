@@ -12,7 +12,7 @@ clear
 
 sudo addport
 
-echo -e "$CYAN --------------------------------------------------------------------------- 	$COL_RESET"
-echo -e "$RED    Type ${daemonname} at anytime to Add Port & run Stratum				$COL_RESET"
-echo -e "$CYAN --------------------------------------------------------------------------- 	$COL_RESET"
+echo -e "$CYAN --------------------------------------------------------------------------- 	${NC}"
+echo -e "$RED    Type ${daemonname} at anytime to Add Port & run Stratum				${NC}"
+echo -e "$CYAN --------------------------------------------------------------------------- 	${NC}"
 exit

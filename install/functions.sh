@@ -23,30 +23,48 @@ BLUE=$ESC_SEQ"34;01m"
 MAGENTA=$ESC_SEQ"35;01m"
 CYAN=$ESC_SEQ"36;01m"
 
-function spinner {
+spinner() {
     local pid=$!
-    local delay=0.35
+    local delay=0.1
     local spinstr='|/-\'
-    while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
-        local temp=${spinstr#?}
-        printf " [%c]  " "$spinstr"
-        local spinstr=$temp${spinstr%"$temp"}
-        sleep $delay
-        printf "\b\b\b\b\b\b"
-    done
-    printf "    \b\b\b\b"
-}
+    local start_time=$(date +%s)
+    local SECONDS=0  # Initialize timer
+    local total_seconds=300  # Example total duration of the process in seconds (adjust as needed)
 
-function spinning_timer() {
-  animation=( ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏ )
-  end=$((SECONDS+NUM))
-  while [ $SECONDS -lt $end ]; do
-    for i in "${animation[@]}"; do
-      echo -ne "${RED}\r$i ${CYAN}${MSG1}${NC}"
-      sleep 0.1
+    while ps -p $pid > /dev/null; do
+        local current_time=$(date +%s)
+        local elapsed_seconds=$((current_time - start_time))
+        
+        # Calculate progress percentage
+        local progress=$(( (elapsed_seconds * 100) / total_seconds ))
+        if [ $progress -gt 100 ]; then
+            progress=100
+        fi
+        
+        local remaining_seconds=$(( total_seconds - elapsed_seconds ))
+        
+        local hours=$((remaining_seconds / 3600))
+        local minutes=$(( (remaining_seconds % 3600) / 60 ))
+        local seconds=$((remaining_seconds % 60))
+
+        # Print elapsed time and estimated time remaining (ETA)
+        printf "\r[Elapsed: %02d:%02d:%02d] [ETA: %02d:%02d:%02d] [%c] %d%%" \
+            $((elapsed_seconds / 3600)) $(( (elapsed_seconds % 3600) / 60 )) $((elapsed_seconds % 60)) \
+            $hours $minutes $seconds \
+            "${spinstr:0:1}" \
+            $progress
+
+        # Rotate spinner animation
+        spinstr=${spinstr:1}${spinstr:0:1}
+        sleep $delay
+
+        # Check if the process has completed
+        if ! ps -p $pid > /dev/null; then
+            break
+        fi
     done
-  done
-  echo -e "${MSG2}"
+
+    printf "\r                        \r"  # Clear timer, spinner, and ETA
 }
 
 # Database functions
@@ -54,7 +72,7 @@ function database_import_sql {
 
 	# Import Database from SQL files
 	sleep 1
-	echo -e "$CYAN Importing Database from SQL files <= $COL_RESET"
+	echo -e "$CYAN Importing Database from SQL files <= ${NC}"
 
 	echo
 	cd ~
@@ -87,58 +105,99 @@ function database_import_sql {
     sudo mysql --defaults-group-suffix=host1 --force < 2022-10-14-shares_solo.sql
     sudo mysql --defaults-group-suffix=host1 --force < 2022-10-29-blocks_effort.sql
 
-	echo -e "$GREEN Database imported successfully!$COL_RESET"
+	echo -e "$GREEN Database imported successfully!${NC}"
 
 }
 
 # terminal art end screen.
 
-function install_end_message {
+function install_end_message() {
 
-	clear
-	echo
-	figlet -f slant -w 100 "Complete!"
+  clear
 
-	echo -e "$CYAN  --------------------------------------------------------------------------- 	  		$COL_RESET"
-	echo -e "$YELLOW  | Version:$GREEN $VERSION                                                 |				$COL_RESET"
-	echo -e "$YELLOW Yiimp Installer Script Fork By Afiniel https://github.com/afiniel/Yiimpoolv2 $COL_RESET"
-	echo -e "$CYAN  --------------------------------------------------------------------------- 	  		$COL_RESET"
-	echo -e "$YELLOW   Your mysql information (login/Password) is saved in:$RED ~/.my.cnf					$COL_RESET"
-	echo -e "$CYAN  ---------------------------------------------------------------------------	  	  		$COL_RESET"
-	echo -e "$YELLOW   Your pool  at :$CYAN http://"$server_name" 									  		$COL_RESET"
-	echo -e "$YELLOW   Admin area at :$CYAN http://"$server_name"/site/AdminPanel					  		$COL_RESET"
-	echo -e "$YELLOW   phpMyAdmin at :$CYAN http://"$server_name"/phpmyadmin 						  		$COL_RESET"
-	echo -e "$CYAN  --------------------------------------------------------------------------- 	  		$COL_RESET"
-	echo -e "$YELLOW   If you want change$RED $admin_panel $YELLOW edit SiteController.php:			  		$COL_RESET"
-	echo -e "$RED   /var/web/yaamp/modules/site/SiteController.php 									  		$COL_RESET"
-	echo -e "$YELLOW   Line 11 => change it to your preference. 									  		$COL_RESET"
-	echo -e "$CYAN  --------------------------------------------------------------------------- 	  		$COL_RESET"
-	echo -e "$YELLOW  Please make sure to change your$RED public keys and your wallet addresses in:  		$COL_RESET"
-	echo -e "$RED   /var/web/serverconfig.php		 												  		$COL_RESET"
-	echo -e "$YELLOW  Please make sure to change your private keys in the$RED /etc/yiimp/keys.php$YELLOW file.$COL_RESET"
-	echo -e "$CYAN  -----------------------------------------------------------------------------  	  		$COL_RESET"
-	echo -e "$YELLOW |  YOU MUST$RED REBOOT$YELLOW NOW  TO FINALIZE INSTALLATION Thanks you! |		  		$COL_RESET"
-	echo -e "$CYAN  -----------------------------------------------------------   			    	  		$COL_RESET"
-	echo
+  # Define color codes (avoid hardcoding in the function)
+  RED='\033[0;31m'
+  GREEN='\033[0;32m'
+  YELLOW='\033[0;33m'
+  BOLD_YELLOW='\033[1;33m'
+  CYAN='\033[0;36m'
+  BOLD_CYAN='\033[1;36m'
+  NC='\033[0m'  # Reset color
+
+  echo "Yiimp Installation Complete!"
+  echo
+
+  figlet -f slant -w 100 "Success"
+
+  echo -e "${BOLD_GREEN}**Yiimp Version:**${NC} $VERSION"
+  echo
+
+  echo -e "${BOLD_CYAN}**Database Information:**${NC}"
+  echo "  - Login credentials are saved securely in ~/.my.cnf"
+  echo
+
+  echo -e "${BOLD_CYAN}**Pool and Admin Panel Access:**${NC}"
+  echo "  - Pool: http://$server_name"
+  echo "  - Admin Panel: http://$server_name/site/AdminPanel"
+  echo "  - phpMyAdmin: http://$server_name/phpmyadmin"
+  echo
+
+  echo -e "${BOLD_CYAN}**Customization:**${NC}"
+  echo "  - To modify the admin panel URL (currently set to '$admin_panel'):"
+  echo "    - Edit ${BOLD_YELLOW}/var/web/yaamp/modules/site/SiteController.php${NC}"
+  echo "    - Update line 11 with your desired URL"
+  echo
+
+  echo -e "${BOLD_CYAN}**Security Reminders:**${NC}"
+  echo "  - Update public keys and wallet addresses in ${BOLD_YELLOW}/var/web/serverconfig.php${NC}"
+  echo "  - Replace placeholder private keys in ${BOLD_YELLOW}/etc/yiimp/keys.php${NC} with your actual keys"
+  echo "    - ${RED}Never share your private keys with anyone!${NC}"
+  echo
+
+  echo -e "${BOLD_YELLOW}**Next Steps:**${NC}"
+  echo "  1. Reboot your server to finalize the installation process. ( ${RED}reboot${NC} )"
+  echo "  2. Secure your installation by following best practices for server security."
+  echo
+
+  echo "Thank you for using the Yiimp Installer Script Fork by Afiniel!"
+
 }
 
 # terminal art start screen.
-function term_art {
-	clear
-	source /etc/functions.sh
-	source /etc/yiimpool.conf
-	echo
-	figlet -f slant -w 100 "YiimpooL" | lolcat
-	echo -e "$CYAN   ----------------------------------------------------------> 	  											$COL_RESET"
-	echo -e "$CYAN  |$YELLOW Yiimp Installer Script Fork By Afiniel!												$COL_RESET"
-	echo -e "$CYAN  |$MAGENTA Version:$GREEN $VERSION 														$COL_RESET"
-	echo -e "$CYAN   ----------------------------------------------------------------------> 	  			$COL_RESET"
-	echo -e "$CYAN  |$YELLOW This script will install all the dependencies and will install Yiimp.					$COL_RESET"
-	echo -e "$CYAN  |$YELLOW It will also install a MySQL database and a Web server.								$COL_RESET"
-	echo -e "$CYAN  |$YELLOW MariaDB is used for the database.														$COL_RESET"
-	echo -e "$CYAN  |$YELLOW Nginx is used for the Web server, PHP 7.3 is also installed.							$COL_RESET"
-	echo -e "$CYAN   ----------------------------------------------------------------------> 	  			$COL_RESET"
-	echo
+function term_art() {
+
+  clear
+
+  # Define color codes (assuming they are not already defined)
+  RED='\033[0;31m'
+  GREEN='\033[0;32m'
+  YELLOW='\033[0;33m'
+  BOLD_YELLOW='\033[1;33m'
+  CYAN='\033[0;36m'
+  BOLD_CYAN='\033[1;36m'
+  NC='\033[0m'  # Reset color
+
+  # Centered text with dashes for a modern border
+  num_cols=$(tput cols)
+  num_spaces=$(( (num_cols - 16) / 2 ))
+  spaces=$(printf "%*s" "$num_spaces")
+
+  echo -e "${BOLD_YELLOW}${spaces}╔══════════════════════╗${NC}"
+  echo -e "${BOLD_YELLOW}${spaces}║  Yiimp Installer Script  ║${NC}"
+  echo -e "${BOLD_YELLOW}${spaces}║${BOLD_CYAN}        Fork By Afiniel!${BOLD_YELLOW} ║${NC}"
+  echo -e "${BOLD_YELLOW}${spaces}╚══════════════════════╝${NC}"
+  echo
+
+  echo
+  echo -e "${BOLD_YELLOW}                       Welcome to the Yiimp Installer!${NC}"
+  echo
+  echo -e "${BOLD_YELLOW}  This script will install all dependencies and Yiimp for you, including:"
+  echo -e "${BOLD_YELLOW}    - MySQL for database management"
+  echo -e "${BOLD_YELLOW}    - Nginx web server with PHP for Yiimp operation"
+  echo -e "${BOLD_YELLOW}    - MariaDB as the database backend"
+  echo
+  echo -e "${BOLD_YELLOW}  **Version:** ${GREEN}$VERSION${NC}"
+  echo
 
 }
 
@@ -147,16 +206,16 @@ function term_yiimpool {
 	source /etc/functions.sh
 	source /etc/yiimpool.conf
 	figlet -f slant -w 100 "YiimpooL" | lolcat
-	echo -e "$CYAN   -----------------|--------------------- 	  											$COL_RESET"
-	echo -e "$YELLOW  Yiimp Installer Script Fork By Afiniel!												$COL_RESET"
-	echo -e "$YELLOW  Version:$COL_RESET $GREEN $VERSION 											$COL_RESET"
-	echo -e "$CYAN   -----------------|--------------------- 	  			$COL_RESET"
+	echo -e "$CYAN   -----------------|--------------------- 	  											${NC}"
+	echo -e "$YELLOW  Yiimp Installer Script Fork By Afiniel!												${NC}"
+	echo -e "$YELLOW  Version:${NC} $GREEN $VERSION 											${NC}"
+	echo -e "$CYAN   -----------------|--------------------- 	  			${NC}"
 	echo
 
 }
 
 function daemonbuiler_files {
-	echo -e "$YELLOW Copy => Copy Daemonbuilder files.  <= $COL_RESET"
+	echo -e "$YELLOW Copy => Copy Daemonbuilder files.  <= ${NC}"
 	cd $HOME/Yiimpoolv2
 	sudo mkdir -p /etc/utils/daemon_builder
 	sudo cp -r utils/start.sh $HOME/utils/daemon_builder
@@ -177,47 +236,56 @@ function daemonbuiler_files {
 	' | sudo -E tee /usr/bin/daemonbuilder >/dev/null 2>&1
 	sudo chmod +x /usr/bin/daemonbuilder
 	echo
-	echo -e "$GREEN => Complete$COL_RESET"
+	echo -e "$GREEN => Complete${NC}"
 	sleep 2
 }
 
-function hide_output {
-	OUTPUT=$(tempfile)
-	$@ &>$OUTPUT &
-	spinner
-	E=$?
-	if [ $E != 0 ]; then
-		echo
-		echo FAILED: $@
-		echo -----------------------------------------
-		cat $OUTPUT
-		echo -----------------------------------------
-		exit $E
-	fi
+hide_output() {
+    local OUTPUT=$(mktemp)
+    $@ &>$OUTPUT &
+    local pid=$!
 
-	rm -f $OUTPUT
+    # Run spinner function in the background
+    spinner $pid
+
+    local E=$?
+    wait $pid # Wait for the background process to finish
+    local exit_status=$?
+
+    if [ $exit_status != 0 ]; then
+        echo " "
+        echo "FAILED: $@"
+        echo "-----------------------------------------"
+        cat $OUTPUT
+        echo "-----------------------------------------"
+        rm -f $OUTPUT
+        exit $exit_status
+    fi
+
+    rm -f $OUTPUT
 }
+
 
 function last_words {
 	echo "<-------------------------------------|---------------------------------------->"
 	echo
-	echo -e "$YELLOW Thank you for using the Yiimpool Installer $GREEN $VERSION             $COL_RESET"
+	echo -e "$YELLOW Thank you for using the Yiimpool Installer $GREEN $VERSION             ${NC}"
 	echo
-	echo -e "$YELLOW To run this installer anytime simply type: $GREEN yiimpool            $COL_RESET"
-	echo -e "$YELLOW Donations for continued support of this script are welcomed at:       $COL_RESET"
+	echo -e "$YELLOW To run this installer anytime simply type: $GREEN yiimpool            ${NC}"
+	echo -e "$YELLOW Donations for continued support of this script are welcomed at:       ${NC}"
 	echo "<-------------------------------------|--------------------------------------->"
-	echo -e "$YELLOW                     Donate Wallets:                                   $COL_RESET"
+	echo -e "$YELLOW                     Donate Wallets:                                   ${NC}"
 	echo "<-------------------------------------|--------------------------------------->"
-	echo -e "$YELLOW Thank you for using Yiimp Install Script $VERSION fork by Afiniel!      $COL_RESET"
+	echo -e "$YELLOW Thank you for using Yiimp Install Script $VERSION fork by Afiniel!      ${NC}"
 	echo
-	echo -e "$YELLOW =>  To run this installer anytime simply type:$GREEN yiimpool         $COL_RESET"
-	echo -e "$YELLOW =>  Do you want to support me? Feel free to use wallets below:        $COL_RESET"
+	echo -e "$YELLOW =>  To run this installer anytime simply type:$GREEN yiimpool         ${NC}"
+	echo -e "$YELLOW =>  Do you want to support me? Feel free to use wallets below:        ${NC}"
 	echo "<-------------------------------------|--------------------------------------->"
-	echo -e "$YELLOW =>  BTC:$GREEN $BTCDON                                   		 $COL_RESET"
-	echo -e "$YELLOW =>  BCH:$GREEN $BCHDON                                   		 $COL_RESET"
-	echo -e "$YELLOW =>  ETH:$GREEN $ETHDON                                   		 $COL_RESET"
-	echo -e "$YELLOW =>  DOGE:$GREEN $DOGEDON                                 		 $COL_RESET"
-	echo -e "$YELLOW =>  LTC:$GREEN $LTCDON                                   		 $COL_RESET"
+	echo -e "$YELLOW =>  BTC:$GREEN $BTCDON                                   		 ${NC}"
+	echo -e "$YELLOW =>  BCH:$GREEN $BCHDON                                   		 ${NC}"
+	echo -e "$YELLOW =>  ETH:$GREEN $ETHDON                                   		 ${NC}"
+	echo -e "$YELLOW =>  DOGE:$GREEN $DOGEDON                                 		 ${NC}"
+	echo -e "$YELLOW =>  LTC:$GREEN $LTCDON                                   		 ${NC}"
 	echo "<-------------------------------------|-------------------------------------->"
 	exit 0
 }
@@ -225,7 +293,7 @@ function last_words {
 function package_compile_crypto {
 
 	# Installing Package to compile crypto currency
-	echo -e "$MAGENTA => Installing needed Package to compile crypto currency <= $COL_RESET"
+	echo -e "$MAGENTA => Installing needed Package to compile crypto currency <= ${NC}"
 
 	hide_output sudo apt -y install software-properties-common build-essential
 	hide_output sudo apt -y install libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils git cmake libboost-all-dev zlib1g-dev libz-dev libseccomp-dev libcap-dev libminiupnpc-dev gettext

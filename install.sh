@@ -17,7 +17,7 @@
 set -e
 
 # Default version tag if not provided as environment variable
-TAG=${TAG:-v0.1.4}
+TAG=${TAG:-v0.1.5}
 
 # File paths
 YIIMPOOL_VERSION_FILE="/etc/yiimpoolversion.conf"
@@ -33,7 +33,7 @@ install_git() {
   if ! command -v git &>/dev/null; then
     log_error "Git is not installed. Installing git..."
     sudo apt-get -q update
-    DEBIAN_FRONTEND=noninteractive sudo apt-get -q install -y git
+    DEBIAN_FRONTEND=noninteractive sudo apt-get -q install -y git < /dev/null
     echo "Git installed."
   else
     echo "Git is already installed."
@@ -44,7 +44,7 @@ install_git() {
 clone_or_update_repo() {
   if [ ! -d "$YIIMPOOL_INSTALL_DIR" ]; then
     echo "Cloning Yiimpool Installer ${TAG}..."
-    git clone -b "${TAG}" --depth 1 https://github.com/afiniel/Yiimpoolv2 "$YIIMPOOL_INSTALL_DIR"
+    git clone -b "${TAG}" --depth 1 https://github.com/afiniel/Yiimpoolv2 "$YIIMPOOL_INSTALL_DIR" < /dev/null
     echo "Repository cloned."
   else
     echo "Updating Yiimpool Installer to ${TAG}..."

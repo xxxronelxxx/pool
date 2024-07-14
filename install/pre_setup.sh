@@ -8,7 +8,7 @@
 
 source /etc/functions.sh
 clear
-echo -e "$YELLOW => Setting our global variables <= $COL_RESET"
+echo -e "$YELLOW => Setting our global variables <= ${NC}"
 
 # If the machine is behind a NAT, inside a VM, etc., it may not know
 # its IP address on the public network / the Internet. Ask the Internet

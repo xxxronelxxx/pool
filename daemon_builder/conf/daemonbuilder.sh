@@ -55,22 +55,22 @@ function install_end_message {
 	clear
 	echo
 	figlet -f slant -w 100 "Complete!"
-	echo -e "$CYAN  --------------------------------------------------------------------------- 	$COL_RESET"
-	echo -e "$YELLOW  Script install of Daemon & Addpor & Stratum By Afiniel       					$COL_RESET"
-	echo -e "$GREEN	Donations are welcome at wallets below:					  						$COL_RESET"
-	echo -e "$YELLOW  BTC:$COL_RESET $MAGENTA btcdons	$COL_RESET"
-	echo -e "$YELLOW  LTC:$COL_RESET $MAGENTA ltcdons	$COL_RESET"
-	echo -e "$YELLOW  ETH:$COL_RESET $MAGENTA ethdons	$COL_RESET"
-	echo -e "$YELLOW  BCH:$COL_RESET $MAGENTA bchdons	$COL_RESET"
-	echo -e "$CYAN  --------------------------------------------------------------------------- 	$COL_RESET"
-	echo -e "$CYAN 	https://github.com/Afiniel/Yiimpoolv2									$COL_RESET"
-	echo -e "$CYAN  ---------------------------------------------------------------------------  	$COL_RESET"
+	echo -e "$CYAN  --------------------------------------------------------------------------- 	${NC}"
+	echo -e "$YELLOW  Script install of Daemon & Addpor & Stratum By Afiniel       					${NC}"
+	echo -e "$GREEN	Donations are welcome at wallets below:					  						${NC}"
+	echo -e "$YELLOW  BTC:${NC} $MAGENTA btcdons	${NC}"
+	echo -e "$YELLOW  LTC:${NC} $MAGENTA ltcdons	${NC}"
+	echo -e "$YELLOW  ETH:${NC} $MAGENTA ethdons	${NC}"
+	echo -e "$YELLOW  BCH:${NC} $MAGENTA bchdons	${NC}"
+	echo -e "$CYAN  --------------------------------------------------------------------------- 	${NC}"
+	echo -e "$CYAN 	https://github.com/Afiniel/Yiimpoolv2									${NC}"
+	echo -e "$CYAN  ---------------------------------------------------------------------------  	${NC}"
 	echo
-	echo -e "$CYAN  ---------------------------------------------------------------------------		$COL_RESET"
-    echo -e "$RED   How to use																		$COL_RESET"
-    echo -e "$GREEN	To build a new coin :$COL_RESET $MAGENTA ${daemonname}			  				$COL_RESET"
-    echo -e "$GREEN	To added stratum to coin and dedicated port : $COL_RESET $MAGENTA addport	  	$COL_RESET"
-    echo -e "$CYAN  ---------------------------------------------------------------------------		$COL_RESET"
+	echo -e "$CYAN  ---------------------------------------------------------------------------		${NC}"
+    echo -e "$RED   How to use																		${NC}"
+    echo -e "$GREEN	To build a new coin :${NC} $MAGENTA ${daemonname}			  				${NC}"
+    echo -e "$GREEN	To added stratum to coin and dedicated port : ${NC} $MAGENTA addport	  	${NC}"
+    echo -e "$CYAN  ---------------------------------------------------------------------------		${NC}"
     echo
     cd ~
 }
@@ -79,7 +79,7 @@ function install_end_message {
 function term_art {
 
 	echo
-	echo -e "$CYAN-----------------------------------------------------------------------------------------	$COL_RESET"
+	echo -e "$CYAN-----------------------------------------------------------------------------------------	${NC}"
 	echo "                                                                                        "
 	echo " ██████╗  █████╗ ███████╗███╗   ███╗ ██████╗ ███╗   ██╗     ██████╗ ██████╗ ██╗███╗   ██╗"
 	echo " ██╔══██╗██╔══██╗██╔════╝████╗ ████║██╔═══██╗████╗  ██║    ██╔════╝██╔═══██╗██║████╗  ██║"
@@ -87,8 +87,8 @@ function term_art {
 	echo " ██║  ██║██╔══██║██╔══╝  ██║╚██╔╝██║██║   ██║██║╚██╗██║    ██║     ██║   ██║██║██║╚██╗██║"
 	echo " ██████╔╝██║  ██║███████╗██║ ╚═╝ ██║╚██████╔╝██║ ╚████║    ╚██████╗╚██████╔╝██║██║ ╚████║"
 	echo " ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═══╝     ╚═════╝ ╚═════╝ ╚═╝╚═╝  ╚═══╝"
-    echo -e "$GREEN  *Daemon Coin Installer$COL_RESET $MAGENTA versiontag									$COL_RESET"
-	echo -e "$CYAN-----------------------------------------------------------------------------------------	$COL_RESET"
+    echo -e "$GREEN  *Daemon Coin Installer${NC} $MAGENTA versiontag									${NC}"
+	echo -e "$CYAN-----------------------------------------------------------------------------------------	${NC}"
 	echo
 }
 

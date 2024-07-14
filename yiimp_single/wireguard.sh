@@ -12,9 +12,9 @@ source "/etc/yiimpool.conf"
 
 # Display banner
 term_art
-echo -e "$MAGENTA    <-------------------------->$COL_RESET"
-echo -e "$MAGENTA     <--$YELLOW Installing WireGuard$MAGENTA -->$COL_RESET"
-echo -e "$MAGENTA    <-------------------------->$COL_RESET"
+echo -e "$MAGENTA    <-------------------------->${NC}"
+echo -e "$MAGENTA     <--$YELLOW Installing WireGuard$MAGENTA -->${NC}"
+echo -e "$MAGENTA    <-------------------------->${NC}"
 
 # Add WireGuard repository and install packages
 sudo add-apt-repository ppa:wireguard/wireguard -y
@@ -48,7 +48,7 @@ mypublic="${wg_public_key}"
 echo -e "Public Ip: ${dbpublic}\nPublic Key: ${mypublic}" | sudo -E tee "$STORAGE_ROOT/yiimp/.wireguard_public.conf" >/dev/null 2>&1
 
 echo
-echo -e "$GREEN WireGuard setup completed $COL_RESET"
+echo -e "$GREEN WireGuard setup completed ${NC}"
 
 # Change directory to yiimp_single
 cd "$HOME/yiimpool/yiimp_single"

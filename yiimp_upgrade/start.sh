@@ -39,4 +39,4 @@ source upgrade_warning.sh
 source menu.sh
 
 clear
-echo -e "$YELLOW Upgrade of your YiiMP stratum is now$GREEN completed. $COL_RESET"
+echo -e "$YELLOW Upgrade of your YiiMP stratum is now$GREEN completed. ${NC}"

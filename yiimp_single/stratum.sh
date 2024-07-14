@@ -11,14 +11,14 @@ source $HOME/Yiimpoolv2/yiimp_single/.wireguard.install.cnf
 
 echo
 term_art
-echo -e "$MAGENTA    <--------------------->$COL_RESET"
-echo -e "$MAGENTA     <--$YELLOW Compile Stratum$MAGENTA -->$COL_RESET"
-echo -e "$MAGENTA    <--------------------->$COL_RESET"
+echo -e "$MAGENTA    <--------------------->${NC}"
+echo -e "$MAGENTA     <--$YELLOW Compile Stratum$MAGENTA -->${NC}"
+echo -e "$MAGENTA    <--------------------->${NC}"
 cd /home/crypto-data/yiimp/yiimp_setup
 
 # Starting the build progress of the stratum
 echo
-echo -e "$MAGENTA => Building$GREEN blocknotify$MAGENTA ,$GREEN iniparser$MAGENTA ,$GREEN stratum$MAGENTA ... <= $COL_RESET"
+echo -e "$MAGENTA => Building$GREEN blocknotify$MAGENTA ,$GREEN iniparser$MAGENTA ,$GREEN stratum$MAGENTA ... <= ${NC}"
 
 # Generating Random Password for stratum
 blckntifypass=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1`
@@ -41,7 +41,7 @@ fi
 cd /home/crypto-data/yiimp/yiimp_setup/yiimp/stratum
 hide_output make -j$((`nproc`+1))
 
-echo -e "$CYAN => Building stratum folder structure and copying files... <= $COL_RESET"
+echo -e "$CYAN => Building stratum folder structure and copying files... <= ${NC}"
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/stratum
 sudo cp -a config.sample/. $STORAGE_ROOT/yiimp/site/stratum/config
 sudo cp -r stratum $STORAGE_ROOT/yiimp/site/stratum
@@ -72,7 +72,7 @@ cd '""''"${STORAGE_ROOT}"''""'/yiimp/site/stratum/config/ && ./run.sh $*
 ' | sudo -E tee $STORAGE_ROOT/yiimp/site/stratum/run.sh >/dev/null 2>&1
 sudo chmod +x $STORAGE_ROOT/yiimp/site/stratum/run.sh
 
-echo -e "$YELLOW => Updating stratum config files with database$GREEN connection$YELLOW info <= $COL_RESET"
+echo -e "$YELLOW => Updating stratum config files with database$GREEN connection$YELLOW info <= ${NC}"
 cd $STORAGE_ROOT/yiimp/site/stratum/config
 
 sudo sed -i 's/password = tu8tu5/password = '${blckntifypass}'/g' *.conf
@@ -92,5 +92,5 @@ sudo setfacl -m u:$USER:rwx $STORAGE_ROOT/yiimp/site/stratum/config
 
 sleep 1.5
 term_art
-echo -e "$GREEN => Stratum build complete $COL_RESET"
+echo -e "$GREEN => Stratum build complete ${NC}"
 cd $HOME/Yiimpoolv2/yiimp_single

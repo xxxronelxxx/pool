@@ -10,11 +10,11 @@ source /etc/yiimpooldonate.conf
 cd $HOME/Yiimpoolv2/yiimp_single
 
 term_art
-echo -e "$MAGENTA    <----------------------------->$COL_RESET"
-echo -e "$MAGENTA     <--$YELLOW Starting Server Cleanup$MAGENTA -->$COL_RESET"
-echo -e "$MAGENTA    <----------------------------->$COL_RESET"
+echo -e "$MAGENTA    <----------------------------->${NC}"
+echo -e "$MAGENTA     <--$YELLOW Starting Server Cleanup$MAGENTA -->${NC}"
+echo -e "$MAGENTA    <----------------------------->${NC}"
 echo
-echo -e "$YELLOW => Installing cron screens to crontab <= $COL_RESET"
+echo -e "$YELLOW => Installing cron screens to crontab <= ${NC}"
 
 (
     crontab -l 2>/dev/null
@@ -41,9 +41,9 @@ fi
 ) | crontab -
 sudo cp -r first_boot.sh $STORAGE_ROOT/yiimp/
 
-echo -e "$GREEN Crontab system complete$COL_RESET"
+echo -e "$GREEN Crontab system complete${NC}"
 echo
-echo -e "$MAGENTA => Creating YiiMP Screens startup script <= $COL_RESET"
+echo -e "$MAGENTA => Creating YiiMP Screens startup script <= ${NC}"
 
 echo '#!/usr/bin/env bash
 source /etc/yiimpool.conf
@@ -77,7 +77,7 @@ screen -dmS debug tail -f $LOG_DIR/debug.log
 sudo chmod +x $STORAGE_ROOT/yiimp/starts/screens.start.sh
 
 echo
-echo -e "$MAGENTA => Creating Stratum screens start script <= $COL_RESET"
+echo -e "$MAGENTA => Creating Stratum screens start script <= ${NC}"
 
 echo '#!/usr/bin/env bash
 source /etc/yiimpool.conf
@@ -228,7 +228,7 @@ STRATUM_DIR=$STORAGE_ROOT/yiimp/site/stratum
 
 echo "source /etc/yiimpool.conf" | hide_output tee -a ~/.bashrc
 echo "source $STORAGE_ROOT/yiimp/.prescreens.start.conf" | hide_output tee -a ~/.bashrc
-echo -e "$YELLOW YiiMP Screens$GREEN Added$COL_RESET"
+echo -e "$YELLOW YiiMP Screens$GREEN Added${NC}"
 
 sudo rm -r $STORAGE_ROOT/yiimp/yiimp_setup
 

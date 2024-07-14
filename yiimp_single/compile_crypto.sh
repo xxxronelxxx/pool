@@ -18,9 +18,9 @@ function print_error {
 }
 trap print_error ERR
 term_art
-echo -e "$MAGENTA    <---------------------------------------->$COL_RESET"
-echo -e "$MAGENTA     <--$YELLOW Install DaemonBuilder Requirements$MAGENTA -->$COL_RESET"
-echo -e "$MAGENTA    <---------------------------------------->$COL_RESET"
+echo -e "$MAGENTA    <---------------------------------------->${NC}"
+echo -e "$MAGENTA     <--$YELLOW Install DaemonBuilder Requirements$MAGENTA -->${NC}"
+echo -e "$MAGENTA    <---------------------------------------->${NC}"
 
 cd $HOME/Yiimpoolv2/daemon_builder
 source start.sh

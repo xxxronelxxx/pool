@@ -27,7 +27,7 @@ hide_output sudo chmod +x /etc/screen-scrypt-daemonbuilder.sh
 
 #Install dependencies
 echo
-echo -e "$MAGENTA => Installing Package to compile crypto currency <= $COL_RESET"
+echo -e "$MAGENTA => Installing Package to compile crypto currency <= ${NC}"
 hide_output sudo apt-get update
 hide_output sudo apt-get -y upgrade
 hide_output sudo apt-get -y install p7zip-full
@@ -44,10 +44,10 @@ apt_install libdb4.8-dev libdb4.8++-dev libdb5.3 libdb5.3++
 fi
 
 hide_output sudo apt -y install libdb5.3 libdb5.3++
-echo -e "$GREEN => Complete <=$COL_RESET"
+echo -e "$GREEN => Complete <=${NC}"
 
 echo
-echo -e "$MAGENTA => Installing additional system files required for daemons <= $COL_RESET"
+echo -e "$MAGENTA => Installing additional system files required for daemons <= ${NC}"
 hide_output sudo apt-get update
 apt_install build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev libboost-all-dev libminiupnpc-dev \
 libqt5gui5 libqt5core5a libqt5webkit5-dev libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler libqrencode-dev libzmq3-dev \
@@ -63,12 +63,12 @@ hide_output sudo apt -y install libdb-dev
 hide_output sudo apt -y install libdb5.3++ libdb5.3++-dev
 fi
 
-echo -e "$GREEN Additional System Files Completed...$COL_RESET"
+echo -e "$GREEN Additional System Files Completed...${NC}"
 echo
 
 # Updating gcc & g++ to version 8
 echo
-echo -e "$CYAN => Updating gcc & g++ to version 8 $COL_RESET"
+echo -e "$CYAN => Updating gcc & g++ to version 8 ${NC}"
 hide_output sudo apt-get update
 hide_output sudo apt-get -y upgrade
 apt_dist_upgrade
@@ -85,7 +85,7 @@ apt_install gcc-8 g++-8
 hide_output sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-8
 hide_output sudo update-alternatives --config gcc
 
-echo -e "$GREEN gcc & g++ Updated...$COL_RESET"
+echo -e "$GREEN gcc & g++ Updated...${NC}"
 
 set +eu +o pipefail
 cd $HOME/Yiimpoolv2/daemon_builder

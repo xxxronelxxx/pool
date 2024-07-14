@@ -70,7 +70,7 @@ if [[ ("$UsingSSH" == "yes") ]]; then
     clear
 
     # Add user
-    echo -e "$YELLOW => Adding new user and setting SSH key... <= $COL_RESET"
+    echo -e "$YELLOW => Adding new user and setting SSH key... <= ${NC}"
     sudo adduser ${yiimpadmin} --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password
     echo -e "${RootPassword}\n${RootPassword}" | passwd ${yiimpadmin}
     sudo usermod -aG sudo ${yiimpadmin}
@@ -130,9 +130,9 @@ if [[ ("$UsingSSH" == "yes") ]]; then
     sudo setfacl -m u:${yiimpadmin}:rwx /home/${yiimpadmin}/Yiimpoolv2
     sudo rm -r $HOME/yiimpool
     clear
-    echo -e "$YELLOW New User:$MAGENTA ${yiimpadmin} $GREEN created!$YELLOW Make sure you save your$RED private key!$COL_RESET"
+    echo -e "$YELLOW New User:$MAGENTA ${yiimpadmin} $GREEN created!$YELLOW Make sure you save your$RED private key!${NC}"
     echo
-    echo -e "$RED Please reboot system and log in as $GREEN ${yiimpadmin} $RED and type$GREEN yiimpool$RED to$GREEN continue$YELLOW setup...$COL_RESET"
+    echo -e "$RED Please reboot system and log in as $GREEN ${yiimpadmin} $RED and type$GREEN yiimpool$RED to$GREEN continue$YELLOW setup...${NC}"
     exit 0
 fi
 
@@ -182,7 +182,7 @@ case $response in
 
 0)
     clear
-    echo -e "$YELLOW => Adding new user and password... <= $COL_RESET"
+    echo -e "$YELLOW => Adding new user and password... <= ${NC}"
 
     sudo adduser ${yiimpadmin} --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password
     echo -e ""${RootPassword}"\n"${RootPassword}"" | passwd ${yiimpadmin}
@@ -234,9 +234,9 @@ case $response in
     sudo setfacl -m u:${yiimpadmin}:rwx /home/${yiimpadmin}/Yiimpoolv2
     sudo rm -r $HOME/Yiimpoolv2
     clear
-    echo -e "$YELLOW New User:$MAGENTA ${yiimpadmin} $GREEN created$RED $COL_RESET"
+    echo -e "$YELLOW New User:$MAGENTA ${yiimpadmin} $GREEN created$RED ${NC}"
     echo
-    echo -e "$YELLOW Please$RED reboot$YELLOW system and log in as the new user:$MAGENTA ${yiimpadmin} $YELLOW and type$GREEN yiimpool$YELLOW to$GREEN continue$YELLOW setup.$COL_RESET"
+    echo -e "$YELLOW Please$RED reboot$YELLOW system and log in as the new user:$MAGENTA ${yiimpadmin} $YELLOW and type$GREEN yiimpool$YELLOW to$GREEN continue$YELLOW setup.${NC}"
     exit 0
     ;;
 

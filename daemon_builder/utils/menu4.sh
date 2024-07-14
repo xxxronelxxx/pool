@@ -30,7 +30,7 @@ if [[ ("${LATESTVER}" > "${VERSION}" && "${LATESTVER}" != "null") ]]; then
 	test $? -eq 0 ||
 		{ 
 			echo
-			echo -e "$RED Error cloning repository. $COL_RESET";
+			echo -e "$RED Error cloning repository. ${NC}";
 			echo
 			sudo rm -f $temp_dir
 			exit 1;
@@ -48,9 +48,9 @@ if [[ ("${LATESTVER}" > "${VERSION}" && "${LATESTVER}" != "null") ]]; then
 
 	sudo rm -rf $temp_dir
 
-	echo -e "$CYAN  -------------------------------------------------------------------------- 	$COL_RESET"
-	echo -e "$GREEN    						Updating is Finish!					 				$COL_RESET"
-	echo -e "$CYAN  -------------------------------------------------------------------------- 	$COL_RESET"
+	echo -e "$CYAN  -------------------------------------------------------------------------- 	${NC}"
+	echo -e "$GREEN    						Updating is Finish!					 				${NC}"
+	echo -e "$CYAN  -------------------------------------------------------------------------- 	${NC}"
 	echo
 	cd ~
 	exit
@@ -63,17 +63,17 @@ else
 
 	cd ~
 	clear
-	echo -e "$CYAN  -------------------------------------------------------------------------- 	$COL_RESET"
-	echo -e "$RED    Thank you using this scrpt!			 				$COL_RESET"
-	echo -e "$CYAN  -------------------------------------------------------------------------- 	$COL_RESET"
+	echo -e "$CYAN  -------------------------------------------------------------------------- 	${NC}"
+	echo -e "$RED    Thank you using this scrpt!			 				${NC}"
+	echo -e "$CYAN  -------------------------------------------------------------------------- 	${NC}"
 	echo
-	echo -e "$CYAN  -------------------------------------------------------------------------- 	$COL_RESET"
-	echo -e "$GREEN	Donations are welcome at wallets below:					  					$COL_RESET"
-	echo -e "$YELLOW  BTC: $COL_RESET $MAGENTA ${BTCDEP}	$COL_RESET"
-	echo -e "$YELLOW  LTC: $COL_RESET $MAGENTA ${LTCDEP}	$COL_RESET"
-	echo -e "$YELLOW  ETH: $COL_RESET $MAGENTA ${ETHDEP}	$COL_RESET"
-	echo -e "$YELLOW  BCH: $COL_RESET $MAGENTA ${DOGEDEP}	$COL_RESET"
-	echo -e "$CYAN  -------------------------------------------------------------------------- 	$COL_RESET"
+	echo -e "$CYAN  -------------------------------------------------------------------------- 	${NC}"
+	echo -e "$GREEN	Donations are welcome at wallets below:					  					${NC}"
+	echo -e "$YELLOW  BTC: ${NC} $MAGENTA ${BTCDEP}	${NC}"
+	echo -e "$YELLOW  LTC: ${NC} $MAGENTA ${LTCDEP}	${NC}"
+	echo -e "$YELLOW  ETH: ${NC} $MAGENTA ${ETHDEP}	${NC}"
+	echo -e "$YELLOW  BCH: ${NC} $MAGENTA ${DOGEDEP}	${NC}"
+	echo -e "$CYAN  -------------------------------------------------------------------------- 	${NC}"
 	echo
 	cd ~
 	exit

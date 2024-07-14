@@ -30,13 +30,13 @@
 
 	echo
 	echo
-	echo -e "$RED Install Straum OR update!! $COL_RESET"
+	echo -e "$RED Install Straum OR update!! ${NC}"
 	echo
 
 	# Installing Stratum
 	echo
 	echo
-	echo -e "$MAGENTA => Installing Stratum $COL_RESET"
+	echo -e "$MAGENTA => Installing Stratum ${NC}"
 	echo
 	echo -e "Grabbing Stratum fron Github, building files and setting file structure."
 	echo
@@ -66,7 +66,7 @@
 	
 	whoami=`whoami`
 	echo
-	echo -e "$RED Enter password for ROOT server : $COL_RESET"
+	echo -e "$RED Enter password for ROOT server : ${NC}"
 	echo
 	su root
 	cd $HOME/$whoami/${installtoserver}/stratum
@@ -103,16 +103,16 @@
 	' | sudo -E tee /home/crypto-data/yiimp/site/stratum/config/run.sh >/dev/null 2>&1
 	sudo chmod +x /home/crypto-data/yiimp/site/stratum/config/run.sh
 
-	echo -e "$GREEN Done...$COL_RESET"
+	echo -e "$GREEN Done...${NC}"
 	sleep 3
 
 	# Update Timezone
 	echo
 	echo
-	echo -e "$CYAN => Update default timezone. $COL_RESET"
+	echo -e "$CYAN => Update default timezone. ${NC}"
 	echo
 
-	echo -e " Setting TimeZone to UTC...$COL_RESET"
+	echo -e " Setting TimeZone to UTC...${NC}"
 	if [ ! -f /etc/timezone ]; then
 	echo "Setting timezone to UTC."
 	echo "Etc/UTC" > sudo /etc/timezone
@@ -120,13 +120,13 @@
 	fi
 	sudo systemctl status rsyslog | sed -n "1,3p"
 	echo
-	echo -e "$GREEN Done...$COL_RESET"
+	echo -e "$GREEN Done...${NC}"
 	sleep 3
 
 	# Updating stratum config files with database connection info
 	echo
 	echo
-	echo -e "$CYAN => Updating stratum config files with database connection info. $COL_RESET"
+	echo -e "$CYAN => Updating stratum config files with database connection info. ${NC}"
 	echo
 	sleep 3
 
@@ -138,12 +138,12 @@
 	sudo sed -i 's/username = root/username = '$MYSQL_USER'/g' *.conf
 	sudo sed -i 's/password = patofpaq/password = '$MYSQL_PASSWORD'/g' *.conf
 	cd ~
-	echo -e "$GREEN Done...$COL_RESET"
+	echo -e "$GREEN Done...${NC}"
 
 	# Final Directory permissions
 	echo
 	echo
-	echo -e "$CYAN => Final Directory permissions $COL_RESET"
+	echo -e "$CYAN => Final Directory permissions ${NC}"
 	echo
 	sleep 3
 
@@ -155,7 +155,7 @@
 	sudo mv $HOME/stratum/ $HOME/stratum-install-finish
 
 	echo
-	echo -e "$GREEN Done...$COL_RESET"
+	echo -e "$GREEN Done...${NC}"
 	sleep 3
 
 	echo

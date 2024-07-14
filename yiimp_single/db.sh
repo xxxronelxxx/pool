@@ -26,9 +26,9 @@ fi
 # Define MariaDB version
 MARIADB_VERSION='10.4'
 
-echo -e "$MAGENTA    <----------------------------->$COL_RESET"
-echo -e "$MAGENTA     <--$YELLOW Installing MariaDB$MAGENTA $MARIADB_VERSION -->$COL_RESET"
-echo -e "$MAGENTA    <----------------------------->$COL_RESET"
+echo -e "$MAGENTA    <----------------------------->${NC}"
+echo -e "$MAGENTA     <--$YELLOW Installing MariaDB$MAGENTA $MARIADB_VERSION -->${NC}"
+echo -e "$MAGENTA    <----------------------------->${NC}"
 echo
 # Set MariaDB root password for installation
 sudo debconf-set-selections <<<"maria-db-$MARIADB_VERSION mysql-server/root_password password $DBRootPassword"
@@ -38,11 +38,11 @@ sudo debconf-set-selections <<<"maria-db-$MARIADB_VERSION mysql-server/root_pass
 apt_install mariadb-server mariadb-client
 
 # Display completion message
-echo -e "$GREEN => MariaDB build complete <= $COL_RESET"
+echo -e "$GREEN => MariaDB build complete <= ${NC}"
 echo
 
 # Display message for creating DB users
-echo -e "$MAGENTA => Creating DB users for YiiMP <= $COL_RESET"
+echo -e "$MAGENTA => Creating DB users for YiiMP <= ${NC}"
 echo
 # Check if wireguard variable is set to false
 if [ "$wireguard" = "false" ]; then
@@ -67,7 +67,7 @@ else
 fi
 
 echo
-echo -e "$MAGENTA => Creating my.cnf <= $COL_RESET"
+echo -e "$MAGENTA => Creating my.cnf <= ${NC}"
 
 if [[ ("$wireguard" == "false") ]]; then
   echo '[clienthost1]
@@ -105,7 +105,7 @@ fi
 sudo chmod 0600 $STORAGE_ROOT/yiimp/.my.cnf
 
 echo
-echo -e "$YELLOW => Importing YiiMP Default database values <= $COL_RESET"
+echo -e "$YELLOW => Importing YiiMP Default database values <= ${NC}"
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/sql
 
 # import SQL dump
@@ -141,10 +141,10 @@ for file in "${SQL_FILES[@]}"; do
 done
 
 echo
-echo -e "$YELLOW <-- Datebase import $GREEN complete -->$COL_RESET"
+echo -e "$YELLOW <-- Datebase import $GREEN complete -->${NC}"
 
 echo
-echo -e "$YELLOW => Tweaking MariaDB for better performance <= $COL_RESET"
+echo -e "$YELLOW => Tweaking MariaDB for better performance <= ${NC}"
 
 # Define MariaDB configuration changes
 config_changes=(

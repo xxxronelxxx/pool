@@ -19,17 +19,17 @@ function print_error {
 }
 trap print_error ERR
 term_art
-echo -e "$MAGENTA <----------------------------------> $COL_RESET"
-echo -e "$MAGENTA Database$YELLOW build and tweak$GREEN completed $COL_RESET"
-echo -e "$MAGENTA <----------------------------------> $COL_RESET"
-echo -e "$GREEN Passwords can be found in$RED $STORAGE_ROOT/yiimp/.my.cnf $COL_RESET $COL_RESET"
+echo -e "$MAGENTA <----------------------------------> ${NC}"
+echo -e "$MAGENTA Database$YELLOW build and tweak$GREEN completed ${NC}"
+echo -e "$MAGENTA <----------------------------------> ${NC}"
+echo -e "$GREEN Passwords can be found in$RED $STORAGE_ROOT/yiimp/.my.cnf ${NC} ${NC}"
 
 if [[ ("$wireguard" == "true") ]]; then
 source $STORAGE_ROOT/yiimp/.wireguard.conf
 fi
 
 # NGINX upgrade TODO: CLEAN UP
-echo -e "$YELLOW => Upgrading NGINX  <= $COL_RESET"
+echo -e "$YELLOW => Upgrading NGINX  <= ${NC}"
 
 # Grab Nginx key and proper mainline package for distro
 echo "deb http://nginx.org/packages/mainline/ubuntu `lsb_release -cs` nginx" \
@@ -56,7 +56,7 @@ sudo cp -r nginx_confs/letsencrypt.conf /etc/nginx/yiimpool
 sudo rm -r /etc/nginx/sites-enabled/default
 sudo rm -r /etc/nginx/sites-available/default*
 
-echo -e "$GREEN NGINX upgrade complete.$COL_RESET"
+echo -e "$GREEN NGINX upgrade complete.${NC}"
 restart_service nginx
 restart_service php7.3-fpm
 

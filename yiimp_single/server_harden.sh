@@ -11,7 +11,7 @@ source /etc/functions.sh
 source /etc/yiimpool.conf
 
 echo
-echo -e "$GREEN => Boosting server performance for YiiMP  <= $COL_RESET"
+echo -e "$GREEN => Boosting server performance for YiiMP  <= ${NC}"
 # Boost Network Performance by Enabling TCP BBR
 hide_output sudo apt install -y --install-recommends linux-generic-hwe-16.04
 echo 'net.core.default_qdisc=fq' | hide_output sudo tee -a /etc/sysctl.conf

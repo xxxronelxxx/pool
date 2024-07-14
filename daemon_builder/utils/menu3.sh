@@ -14,7 +14,7 @@ message_box " Stratum compiler " \
 cd ~
 clear
 
-echo -e "$CYAN --------------------------------------------------------------------------- 	$COL_RESET"
-echo -e "$RED    Type ${daemonname} at anytime to run this Scrypt!			 				$COL_RESET"
-echo -e "$CYAN --------------------------------------------------------------------------- 	$COL_RESET"
+echo -e "$CYAN --------------------------------------------------------------------------- 	${NC}"
+echo -e "$RED    Type ${daemonname} at anytime to run this Scrypt!			 				${NC}"
+echo -e "$CYAN --------------------------------------------------------------------------- 	${NC}"
 exit

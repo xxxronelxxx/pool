@@ -201,7 +201,7 @@ else
 
 		# Update package and Upgrade Ubuntu
 		echo
-		echo -e "$CYAN => Updating system and installing required packages :$COL_RESET"
+		echo -e "$CYAN => Updating system and installing required packages :${NC}"
 		sleep 3
 
 		hide_output sudo apt -y update 
@@ -209,7 +209,7 @@ else
 		hide_output sudo apt -y autoremove
 		hide_output sudo apt-get install -y software-properties-common
 		hide_output sudo apt install -y dialog python3 python3-pip acl nano apt-transport-https figlet jq
-		echo -e "$GREEN Done...$COL_RESET"
+		echo -e "$GREEN Done...${NC}"
 
 		sleep 3
 
@@ -243,7 +243,7 @@ else
 			term_art
 
 			echo
-			echo -e "$YELLOW Updating your version to $TAG! $COL_RESET"
+			echo -e "$YELLOW Updating your version to $TAG! ${NC}"
 			NEWVERSION=${TAG}
 
 		else
@@ -264,18 +264,18 @@ else
 
 		# Installing other needed files
 		echo
-		echo -e "$MAGENTA => Installing other needed files : $COL_RESET"
+		echo -e "$MAGENTA => Installing other needed files : ${NC}"
 		sleep 3
 
 		hide_output sudo apt-get -y install dialog acl libgmp3-dev libmysqlclient-dev libcurl4-gnutls-dev libkrb5-dev libldap2-dev libidn11-dev gnutls-dev \
 		librtmp-dev sendmail mutt screen git make
 		hide_output sudo apt -y install pwgen unzip
-		echo -e "$GREEN Done...$COL_RESET"
+		echo -e "$GREEN Done...${NC}"
 		sleep 3
 
 		# Installing Package to compile crypto currency
 		echo
-		echo -e "$MAGENTA => Installing Package to compile crypto currency $COL_RESET"
+		echo -e "$MAGENTA => Installing Package to compile crypto currency ${NC}"
 		sleep 3
 
 		hide_output sudo apt-get -y install build-essential libzmq5 \
@@ -290,11 +290,11 @@ else
 		fi
 		hide_output sudo apt -y install libdb5.3 libdb5.3++
 
-		echo -e "$GREEN Done...$COL_RESET"
+		echo -e "$GREEN Done...${NC}"
 
 		# Installing Package to compile crypto currency
 		echo
-		echo -e "$MAGENTA => Installing additional system files required for daemons $COL_RESET"
+		echo -e "$MAGENTA => Installing additional system files required for daemons ${NC}"
 		sleep 3
 
 		hide_output sudo apt-get -y update
@@ -311,11 +311,11 @@ else
 			hide_output sudo apt -y install libdb5.3++ libdb5.3++-dev
 		fi
 
-		echo -e "$GREEN Additional System Files Completed...$COL_RESET"
+		echo -e "$GREEN Additional System Files Completed...${NC}"
 
 		# Updating gcc & g++ to version 8
 		echo
-		echo -e "$CYAN => Updating GCC & G++ ... $COL_RESET"
+		echo -e "$CYAN => Updating GCC & G++ ... ${NC}"
 		sleep 3
 
 		hide_output sudo apt-get update -y
@@ -330,7 +330,7 @@ else
 		hide_output sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-8
 		hide_output sudo update-alternatives --config gcc
 
-		echo -e "$GREEN Updated GCC & G++ Completed...$COL_RESET"
+		echo -e "$GREEN Updated GCC & G++ Completed...${NC}"
 		echo
 		sleep 3
 
@@ -346,7 +346,7 @@ else
 		}
 
 		if [[ ! -d "$STORAGE_ROOT/daemon_builder/berkeley/db4" ]]; then
-			echo -e "$YELLOW Building Berkeley 4.8, this may take several minutes...$COL_RESET"
+			echo -e "$YELLOW Building Berkeley 4.8, this may take several minutes...${NC}"
 			sleep 3
 
 			sudo mkdir -p $STORAGE_ROOT/daemon_builder/berkeley/db4/
@@ -359,12 +359,12 @@ else
 			hide_output sudo make install
 			cd ${absolutepath}/daemon_setup/tmp/
 			sudo rm -r db-4.8.30.NC.tar.gz db-4.8.30.NC
-			echo -e "$GREEN Berkeley 4.8 Completed...$COL_RESET"
+			echo -e "$GREEN Berkeley 4.8 Completed...${NC}"
 			DONEINST=true
 		fi
 
 		if [[ ! -d "$STORAGE_ROOT/daemon_builder/berkeley/db5" ]]; then
-			echo -e "$YELLOW Building Berkeley 5.1, this may take several minutes...$COL_RESET"
+			echo -e "$YELLOW Building Berkeley 5.1, this may take several minutes...${NC}"
 			sleep 3
 
 			sudo mkdir -p $STORAGE_ROOT/daemon_builder/berkeley/db5/
@@ -377,12 +377,12 @@ else
 			hide_output sudo make install
 			cd ${absolutepath}/daemon_setup/tmp
 			sudo rm -r db-5.1.29.tar.gz db-5.1.29
-			echo -e "$GREEN Berkeley 5.1 Completed...$COL_RESET"
+			echo -e "$GREEN Berkeley 5.1 Completed...${NC}"
 			DONEINST=true
 		fi
 
 		if [[ ! -d "$STORAGE_ROOT/daemon_builder/berkeley/db5.3" ]]; then
-			echo -e "$YELLOW Building Berkeley 5.3, this may take several minutes...$COL_RESET"
+			echo -e "$YELLOW Building Berkeley 5.3, this may take several minutes...${NC}"
 			sleep 3
 
 			sudo mkdir -p $STORAGE_ROOT/daemon_builder/berkeley/db5.3/
@@ -395,12 +395,12 @@ else
 			hide_output sudo make install
 			cd ${absolutepath}/daemon_setup/tmp/
 			sudo rm -r db-5.3.28.tar.gz db-5.3.28
-			echo -e "$GREEN Berkeley 5.3 Completed...$COL_RESET"
+			echo -e "$GREEN Berkeley 5.3 Completed...${NC}"
 			DONEINST=true
 		fi
 
 		if [[ ! -d "$STORAGE_ROOT/daemon_builder/berkeley/db6.2" ]]; then
-			echo -e "$YELLOW Building Berkeley 6.2, this may take several minutes...$COL_RESET"
+			echo -e "$YELLOW Building Berkeley 6.2, this may take several minutes...${NC}"
 			sleep 3
 
 			sudo mkdir -p $STORAGE_ROOT/daemon_builder/berkeley/db6.2/
@@ -412,12 +412,12 @@ else
 			hide_output sudo make install
 			cd ${absolutepath}/daemon_setup/tmp/
 			sudo rm -r db-6.2.23.tar.gz db-6.2.23
-			echo -e "$GREEN Berkeley 6.2 Completed...$COL_RESET"
+			echo -e "$GREEN Berkeley 6.2 Completed...${NC}"
 			DONEINST=true
 		fi
 
 		if [[ ! -d "$STORAGE_ROOT/daemon_builder/berkeley/db18" ]]; then
-			echo -e "$YELLOW Building Berkeley 18, this may take several minutes...$COL_RESET"
+			echo -e "$YELLOW Building Berkeley 18, this may take several minutes...${NC}"
 			sleep 3
 
 			sudo mkdir -p $STORAGE_ROOT/daemon_builder/berkeley/db18/
@@ -429,12 +429,12 @@ else
 			hide_output sudo make install
 			cd ${absolutepath}/daemon_setup/tmp/
 			sudo rm -r db-18.1.40.tar.gz db-18.1.40
-			echo -e "$GREEN Berkeley 18.xx Completed...$COL_RESET"
+			echo -e "$GREEN Berkeley 18.xx Completed...${NC}"
 			DONEINST=true
 		fi
 
 		if [[ ! -d "$STORAGE_ROOT/daemon_builder/openssl" ]]; then
-			echo -e "$YELLOW Building OpenSSL 1.0.2g, this may take several minutes...$COL_RESET"
+			echo -e "$YELLOW Building OpenSSL 1.0.2g, this may take several minutes...${NC}"
 			sleep 3
 
 			cd ${absolutepath}/daemon_setup/tmp/
@@ -446,12 +446,12 @@ else
 			hide_output sudo make install
 			cd ${absolutepath}/daemon_setup/tmp/
 			sudo rm -r openssl-1.0.2g.tar.gz openssl-1.0.2g
-			echo -e "$GREEN OpenSSL 1.0.2g Completed...$COL_RESET"
+			echo -e "$GREEN OpenSSL 1.0.2g Completed...${NC}"
 			DONEINST=true
 		fi
 
 		if [[ "${INSTVERSION}" == "$TAG" ]]; then
-			echo -e "$YELLOW Building bls-signatures, this may take several minutes...$COL_RESET"
+			echo -e "$YELLOW Building bls-signatures, this may take several minutes...${NC}"
 			sleep 3
 
 			cd ${absolutepath}/daemon_setup/tmp/
@@ -462,7 +462,7 @@ else
 			hide_output sudo make install
 			cd ${absolutepath}/daemon_setup/tmp/
 			sudo rm -r v20181101.zip bls-signatures-20181101
-			echo -e "$GREEN bls-signatures Completed...$COL_RESET"
+			echo -e "$GREEN bls-signatures Completed...${NC}"
 			DONEINST=true
 		fi
 
@@ -472,7 +472,7 @@ else
 
 		if [[ "${INSTVERSION}" == "$TAG" ]]; then
 			# Update Timezone
-			echo -e "$CYAN => Update default timezone. $COL_RESET"
+			echo -e "$CYAN => Update default timezone. ${NC}"
 			sleep 3
 
 			if [ ! -f /etc/timezone ]; then
@@ -480,7 +480,7 @@ else
 				sudo systemctl restart rsyslog >/dev/null 2>&1
 			fi
 			sudo systemctl status rsyslog | sed -n "1,3p" >/dev/null 2>&1
-			echo -e "$GREEN Done...$COL_RESET"
+			echo -e "$GREEN Done...${NC}"
 			sleep 3
 		fi
 
@@ -488,12 +488,12 @@ else
 			if [[ "${NEWVERSION}" == "$TAG" ]]; then
 				echo
 				# Updating Daemonbuilder
-				echo -e "$YELLOW Updating daemonbuilder Coin! $COL_RESET"
+				echo -e "$YELLOW Updating daemonbuilder Coin! ${NC}"
 				sleep 3
 			else
 				# Install Daemonbuilder
 				echo
-				echo -e "$MAGENTA => Installing daemonbuilder $COL_RESET"
+				echo -e "$MAGENTA => Installing daemonbuilder ${NC}"
 				sleep 3
 			fi
 
@@ -516,16 +516,16 @@ else
 			hide_output sudo chmod +x $STORAGE_ROOT/daemon_builder/menu4.sh
 			hide_output sudo chmod +x $STORAGE_ROOT/daemon_builder/source.sh
 			sleep 3
-			echo -e "$GREEN Done...$COL_RESET"
+			echo -e "$GREEN Done...${NC}"
 
 			if [[ "${NEWVERSION}" == "$TAG" ]]; then
 				# Updating Addport
-				echo -e "$YELLOW Updating Addport Coin! $COL_RESET"
+				echo -e "$YELLOW Updating Addport Coin! ${NC}"
 				sleep 3
 			else
 				# Install Addport
 				echo
-				echo -e "$MAGENTA => Installing Addport $COL_RESET"
+				echo -e "$MAGENTA => Installing Addport ${NC}"
 				sleep 3
 			fi
 
@@ -542,25 +542,25 @@ else
 				hide_output sudo chmod +x /usr/bin/${daemonname}
 			fi
 
-			echo -e "$GREEN Done...$COL_RESET"
+			echo -e "$GREEN Done...${NC}"
 			sleep 5
 		fi
 
 		if [[ "${INSTVERSION}" == "$TAG" ]]; then
 			# Final Directory permissions
 			echo
-			echo -e "$CYAN => Final Directory permissions $COL_RESET"
+			echo -e "$CYAN => Final Directory permissions ${NC}"
 			sleep 3
 
 			#Restart service
 			hide_output sudo systemctl restart cron.service
 
-			echo -e "$GREEN Done...$COL_RESET"
+			echo -e "$GREEN Done...${NC}"
 			sleep 5
 		fi
 
 		if [[ "${FILEINFO}" == "true" ]]; then
-			echo -e "$YELLOW FINISH! Updating info file to $TAG! $COL_RESET"
+			echo -e "$YELLOW FINISH! Updating info file to $TAG! ${NC}"
 			sleep 3
 			if [ -z "${VERSION}" ]; then
 				echo '#!/bin/sh
@@ -586,11 +586,11 @@ else
 					DOGEDEP='"${DOGEDEP}"''| sudo -E tee $STORAGE_ROOT/daemon_builder/conf/info.sh >/dev/null 2>&1
 					hide_output sudo chmod +x $STORAGE_ROOT/daemon_builder/conf/info.sh
 				fi
-				echo -e "$GREEN Done...$COL_RESET"
+				echo -e "$GREEN Done...${NC}"
 				sleep 5
 			fi
 		else
-			echo -e "$YELLOW FINISH! Creating info file to Version $TAG! $COL_RESET"
+			echo -e "$YELLOW FINISH! Creating info file to Version $TAG! ${NC}"
 			sleep 3
 			echo '#!/bin/sh
 			USERSERVER='"${whoami}"'
@@ -602,7 +602,7 @@ else
 			ETHDEP='"${ETHDEP}"'
 			DOGEDEP='"${DOGEDEP}"'' | sudo -E tee $STORAGE_ROOT/daemon_builder/conf/info.sh >/dev/null 2>&1
 			hide_output sudo chmod +x $STORAGE_ROOT/daemon_builder/conf/info.sh
-			echo -e "$GREEN Done...$COL_RESET"
+			echo -e "$GREEN Done...${NC}"
 			sleep 5
 		fi
 
