@@ -17,7 +17,7 @@
 set -e
 
 # Set the default TAG if not provided
-TAG=${TAG:-v0.1.0}
+TAG=${TAG:-v0.1.1}
 
 # Create the yiimpoolversion.conf file
 echo "VERSION=${TAG}" | sudo tee /etc/yiimpoolversion.conf >/dev/null
