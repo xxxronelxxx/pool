@@ -4,7 +4,7 @@
 # Preflight script for configuring the system for Yiimpool.                      #
 #                                                                                #
 # Author: Afiniel                                                                #
-# Date: 2024-07-13                                                               #
+# Date: 2024-07-14                                                               #
 ##################################################################################
 
 source /etc/functions.sh

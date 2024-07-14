@@ -130,7 +130,19 @@ if [[ "$UsingSSH" == "yes" ]]; then
     cd ~ || { echo "Failed to change directory to home"; exit 1; }
     sudo setfacl -m u:${yiimpadmin}:rwx /home/${yiimpadmin}/Yiimpoolv2 || { echo "Failed to set ACL for ${yiimpadmin}"; exit 1; }
     sudo rm -r "$HOME/yiimpool" || { echo "Failed to remove $HOME/yiimpool"; exit 1; }
+    
     clear
+    echo
+    echo -e "${YELLOW}Detected the following information:$NC"
+    echo
+    echo -e "${MAGENTA}USERNAME: ${GREEN}${yiimpadmin}$NC"
+    echo -e "${MAGENTA}STORAGE_USER: ${GREEN}${STORAGE_USER}$NC"
+    echo -e "${MAGENTA}STORAGE_ROOT: ${GREEN}${STORAGE_ROOT}$NC"
+    echo -e "${MAGENTA}PUBLIC_IP: ${GREEN}${PUBLIC_IP}$NC"
+    echo -e "${MAGENTA}PUBLIC_IPV6: ${GREEN}${PUBLIC_IPV6}$NC"
+    echo -e "${MAGENTA}DISTRO: ${GREEN}${DISTRO}$NC"
+    echo -e "${MAGENTA}FIRST_TIME_SETUP: ${GREEN}${FIRST_TIME_SETUP}$NC"
+    echo -e "${MAGENTA}PRIVATE_IP: ${GREEN}${PRIVATE_IP}$NC"
     echo -e "$YELLOW New User:$MAGENTA ${yiimpadmin} $GREEN created!$YELLOW Make sure to save your$RED private key!$NC"
     echo
     echo -e "$RED Please reboot the system and log in as$GREEN ${yiimpadmin} $RED and type$GREEN yiimpool$RED to$GREEN continue$YELLOW setup...$NC"
@@ -231,10 +243,22 @@ case $response in
     cd ~ || { echo "Failed to change directory to home"; exit 1; }
     sudo setfacl -m u:${yiimpadmin}:rwx /home/${yiimpadmin}/Yiimpoolv2 || { echo "Failed to set ACL for ${yiimpadmin}"; exit 1; }
     sudo rm -r "$HOME/Yiimpoolv2" || { echo "Failed to remove $HOME/Yiimpoolv2"; exit 1; }
+    
     clear
+    echo
+    echo -e "${YELLOW}Detected the following information:$NC"
+    echo
+    echo -e "${MAGENTA}USERNAME: ${GREEN}${yiimpadmin}$NC"
+    echo -e "${MAGENTA}STORAGE_USER: ${GREEN}${STORAGE_USER}$NC"
+    echo -e "${MAGENTA}STORAGE_ROOT: ${GREEN}${STORAGE_ROOT}$NC"
+    echo -e "${MAGENTA}PUBLIC_IP: ${GREEN}${PUBLIC_IP}$NC"
+    echo -e "${MAGENTA}PUBLIC_IPV6: ${GREEN}${PUBLIC_IPV6}$NC"
+    echo -e "${MAGENTA}DISTRO: ${GREEN}${DISTRO}$NC"
+    echo -e "${MAGENTA}FIRST_TIME_SETUP: ${GREEN}${FIRST_TIME_SETUP}$NC"
+    echo -e "${MAGENTA}PRIVATE_IP: ${GREEN}${PRIVATE_IP}$NC"
     echo -e "$YELLOW New User:$MAGENTA ${yiimpadmin} $GREEN created$RED $NC"
     echo
-    echo -e "$YELLOW Please$RED reboot$YELLOW system and log in as the new user:$MAGENTA ${yiimpadmin} $YELLOW and type$GREEN yiimpool$YELLOW to$GREEN continue$YELLOW setup.$NC"
+    echo -e "$RED Please reboot the system and log in as:$GREEN ${yiimpadmin} $RED and type$GREEN yiimpool$YELLOW to$GREEN continue$YELLOW setup...$NC"
     exit 0
     ;;
 

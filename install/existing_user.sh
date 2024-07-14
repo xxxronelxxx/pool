@@ -14,7 +14,7 @@ clear
 
 # Get the current logged in username
 current_user=$(whoami)
-echo -e "${YELLOW}Modifying existing user ${MAGENTA}$current_user${YELLOW} for yiimpool support.${COL_RESET}"
+echo -e "${YELLOW}Modifying existing user ${MAGENTA}$current_user${YELLOW} for yiimpool support.$NC"
 
 # Add current user to the sudo group
 sudo usermod -aG sudo "$current_user"
@@ -69,8 +69,19 @@ sudo setfacl -m u:"$current_user":rwx /home/"$current_user"/yiimpoolv2
 
 # Clear the screen and display a message to the user
 clear
-echo -e "${GREEN}Your user: ${MAGENTA}$current_user${GREEN} has been modified for yiimpool support.${COL_RESET}"
-echo -e "${YELLOW}You must ${RED}reboot${YELLOW} the system for the new permissions to update.${COL_RESET}"
-echo -e "${YELLOW}After reboot, type ${GREEN}yiimpool${YELLOW} to continue setup.${COL_RESET}"
-
+echo
+echo -e "${YELLOW}Detected the following information:$NC"
+echo
+echo -e "${MAGENTA}USERNAME: ${GREEN}$current_user$NC"
+echo -e "${MAGENTA}STORAGE_USER: ${GREEN}${STORAGE_USER}$NC"
+echo -e "${MAGENTA}STORAGE_ROOT: ${GREEN}${STORAGE_ROOT}$NC"
+echo -e "${MAGENTA}PUBLIC_IP: ${GREEN}${PUBLIC_IP}$NC"
+echo -e "${MAGENTA}PUBLIC_IPV6: ${GREEN}${PUBLIC_IPV6}$NC"
+echo -e "${MAGENTA}DISTRO: ${GREEN}${DISTRO}$NC"
+echo -e "${MAGENTA}FIRST_TIME_SETUP: ${GREEN}${FIRST_TIME_SETUP}$NC"
+echo -e "${MAGENTA}PRIVATE_IP: ${GREEN}${PRIVATE_IP}$NC"
+echo
+echo -e "${GREEN}Your user: ${MAGENTA}$current_user${GREEN} has been modified for yiimpool support.$NC"
+echo -e "${YELLOW}You must ${RED}reboot${YELLOW} the system for the new permissions to update.$NC"
+echo -e "${YELLOW}After reboot, type ${GREEN}yiimpool${YELLOW} to continue setup.$NC"
 exit 0
