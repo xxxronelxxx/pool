@@ -7,89 +7,98 @@
 # Date: 2024-07-13                                                               #
 ##################################################################################
 
-# Source functions (assuming it contains color definitions)
 source /etc/functions.sh
 
 echo -e "${YELLOW}Starting preflight checks...${COL_RESET}"
 echo
 
-# Check for supported Ubuntu versions
-DISTRO=""
-case "$(lsb_release -d | sed 's/.*:\s*//')" in
-  "Ubuntu 20.04 LTS" | "Ubuntu 20.04" | "Ubuntu 20.04.6 LTS")
-    DISTRO=20
-    ;;
-  "Ubuntu 18.04 LTS" | "Ubuntu 18.04")
-    DISTRO=18
-    ;;
-  "Ubuntu 16.04 LTS" | "Ubuntu 16.04")
-    DISTRO=16
-    ;;
-  *)
-    echo -e "${RED}ERROR: This script supports only Ubuntu 16.04 LTS, 18.04 LTS, and 20.04 LTS.${COL_RESET}"
-    exit 1
-    ;;
-esac
+# Define supported Ubuntu LTS versions
+SUPPORTED_Ubuntu_VERSIONS=("20.04" "20.04.6" "18.04" "16.04")
 
-echo -e "${YELLOW}Updating permissions...${COL_RESET}"
-# Update permissions
-sudo chmod g-w /etc /etc/default /usr
-echo -e "${GREEN}Permissions updated.${COL_RESET}"
-echo
+# Function to check if a Ubuntu LTS version is supported
+check_ubuntu_version() {
+    lsb_release -ds | grep -q "Ubuntu $1 LTS"
+}
 
-echo -e "${YELLOW}Checking swap requirements...${COL_RESET}"
+# Function to ensure directories are not group writable
+secure_directories() {
+    echo -e "${YELLOW}Securing system directories...${NC}"
+    sudo chmod g-w /etc /etc/default /usr
+    echo -e "${GREEN}System directories secured.${NC}"
+}
 
-# Check if swap is needed
-SWAP_MOUNTED=$(cat /proc/swaps | tail -n+2)
-SWAP_IN_FSTAB=$(grep "swap" /etc/fstab)
-ROOT_IS_BTRFS=$(grep "\/ .*btrfs" /proc/mounts)
-TOTAL_PHYSICAL_MEM=$(head -n 1 /proc/meminfo | awk '{print $2}')
-AVAILABLE_DISK_SPACE=$(df / --output=avail | tail -n 1)
+# Function to check if swap is needed
+check_swap_needed() {
+    SWAP_MOUNTED=$(grep -e "^/swapfile" /proc/swaps)
+    SWAP_IN_FSTAB=$(grep -e "^/swapfile" /etc/fstab)
+    ROOT_IS_BTRFS=$(grep -e "\/ .*btrfs" /proc/mounts)
+    TOTAL_PHYSICAL_MEM=$(awk '/MemTotal/{print $2}' /proc/meminfo)
+    AVAILABLE_DISK_SPACE=$(df / --output=avail | tail -n 1)
 
-if [ -z "$SWAP_MOUNTED" ] && [ -z "$SWAP_IN_FSTAB" ] && [ ! -e /swapfile ] && \
-   [ -z "$ROOT_IS_BTRFS" ] && [ "$TOTAL_PHYSICAL_MEM" -lt 1536000 ] && [ "$AVAILABLE_DISK_SPACE" -gt 5242880 ]; then
-  echo -e "${YELLOW}Adding a swap file to the system...${COL_RESET}"
-
-  # Allocate and activate the swap file
-  sudo fallocate -l 3G /swapfile
-  if [ -e /swapfile ]; then
-    sudo chmod 600 /swapfile
-    sudo mkswap /swapfile
-    sudo swapon /swapfile
-    echo "vm.swappiness=10" | sudo tee -a /etc/sysctl.conf
-
-    # Check if swap is mounted and activate on boot
-    if swapon -s | grep -q "\/swapfile"; then
-      echo "/swapfile none swap sw 0 0" | sudo tee -a /etc/fstab
-      echo
-      echo -e "${GREEN}Swap file successfully added.${COL_RESET}"
+    if [ -z "$SWAP_MOUNTED" ] && [ -z "$SWAP_IN_FSTAB" ] && [ ! -e /swapfile ] && [ -z "$ROOT_IS_BTRFS" ] && [ "$TOTAL_PHYSICAL_MEM" -lt 1536000 ] && [ "$AVAILABLE_DISK_SPACE" -gt 5242880 ]; then
+        return 0  # Swap is needed
     else
-      echo
-      echo -e "${RED}ERROR: Swap allocation failed.${COL_RESET}"
+        return 1  # Swap is not needed
     fi
-  else
+}
+
+# Function to create swap file
+create_swap() {
     echo
-    echo -e "${RED}ERROR: Failed to create swap file.${COL_RESET}"
-  fi
-else
-  echo
-  echo -e "${YELLOW}Swap is not needed or already configured.${COL_RESET}"
-fi
-
-echo -e "${YELLOW}Checking system architecture...${COL_RESET}"
-echo
-# Check architecture
-ARCHITECTURE=$(uname -m)
-if [ "$ARCHITECTURE" != "x86_64" ]; then
-  echo -e "${RED}ERROR: Yiimpool Installer supports only x86_64 architecture.${COL_RESET}"
-  echo -e "${RED}Your architecture is $ARCHITECTURE${COL_RESET}"
-  exit 1
-fi
-echo -e "${YELLOW}Your architecture is $ARCHITECTURE${COL_RESET}"
-
-# Set STORAGE_USER and STORAGE_ROOT to default values if not already set
-STORAGE_USER=${STORAGE_USER:-${DEFAULT_STORAGE_USER:-crypto-data}}
-STORAGE_ROOT=${STORAGE_ROOT:-${DEFAULT_STORAGE_ROOT:-/home/$STORAGE_USER}}
+    echo -e "${YELLOW}Adding a swap file to the system...${NC}"
+    sudo fallocate -l 3G /swapfile
+    if [ -e /swapfile ]; then
+        sudo chmod 600 /swapfile
+        sudo mkswap /swapfile
+        sudo swapon /swapfile
+        echo "vm.swappiness=10" | sudo tee -a /etc/sysctl.conf >/dev/null
+        echo "/swapfile none swap sw 0 0" | sudo tee -a /etc/fstab >/dev/null
+        echo -e "${GREEN}Swap file added successfully.${NC}"
+    else
+        echo -e "${RED}ERROR: Swap allocation failed.${NC}"
+    fi
+}
 
 echo
-echo -e "${GREEN}Preflight checks completed successfully.${COL_RESET}"
+echo -e "${YELLOW}Starting system configuration...${NC}"
+
+# Check if the Ubuntu version is supported
+for VERSION in "${SUPPORTED_Ubuntu_VERSIONS[@]}"; do
+    if check_ubuntu_version "$VERSION"; then
+        DISTRO="$VERSION"
+        echo -e "${GREEN}Detected Ubuntu $DISTRO LTS.${NC}"
+        break
+    fi
+done
+
+# Exit if the Ubuntu version is not supported
+if [ -z "$DISTRO" ]; then
+    echo -e "${RED}This script only supports Ubuntu ${SUPPORTED_Ubuntu_VERSIONS[*]} LTS.${NC}"
+    exit 1
+fi
+
+# Secure directories
+secure_directories
+
+# Check and create swap if needed
+if check_swap_needed; then
+    create_swap
+fi
+
+# Check architecture compatibility
+if [ "$(uname -m)" != "x86_64" ]; then
+    if [ -z "$ARM" ]; then
+        echo -e "${RED}Yiimpool Installer only supports x86_64 and will not work on any other architecture, like ARM or 32-bit OS.${NC}"
+        echo -e "${RED}Your architecture is $(uname -m)${NC}"
+        exit 1
+    fi
+fi
+
+# Set default values for STORAGE_USER and STORAGE_ROOT if not already set
+if [ -z "$STORAGE_USER" ]; then
+    STORAGE_USER=$([[ -z "$DEFAULT_STORAGE_USER" ]] && echo "crypto-data" || echo "$DEFAULT_STORAGE_USER")
+fi
+
+if [ -z "$STORAGE_ROOT" ]; then
+    STORAGE_ROOT=$([[ -z "$DEFAULT_STORAGE_ROOT" ]] && echo "/home/$STORAGE_USER" || echo "$DEFAULT_STORAGE_ROOT")
+fi

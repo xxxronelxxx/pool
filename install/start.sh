@@ -35,7 +35,7 @@ if [[ "$FIRST_TIME_SETUP" == "1" ]]; then
     source preflight.sh
 
     # Ensure Python reads/writes files in UTF-8
-    if ! locale -a | grep -q en_US.utf8; then
+    if ! locale -a | grep en_US.utf8; then
         hide_output locale-gen en_US.UTF-8
     fi
 

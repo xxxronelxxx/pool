@@ -10,7 +10,7 @@
 # Colors And Spinner.
 
 ESC_SEQ="\x1b["
-COL_RESET=$ESC_SEQ"39;49;00m"
+NC='\033[0m' # No Color
 RED=$ESC_SEQ"31;01m"
 GREEN=$ESC_SEQ"32;01m"
 YELLOW=$ESC_SEQ"33;01m"
@@ -20,36 +20,87 @@ CYAN=$ESC_SEQ"36;01m"
 
 spinner() {
     local pid=$!
-    local delay=0.35
+    local delay=0.1
     local spinstr='|/-\'
-    while ps a | awk '{print $1}' | grep -q $pid; do
-        local temp=${spinstr#?}
-        printf " [%c] " "$spinstr"
-        local spinstr=$temp${spinstr%"$temp"}
+    local start_time=$(date +%s)
+    local SECONDS=0  # Initialize timer
+    local total_seconds=300  # Example total duration of the process in seconds (adjust as needed)
+
+    while ps -p $pid > /dev/null; do
+        local current_time=$(date +%s)
+        local elapsed_seconds=$((current_time - start_time))
+        
+        # Calculate progress percentage
+        local progress=$(( (elapsed_seconds * 100) / total_seconds ))
+        if [ $progress -gt 100 ]; then
+            progress=100
+        fi
+        
+        local remaining_seconds=$(( total_seconds - elapsed_seconds ))
+        
+        local hours=$((remaining_seconds / 3600))
+        local minutes=$(( (remaining_seconds % 3600) / 60 ))
+        local seconds=$((remaining_seconds % 60))
+
+        # Print elapsed time and estimated time remaining (ETA)
+        printf "\r[Elapsed: %02d:%02d:%02d] [ETA: %02d:%02d:%02d] [%c] %d%%" \
+            $((elapsed_seconds / 3600)) $(( (elapsed_seconds % 3600) / 60 )) $((elapsed_seconds % 60)) \
+            $hours $minutes $seconds \
+            "${spinstr:0:1}" \
+            $progress
+
+        # Rotate spinner animation
+        spinstr=${spinstr:1}${spinstr:0:1}
         sleep $delay
-        printf "\b\b\b\b\b"
     done
-    printf "    \b\b\b\b"
+
+    printf "\r                        \r"  # Clear timer, spinner, and ETA
 }
+
+
 
 # MESSAGE BOX FUNCTIONS.
 
 # Function to display messages in a dialog box
 
+# Welcome message
 message_box() {
-    local title="$1"
-    local message="$2"
-    dialog --title "$title" --msgbox "$message" 10 60
+    title="$1"
+    message="$2"
+    echo -e "${YELLOW}$title${COL_RESET}"
+    echo -e "${GREEN}$message${COL_RESET}"
 }
 
 # Function to display input box and store user input
-input_box() {
-    local title="$1"
-    local prompt="$2"
-    local default="$3"
-    local variable="$4"
-    dialog --title "$title" --inputbox "$prompt" 10 60 "$default" 2> >(read -r "$variable")
+function input_box {
+	# Usage: input_box "title" "prompt" "defaultvalue" VARIABLE
+	# 
+	# Prompts the user with a dialog input box.
+	# Parameters:
+	#   $1: Title of the dialog box
+	#   $2: Prompt message
+	#   $3: Default value (optional)
+	#   $4: Variable to store user input
+	# 
+	# Outputs:
+	#   The user's input will be stored in the variable specified by $4.
+	#   The exit code from dialog will be stored in ${4}_EXITCODE.
+	
+	local result
+	local result_code
+	declare -n result_var="$4"
+	declare -n result_code_var="${4}_EXITCODE"
+	
+	result=$(dialog --stdout --title "$1" --inputbox "$2" 0 0 "$3")
+	result_code=$?
+	
+	# Assigning the result to the variable specified by $4
+	result_var="$result"
+	
+	# Storing the exit code from dialog in ${4}_EXITCODE
+	result_code_var=$result_code
 }
+
 
 hide_output() {
     local OUTPUT=$(mktemp)

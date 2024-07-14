@@ -1,40 +1,41 @@
 #!/bin/env bash
 
 ##################################################################################
-# This is the entry point for configuring the system.                            #
-# Source https://mailinabox.email/ https://github.com/mail-in-a-box/mailinabox   #
-# Updated by Afiniel 2024-07-13                                                  #
+# This script is the entry point for configuring the Yiimpool system.            #
+# Source: https://mailinabox.email/ and https://github.com/mail-in-a-box/mailinabox #
+# Updated by Afiniel on 2024-07-14                                               #
 ##################################################################################
 
+# Sourcing necessary configuration files and functions
 source /etc/yiimpoolversion.conf
 source /etc/functions.sh
-cd ~/yiimpoolv2/install
+cd ~/Yiimpoolv2/install || { echo "Failed to change directory to ~/Yiimpoolv2/install"; exit 1; }
 clear
 
 # Welcome message
 message_box "Yiimpool Installer $VERSION" \
-"Hello and thanks for using the Yiimpool Yiimp Installer!
-\n\nInstallation for the most part is fully automated. In most cases any user responses that are needed are asked prior to the installation.
-\n\nNOTE: You should only install this on a brand new Ubuntu 20.04, Ubuntu 18.04, or Ubuntu 16.04 installation."
+"Hello and thank you for using the Yiimpool Installer!
+\n\nThe installation is mostly automated. User interaction is required only before installation begins.
+\n\nNOTE: This script should be run on a fresh installation of Ubuntu 20.04, Ubuntu 18.04, or Ubuntu 16.04."
 
 # Root warning message box
 message_box "Yiimpool Installer $VERSION" \
-"WARNING: You are about to run this script as root!
-\n\nThe program will create a new user account with sudo privileges.
-\n\nThe next step, you will be asked to create a new user account, you can name it whatever you want."
+"WARNING: Running this script as root!
+\n\nThe script will create a new user with sudo privileges.
+\n\nNext, you will be prompted to create a new user account. You can choose any name you prefer."
 
-# Ask if SSH key or password user
+# Ask user preference for SSH key or password login
 dialog --title "Create New User With SSH Key" \
 --yesno "Do you want to create a new user with SSH key login?
-Selecting 'No' will create the user with password login only." 7 60
+Select 'No' to create a user with password login only." 7 60
 response=$?
 case $response in
-    0) UsingSSH=yes ;;
-    1) UsingSSH=no ;;
-    255) echo "[ESC] key pressed." ;;
+0) UsingSSH=yes ;;
+1) UsingSSH=no ;;
+255) echo "[ESC] key pressed." && exit 1 ;;
 esac
 
-# If Using SSH Key Login
+# Handling SSH Key login scenario
 if [[ "$UsingSSH" == "yes" ]]; then
     clear
     if [ -z "${yiimpadmin:-}" ]; then
@@ -46,203 +47,201 @@ if [[ "$UsingSSH" == "yes" ]]; then
             yiimpadmin
 
         if [ -z "${yiimpadmin}" ]; then
-            # user hit ESC/cancel
-            exit
+            # User hit ESC/cancel
+            exit 1
         fi
     fi
 
     if [ -z "${ssh_key:-}" ]; then
         DEFAULT_ssh_key=PublicKey
-        input_box "Please open PuTTY Key Generator on your local machine and generate a new public key." \
-            "To paste your Public key use ctrl shift right click.
+        input_box "Paste your Public Key" \
+            "Please open PuTTY Key Generator on your local machine and generate a new public key.
+      \n\nTo paste your Public key use ctrl shift right click.
       \n\nPublic Key:" \
             ${DEFAULT_ssh_key} \
             ssh_key
 
         if [ -z "${ssh_key}" ]; then
-            # user hit ESC/cancel
-            exit
+            # User hit ESC/cancel
+            exit 1
         fi
     fi
 
-    # create random user password
+    # Generate random user password
     RootPassword=$(openssl rand -base64 8 | tr -d "=+/")
     clear
 
-    # Add user
-    echo -e "$YELLOW => Adding new user and setting SSH key... <= $COL_RESET"
-    sudo adduser ${yiimpadmin} --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password
-    echo -e "${RootPassword}\n${RootPassword}" | passwd ${yiimpadmin}
-    sudo usermod -aG sudo ${yiimpadmin}
+    # Adding user with SSH key setup
+    echo -e "$YELLOW => Adding new user and setting SSH key... <= $NC"
+    sudo adduser ${yiimpadmin} --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password || { echo "Failed to add user ${yiimpadmin}"; exit 1; }
+    echo -e "${RootPassword}\n${RootPassword}" | sudo passwd ${yiimpadmin} || { echo "Failed to set password for ${yiimpadmin}"; exit 1; }
+    sudo usermod -aG sudo ${yiimpadmin} || { echo "Failed to add ${yiimpadmin} to sudo group"; exit 1; }
     
-    # Create SSH Key structure
-    mkdir -p /home/${yiimpadmin}/.ssh
-    touch /home/${yiimpadmin}/.ssh/authorized_keys
-    chown -R ${yiimpadmin}:${yiimpadmin} /home/${yiimpadmin}/.ssh
-    chmod 700 /home/${yiimpadmin}/.ssh
-    chmod 644 /home/${yiimpadmin}/.ssh/authorized_keys
+    # Setting up SSH key
+    sudo mkdir -p /home/${yiimpadmin}/.ssh || { echo "Failed to create .ssh directory"; exit 1; }
+    sudo touch /home/${yiimpadmin}/.ssh/authorized_keys || { echo "Failed to create authorized_keys file"; exit 1; }
+    sudo chown -R ${yiimpadmin}:${yiimpadmin} /home/${yiimpadmin}/.ssh || { echo "Failed to change ownership of .ssh directory"; exit 1; }
+    sudo chmod 700 /home/${yiimpadmin}/.ssh || { echo "Failed to set permissions on .ssh directory"; exit 1; }
+    sudo chmod 644 /home/${yiimpadmin}/.ssh/authorized_keys || { echo "Failed to set permissions on authorized_keys file"; exit 1; }
     authkeys=/home/${yiimpadmin}/.ssh/authorized_keys
-    echo "$ssh_key" >"$authkeys"
+    echo "$ssh_key" | sudo tee "$authkeys" >/dev/null || { echo "Failed to write SSH key to authorized_keys"; exit 1; }
 
-    # enabling yiimpool command
+    # Enabling yiimpool command
     echo '# yiimp
-  # It needs passwordless sudo functionality.
-  '""''"${yiimpadmin}"''""' ALL=(ALL) NOPASSWD:ALL
-  ' | sudo -E tee /etc/sudoers.d/${yiimpadmin} >/dev/null 2>&1
+  # Requires passwordless sudo functionality.
+  '"${yiimpadmin}"' ALL=(ALL) NOPASSWD:ALL
+  ' | sudo tee /etc/sudoers.d/${yiimpadmin} >/dev/null || { echo "Failed to add sudoers entry"; exit 1; }
 
     echo '
-  cd ~/yiimpoolv2/install
+  cd ~/Yiimpoolv2/install
   bash start.sh
-  ' | sudo -E tee /usr/bin/yiimpool >/dev/null 2>&1
-    sudo chmod +x /usr/bin/yiimpool
+  ' | sudo tee /usr/bin/yiimpool >/dev/null || { echo "Failed to create yiimpool command"; exit 1; }
+    sudo chmod +x /usr/bin/yiimpool || { echo "Failed to set execute permission on yiimpool command"; exit 1; }
 
-    # Check required files and set global variables
-    cd $HOME/yiimpoolv2/install
-    source pre_setup.sh
+    # Checking required files and setting global variables
+    cd "$HOME/Yiimpoolv2/install" || { echo "Failed to change directory to $HOME/Yiimpoolv2/install"; exit 1; }
+    source pre_setup.sh || { echo "Failed to source pre_setup.sh"; exit 1; }
 
-    # Create the STORAGE_USER and STORAGE_ROOT directory if they don't already exist.
-    if ! id -u $STORAGE_USER >/dev/null 2>&1; then
-        sudo useradd -m $STORAGE_USER
+    # Creating STORAGE_USER and STORAGE_ROOT directories if they don't exist
+    if ! id -u "$STORAGE_USER" >/dev/null 2>&1; then
+        sudo useradd -m "$STORAGE_USER" || { echo "Failed to create storage user $STORAGE_USER"; exit 1; }
     fi
-    if [ ! -d $STORAGE_ROOT ]; then
-        sudo mkdir -p $STORAGE_ROOT
+    if [ ! -d "$STORAGE_ROOT" ]; then
+        sudo mkdir -p "$STORAGE_ROOT" || { echo "Failed to create storage root directory $STORAGE_ROOT"; exit 1; }
     fi
 
-    # Save the global options in /etc/yiimpool.conf so that standalone
-    # tools know where to look for data.
+    # Saving global options in /etc/yiimpool.conf
     echo 'STORAGE_USER='"${STORAGE_USER}"'
     STORAGE_ROOT='"${STORAGE_ROOT}"'
     PUBLIC_IP='"${PUBLIC_IP}"'
     PUBLIC_IPV6='"${PUBLIC_IPV6}"'
     DISTRO='"${DISTRO}"'
-    PRIVATE_IP='"${PRIVATE_IP}"'' | sudo -E tee /etc/yiimpool.conf >/dev/null 2>&1
+    PRIVATE_IP='"${PRIVATE_IP}"'' | sudo tee /etc/yiimpool.conf >/dev/null || { echo "Failed to create /etc/yiimpool.conf"; exit 1; }
 
-    # Set Donor Addresses
+    # Setting Donor Addresses
     echo 'BTCDON="bc1qc4qqz8eu5j7u8pxfrfvv8nmcka7whhm225a3f9"
     LTCDON="ltc1qma2lgr2mgmtu7sn6pzddaeac9d84chjjpatpzm"
     ETHDON="0xdA929d4f03e1009Fc031210DDE03bC40ea66D044"
     BCHDON="qpse55j0kg0txz0zyx8nsrv3pvd039c09ypplsfn87"
-    DOGEDON="DFPg3VnH4kTbWiejpwsXvq1sP9qbuwYe6Z"' | sudo -E tee /etc/yiimpooldonate.conf >/dev/null 2>&1
+    DOGEDON="DFPg3VnH4kTbWiejpwsXvq1sP9qbuwYe6Z"' | sudo tee /etc/yiimpooldonate.conf >/dev/null || { echo "Failed to create /etc/yiimpooldonate.conf"; exit 1; }
 
-    sudo cp -r ~/yiimpoolv2 /home/${yiimpadmin}/
-    cd ~
-    sudo setfacl -m u:${yiimpadmin}:rwx /home/${yiimpadmin}/yiimpoolv2
-    sudo rm -r $HOME/yiimpoolv2
+    # Copying Yiimpoolv2 to user's home directory and setting permissions
+    sudo cp -r ~/Yiimpoolv2 /home/${yiimpadmin}/ || { echo "Failed to copy Yiimpoolv2 to /home/${yiimpadmin}/"; exit 1; }
+    cd ~ || { echo "Failed to change directory to home"; exit 1; }
+    sudo setfacl -m u:${yiimpadmin}:rwx /home/${yiimpadmin}/Yiimpoolv2 || { echo "Failed to set ACL for ${yiimpadmin}"; exit 1; }
+    sudo rm -r "$HOME/yiimpool" || { echo "Failed to remove $HOME/yiimpool"; exit 1; }
     clear
-    echo -e "$YELLOW New User:$MAGENTA ${yiimpadmin} $GREEN created!$YELLOW Make sure you save your$RED private key!$COL_RESET"
+    echo -e "$YELLOW New User:$MAGENTA ${yiimpadmin} $GREEN created!$YELLOW Make sure to save your$RED private key!$NC"
     echo
-    echo -e "$RED Please$RED reboot$YELLOW system and log in as the new user:$MAGENTA ${yiimpadmin} $YELLOW and type$GREEN yiimpool$YELLOW to$GREEN continue$YELLOW setup.$COL_RESET"
+    echo -e "$RED Please reboot the system and log in as$GREEN ${yiimpadmin} $RED and type$GREEN yiimpool$RED to$GREEN continue$YELLOW setup...$NC"
     exit 0
 fi
 
-# New User Password Login Creation
+# Creating new user with password login
 if [ -z "${yiimpadmin:-}" ]; then
     DEFAULT_yiimpadmin=yiimpadmin
-    input_box "Creaete new username" \
+    input_box "Create new username" \
         "Please enter your new username.
   \n\nUser Name:" \
         ${DEFAULT_yiimpadmin} \
         yiimpadmin
 
     if [ -z "${yiimpadmin}" ]; then
-        # user hit ESC/cancel
-        exit
+        # User hit ESC/cancel
+        exit 1
     fi
 fi
 
+# Setting up user password
 if [ -z "${RootPassword:-}" ]; then
     DEFAULT_RootPassword=$(openssl rand -base64 8 | tr -d "=+/")
     input_box "User Password" \
-        "Enter your new user password or use this randomly system generated one.
-  \n\nUnfortunatley dialog doesnt let you copy. So you have to write it down.
+        "Enter your new user password or use this randomly generated one.
+  \n\nUnfortunately dialog doesn't allow copying. Please write it down.
   \n\nUser password:" \
         ${DEFAULT_RootPassword} \
         RootPassword
 
     if [ -z "${RootPassword}" ]; then
-        # user hit ESC/cancel
-        exit
+        # User hit ESC/cancel
+        exit 1
     fi
 fi
 
 clear
 
+# Verifying user inputs before proceeding
 dialog --title "Verify Your input" \
     --yesno "Please verify your answers before you continue:
 New User Name : ${yiimpadmin}
 New User Pass : ${RootPassword}" 8 60
 
-# Get exit status
-# 0 means user hit [yes] button.
-# 1 means user hit [no] button.
-# 255 means user hit [Esc] key.
 response=$?
 case $response in
-
 0)
     clear
-    echo -e "$YELLOW => Adding new user and password... <= $COL_RESET"
+    echo -e "$YELLOW => Adding new user and password... <= $NC"
 
-    sudo adduser ${yiimpadmin} --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password
-    echo -e ""${RootPassword}"\n"${RootPassword}"" | passwd ${yiimpadmin}
-    sudo usermod -aG sudo ${yiimpadmin}
+    # Adding user with password setup
+    sudo adduser ${yiimpadmin} --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password || { echo "Failed to add user ${yiimpadmin}"; exit 1; }
+    echo -e ""${RootPassword}"\n"${RootPassword}"" | sudo passwd ${yiimpadmin} || { echo "Failed to set password for ${yiimpadmin}"; exit 1; }
+    sudo usermod -aG sudo ${yiimpadmin} || { echo "Failed to add ${yiimpadmin} to sudo group"; exit 1; }
 
-    # enabling yiimpool command
+    # Enabling yiimpool command
     echo '# yiimp
-    # It needs passwordless sudo functionality.
-    '""''"${yiimpadmin}"''""' ALL=(ALL) NOPASSWD:ALL
-    ' | sudo -E tee /etc/sudoers.d/${yiimpadmin} >/dev/null 2>&1
+    # Requires passwordless sudo functionality.
+    '"${yiimpadmin}"' ALL=(ALL) NOPASSWD:ALL
+    ' | sudo tee /etc/sudoers.d/${yiimpadmin} >/dev/null || { echo "Failed to add sudoers entry"; exit 1; }
 
     echo '
-    cd ~/yiimpoolv2/install
+    cd ~/Yiimpoolv2/install
     bash start.sh
-    ' | sudo -E tee /usr/bin/yiimpool >/dev/null 2>&1
-    sudo chmod +x /usr/bin/yiimpool
+    ' | sudo tee /usr/bin/yiimpool >/dev/null || { echo "Failed to create yiimpool command"; exit 1; }
+    sudo chmod +x /usr/bin/yiimpool || { echo "Failed to set execute permission on yiimpool command"; exit 1; }
 
-    # Check required files and set global variables
-    cd $HOME/yiimpoolv2/install
-    source pre_setup.sh
+    # Checking required files and setting global variables
+    cd "$HOME/Yiimpoolv2/install" || { echo "Failed to change directory to $HOME/Yiimpoolv2/install"; exit 1; }
+    source pre_setup.sh || { echo "Failed to source pre_setup.sh"; exit 1; }
 
-    # Create the STORAGE_USER and STORAGE_ROOT directory if they don't already exist.
-    if ! id -u $STORAGE_USER >/dev/null 2>&1; then
-        sudo useradd -m $STORAGE_USER
+    # Creating STORAGE_USER and STORAGE_ROOT directories if they don't exist
+    if ! id -u "$STORAGE_USER" >/dev/null 2>&1; then
+        sudo useradd -m "$STORAGE_USER" || { echo "Failed to create storage user $STORAGE_USER"; exit 1; }
     fi
-    if [ ! -d $STORAGE_ROOT ]; then
-        sudo mkdir -p $STORAGE_ROOT
+    if [ ! -d "$STORAGE_ROOT" ]; then
+        sudo mkdir -p "$STORAGE_ROOT" || { echo "Failed to create storage root directory $STORAGE_ROOT"; exit 1; }
     fi
 
-    # Save the global options in /etc/yiimpool.conf so that standalone
-    # tools know where to look for data.
+    # Saving global options in /etc/yiimpool.conf
     echo 'STORAGE_USER='"${STORAGE_USER}"'
     STORAGE_ROOT='"${STORAGE_ROOT}"'
     PUBLIC_IP='"${PUBLIC_IP}"'
     PUBLIC_IPV6='"${PUBLIC_IPV6}"'
     DISTRO='"${DISTRO}"'
+    PRIVATE_IP='"${PRIVATE_IP}"'' | sudo tee /etc/yiimpool.conf >/dev/null || { echo "Failed to create /etc/yiimpool.conf"; exit 1; }
 
-    PRIVATE_IP='"${PRIVATE_IP}"'' | sudo -E tee /etc/yiimpool.conf >/dev/null 2>&1
-
-    # Set Donor Addresses
+    # Setting Donor Addresses
     echo 'BTCDON="bc1qc4qqz8eu5j7u8pxfrfvv8nmcka7whhm225a3f9"
     LTCDON="ltc1qma2lgr2mgmtu7sn6pzddaeac9d84chjjpatpzm"
     ETHDON="0xdA929d4f03e1009Fc031210DDE03bC40ea66D044"
     BCHDON="qpse55j0kg0txz0zyx8nsrv3pvd039c09ypplsfn87"
-    DOGEDON="DFPg3VnH4kTbWiejpwsXvq1sP9qbuwYe6Z"' | sudo -E tee /etc/yiimpooldonate.conf >/dev/null 2>&1
+    DOGEDON="DFPg3VnH4kTbWiejpwsXvq1sP9qbuwYe6Z"' | sudo tee /etc/yiimpooldonate.conf >/dev/null || { echo "Failed to create /etc/yiimpooldonate.conf"; exit 1; }
 
-    sudo cp -r ~/yiimpoolv2 /home/${yiimpadmin}/
-    cd ~
-    sudo setfacl -m u:${yiimpadmin}:rwx /home/${yiimpadmin}/yiimpoolv2
-    sudo rm -r $HOME/yiimpoolv2
+    # Copying Yiimpoolv2 to user's home directory and setting permissions
+    sudo cp -r ~/Yiimpoolv2 /home/${yiimpadmin}/ || { echo "Failed to copy Yiimpoolv2 to /home/${yiimpadmin}/"; exit 1; }
+    cd ~ || { echo "Failed to change directory to home"; exit 1; }
+    sudo setfacl -m u:${yiimpadmin}:rwx /home/${yiimpadmin}/Yiimpoolv2 || { echo "Failed to set ACL for ${yiimpadmin}"; exit 1; }
+    sudo rm -r "$HOME/Yiimpoolv2" || { echo "Failed to remove $HOME/Yiimpoolv2"; exit 1; }
     clear
-    echo -e "$YELLOW New User:$MAGENTA ${yiimpadmin} $GREEN created$RED $COL_RESET"
+    echo -e "$YELLOW New User:$MAGENTA ${yiimpadmin} $GREEN created$RED $NC"
     echo
-    echo -e "$YELLOW Please$RED reboot$YELLOW system and log in as the new user:$MAGENTA ${yiimpadmin} $YELLOW and type$GREEN yiimpool$YELLOW to$GREEN continue$YELLOW setup.$COL_RESET"
+    echo -e "$YELLOW Please$RED reboot$YELLOW system and log in as the new user:$MAGENTA ${yiimpadmin} $YELLOW and type$GREEN yiimpool$YELLOW to$GREEN continue$YELLOW setup.$NC"
     exit 0
     ;;
 
 1)
-
+    # If 'No' is selected, restart the script
     clear
-    bash $(basename $0) && exit
+    bash "$(basename "$0")" && exit
     ;;
 
 255) ;;
