@@ -64,11 +64,8 @@ spinner() {
 # Function to display messages in a dialog box
 
 # Welcome message
-message_box() {
-    title="$1"
-    message="$2"
-    echo -e "${YELLOW}$title${COL_RESET}"
-    echo -e "${GREEN}$message${COL_RESET}"
+function message_box {
+	dialog --title "$1" --msgbox "$2" 0 0
 }
 
 # Function to display input box and store user input
