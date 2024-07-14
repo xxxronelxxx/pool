@@ -97,7 +97,7 @@ if [[ ("$UsingSSH" == "yes") ]]; then
     sudo chmod +x /usr/bin/yiimpool
 
     # Check required files and set global variables
-    cd $HOME/Yiimpoolv2/install
+    cd "$HOME/Yiimpoolv2/install"
     source pre_setup.sh
 
     # Create the STORAGE_USER and STORAGE_ROOT directory if they don't already exist.
@@ -127,7 +127,7 @@ if [[ ("$UsingSSH" == "yes") ]]; then
     sudo cp -r ~/Yiimpoolv2 /home/${yiimpadmin}/
     cd ~
     sudo setfacl -m u:${yiimpadmin}:rwx /home/${yiimpadmin}/Yiimpoolv2
-    sudo rm -r $HOME/yiimpool
+    sudo rm -r $HOME/Yiimpoolv2
     clear
     echo -e "$YELLOW New User:$MAGENTA ${yiimpadmin} $GREEN created!$YELLOW Make sure you save your$RED private key!$COL_RESET"
     echo
@@ -195,7 +195,7 @@ case $response in
 
     echo '
     cd ~/Yiimpoolv2/install
-    bash start.sh
+    bash menu.sh
     ' | sudo -E tee /usr/bin/yiimpool >/dev/null 2>&1
     sudo chmod +x /usr/bin/yiimpool
 
