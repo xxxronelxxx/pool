@@ -16,7 +16,7 @@
 source /etc/functions.sh
 source /etc/yiimpool.conf
 source "$STORAGE_ROOT/yiimp/.yiimp.conf"
-source "$HOME/yiimp_install_script/yiimp_single/.wireguard.install.cnf"
+source "$HOME/Yiimpoolv2/yiimp_single/.wireguard.install.cnf"
 
 set -euo pipefail
 
@@ -61,7 +61,7 @@ sudo mkdir -p "/var/www/${DomainName}/html" /etc/yiimp "$SITE_DIR/backup/"
 sudo sed -i "s|ROOTDIR=/data/yiimp|ROOTDIR=${SITE_DIR}|g" /bin/yiimp
 
 # Nginx setup based on domain and SSL options
-cd "$HOME/yiimp_install_script/yiimp_single"
+cd "$HOME/Yiimpoolv2/yiimp_single"
 if [[ "$UsingSubDomain" =~ ^[Yy][Ee]?[Ss]?$ ]]; then
   source nginx_subdomain_nonssl.sh
   if [[ "$InstallSSL" =~ ^[Yy][Ee]?[Ss]?$ ]]; then
@@ -96,7 +96,7 @@ sudo chgrp www-data "$STORAGE_ROOT" -R
 sudo chmod g+w "$STORAGE_ROOT" -R
 echo -e "$GREEN => Complete$COL_RESET"
 
-cd "$HOME/yiimp_install_script/yiimp_single"
+cd "$HOME/Yiimpoolv2/yiimp_single"
 
 # Updating YiiMP files for YiimpPool build
 echo
@@ -131,4 +131,4 @@ fi
 echo -e "$GREEN Web build complete$COL_RESET"
 
 set +euo pipefail
-cd "$HOME/yiimp_install_script/yiimp_single"
+cd "$HOME/Yiimpoolv2/yiimp_single"

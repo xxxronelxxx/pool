@@ -129,6 +129,7 @@ if [[ ("$UsingSSH" == "yes") ]]; then
     sudo setfacl -m u:${yiimpadmin}:rwx /home/${yiimpadmin}/Yiimpoolv2
     sudo rm -r $HOME/yiimpool
     clear
+    term_art
     echo
     echo -e "${YELLOW}Setup information:$NC"
     echo
@@ -243,6 +244,7 @@ case $response in
     sudo setfacl -m u:${yiimpadmin}:rwx /home/${yiimpadmin}/Yiimpoolv2
     sudo rm -r $HOME/Yiimpoolv2
     clear
+    term_art
     echo
     echo -e "${YELLOW}Setup information:$NC"
     echo

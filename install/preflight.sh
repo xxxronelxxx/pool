@@ -12,22 +12,27 @@ source /etc/functions.sh
 echo -e "${YELLOW}Running pre-flight checks...${NC}\n"
 
 # Identify Ubuntu version and set permissions accordingly
-UBUNTU_VERSION=$(lsb_release -d | sed 's/.*:\s*//' | sed 's/20\.04\.[0-9]/20.04 LTS/' | sed 's/18\.04\.[0-9]/18.04 LTS/' | sed 's/16\.04\.[0-9]/16.04 LTS/')
+UBUNTU_VERSION=$(lsb_release -d | sed 's/.*:\s*//' | sed 's/20\.04\.[0-9]/20.04 LTS/' | sed 's/18\.04\.[0-9]/18.04 LTS/' | sed 's/16\.04\.[0-9]/16.04 LTS/' | sed 's/\/.*//')
+
 case "$UBUNTU_VERSION" in
     "Ubuntu 20.04 LTS" | "Ubuntu 20.04.06 LTS")
-        DISTRO="20.04"
+        DISTRO="20.04 LTS"
         ;;
     "Ubuntu 18.04 LTS")
-        DISTRO="18.04"
+        DISTRO="18.04 LTS"
         ;;
     "Ubuntu 16.04 LTS")
-        DISTRO="16.04"
+        DISTRO="16.04 LTS"
+        ;;
+    "Ubuntu 20.04" | "Ubuntu 21.04" | "16.04" | "Ubuntu 22.04" | "Ubuntu 23.04" | "Ubuntu 23.10")
+        DISTRO="non-LTS"
         ;;
     *)
-        echo -e "${RED}This script only supports Ubuntu 16.04 LTS, 18.04 LTS, and 20.04 LTS (including 20.04.06 LTS).${NC}\n"
+        echo -e "${RED}This script supports Ubuntu 16.04 LTS, 18.04 LTS, 20.04 LTS (including 20.04.06 LTS), and some non-LTS versions.${NC}\n"
         exit 1
         ;;
 esac
+
 
 echo -e "${YELLOW}Setting permissions for Ubuntu $DISTRO...${NC}"
 sudo chmod g-w /etc /etc/default /usr
