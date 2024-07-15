@@ -23,21 +23,20 @@ BLUE=$ESC_SEQ"34;01m"
 MAGENTA=$ESC_SEQ"35;01m"
 CYAN=$ESC_SEQ"36;01m"
 
-spinner() {
-    local pid=$1
-    local delay=0.1
+function spinner {
+    local pid=$!
+    local delay=0.35
     local spinstr='|/-\'
-
-    while ps -p $pid > /dev/null 2>&1; do
-        for char in $spinstr; do
-            printf " [%c] " "$char"
-            sleep $delay
-            printf "\b\b\b\b\b\b\b"
-        done
+    while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
+        local temp=${spinstr#?}
+        printf " [%c]  " "$spinstr"
+        local spinstr=$temp${spinstr%"$temp"}
+        sleep $delay
+        printf "\b\b\b\b\b\b"
     done
-    printf "\b\b\b\b\b\b\b"
-    echo -e "\033[0;32mDone\033[0m"
+    printf "    \b\b\b\b"
 }
+
 
 
 
