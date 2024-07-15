@@ -31,4 +31,4 @@ run-parts /etc/update-motd.d/ | sudo tee /etc/motd
 ' | sudo -E tee /usr/bin/motd >/dev/null 2>&1
 sudo chmod +x /usr/bin/motd
 
-cd "$HOME/Yiimpoolv2/yiimp_single"
+cd $HOME/Yiimpoolv2/yiimp_single

@@ -273,4 +273,4 @@ case $response in
 esac
 
 # Change directory back to the initial directory
-cd "$HOME/Yiimpoolv2/yiimp_single"
+cd $HOME/Yiimpoolv2/yiimp_single

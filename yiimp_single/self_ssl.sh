@@ -63,4 +63,4 @@ fi
 
 echo -e "$GREEN => Initial self-signed SSL generation complete <= ${NC}"
 
-cd "$HOME/Yiimpoolv2/yiimp_single"
+cd $HOME/Yiimpoolv2/yiimp_single

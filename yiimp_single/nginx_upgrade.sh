@@ -16,7 +16,7 @@ source /etc/yiimpool.conf
 source "$STORAGE_ROOT/yiimp/.yiimp.conf"
 source "$HOME/Yiimpoolv2/yiimp_single/.wireguard.install.cnf"
 
-cd "$HOME/Yiimpoolv2/yiimp_single"
+cd $HOME/Yiimpoolv2/yiimp_single
 
 # Ensure the script exits on error and logs errors
 set -eu -o pipefail
@@ -74,4 +74,4 @@ restart_service php7.3-fpm
 set +eu +o pipefail
 
 # Return to the initial directory
-cd "$HOME/Yiimpoolv2/yiimp_single"
+cd $HOME/Yiimpoolv2/yiimp_single

@@ -171,4 +171,4 @@ restart_service mysql
 # Reset error handling
 set +eu +o pipefail
 
-cd "$HOME/Yiimpoolv2/yiimp_single"
+cd $HOME/Yiimpoolv2/yiimp_single

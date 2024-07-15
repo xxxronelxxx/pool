@@ -103,4 +103,4 @@ fi
 # Disable strict mode to avoid unintended errors in subsequent commands
 set +euo pipefail
 
-cd "$HOME/Yiimpoolv2/yiimp_single"
+cd $HOME/Yiimpoolv2/yiimp_single

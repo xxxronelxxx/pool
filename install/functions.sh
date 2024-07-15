@@ -24,13 +24,13 @@ MAGENTA=$ESC_SEQ"35;01m"
 CYAN=$ESC_SEQ"36;01m"
 
 spinner() {
+    local infotext=$1
     local pid=$!
     local delay=0.1
     local spinstr='|/-\'
-    local infotext=$1
 
     echo -n " $infotext "
-    while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
+    while ps -p $pid > /dev/null; do
         local temp=${spinstr#?}
         printf " [%c] " "$spinstr"
         local spinstr=$temp${spinstr%"$temp"}
@@ -38,8 +38,9 @@ spinner() {
         printf "\b\b\b\b"
     done
     printf "\b\b\b\b    \b\b\b\b"
-    echo -ne " \033[0;32mDone\033[0m\n"
+    echo -e " \033[0;32mDone\033[0m"
 }
+
 
 
 # Database functions

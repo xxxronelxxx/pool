@@ -12,26 +12,36 @@ source /etc/functions.sh
 echo -e "${YELLOW}Running pre-flight checks...${NC}\n"
 
 # Identify Ubuntu version and set permissions accordingly
-UBUNTU_VERSION=$(lsb_release -d | sed 's/.*:\s*//' | sed 's/20\.04\.[0-9]/20.04 LTS/' | sed 's/18\.04\.[0-9]/18.04 LTS/' | sed 's/16\.04\.[0-9]/16.04 LTS/' | sed 's/\/.*//')
+UBUNTU_DESCRIPTION=$(lsb_release -d | sed 's/.*:\s*//')
+UBUNTU_VERSION=$(lsb_release -rs)
 
-case "$UBUNTU_VERSION" in
-    "Ubuntu 20.04 LTS" | "Ubuntu 20.04.06 LTS")
-        DISTRO="20.04 LTS"
-        ;;
-    "Ubuntu 18.04 LTS")
-        DISTRO="18.04 LTS"
-        ;;
-    "Ubuntu 16.04 LTS")
-        DISTRO="16.04 LTS"
-        ;;
-    "Ubuntu 20.04" | "Ubuntu 21.04" | "16.04" | "Ubuntu 22.04" | "Ubuntu 23.04" | "Ubuntu 23.10")
-        DISTRO="non-LTS"
-        ;;
-    *)
-        echo -e "${RED}This script supports Ubuntu 16.04 LTS, 18.04 LTS, 20.04 LTS (including 20.04.06 LTS), and some non-LTS versions.${NC}\n"
-        exit 1
-        ;;
+if [[ "${UBUNTU_DESCRIPTION}" == "Ubuntu 20.04 LTS" ]]; then
+  DISTRO=20
+elif [[ "${UBUNTU_DESCRIPTION}" == "Ubuntu 18.04 LTS" ]]; then
+  DISTRO=18
+elif [[ "${UBUNTU_DESCRIPTION}" == "Ubuntu 16.04 LTS" ]]; then
+  DISTRO=16
+elif [[ "${UBUNTU_DESCRIPTION}" == "Ubuntu 24.04 LTS" ]]; then
+  DISTRO=24
+elif [[ "${UBUNTU_DESCRIPTION}" == "Ubuntu 23.04 LTS" ]]; then
+  DISTRO=23
+else
+  echo "This script only supports Ubuntu 16.04 LTS, 18.04 LTS, 20.04 LTS, 24.04 LTS, and 23.04 LTS."
+  exit 1
+fi
+
+# Apply permissions based on the identified LTS version
+case "$DISTRO" in
+  16 | 18 | 20 | 24 | 23)
+    sudo chmod g-w /etc /etc/default /usr
+    ;;
+  *)
+    echo "Unsupported Ubuntu version: ${UBUNTU_DESCRIPTION}"
+    exit 1
+    ;;
 esac
+
+
 
 
 echo -e "${YELLOW}Setting permissions for Ubuntu $DISTRO...${NC}"

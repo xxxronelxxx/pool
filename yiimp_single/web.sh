@@ -35,16 +35,17 @@ if [[ "$wireguard" == "true" ]]; then
 fi
 
 echo
-echo -e "$MAGENTA     <--$YELLOW Building web file structure and copying files$MAGENTA -->$COL_RESET"
+echo -e "$MAGENTA     <--$YELLOW Building web file structure and copying files$MAGENTA -->${NC}"
 echo
 echo
-echo -e "$CYAN => Building web file structure and copying files <= $COL_RESET"
+echo -e "$CYAN => Building web file structure and copying files <= ${NC}"
 
 # Paths
 YIIMP_SETUP_DIR="$STORAGE_ROOT/yiimp/yiimp_setup/yiimp"
 SITE_DIR="$STORAGE_ROOT/yiimp/site"
 WEB_DIR="$YIIMP_SETUP_DIR/web"
 
+cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
 # Update SiteController.php
 sudo sed -i "s/myadmin/${AdminPanel}/" "$WEB_DIR/yaamp/modules/site/SiteController.php"
 
@@ -61,29 +62,32 @@ sudo mkdir -p "/var/www/${DomainName}/html" /etc/yiimp "$SITE_DIR/backup/"
 sudo sed -i "s|ROOTDIR=/data/yiimp|ROOTDIR=${SITE_DIR}|g" /bin/yiimp
 
 # Nginx setup based on domain and SSL options
-cd "$HOME/Yiimpoolv2/yiimp_single"
-if [[ "$UsingSubDomain" =~ ^[Yy][Ee]?[Ss]?$ ]]; then
+if [[ ("$UsingSubDomain" == "y" || "$UsingSubDomain" == "Y" || "$UsingSubDomain" == "yes" || "$UsingSubDomain" == "Yes" || "$UsingSubDomain" == "YES") ]]; then
+  cd $HOME/Yiimpoolv2/yiimp_single
   source nginx_subdomain_nonssl.sh
-  if [[ "$InstallSSL" =~ ^[Yy][Ee]?[Ss]?$ ]]; then
+  if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
+  cd $HOME/Yiimpoolv2/yiimp_single
     source nginx_subdomain_ssl.sh
   fi
 else
+  cd $HOME/Yiimpoolv2/yiimp_single
   source nginx_domain_nonssl.sh
-  if [[ "$InstallSSL" =~ ^[Yy][Ee]?[Ss]?$ ]]; then
+  if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
+  cd $HOME/Yiimpoolv2/yiimp_single
     source nginx_domain_ssl.sh
   fi
 fi
 
 echo
-echo -e "$MAGENTA => Creating YiiMP configuration files <= $COL_RESET"
+echo -e "$MAGENTA => Creating YiiMP configuration files <= ${NC}"
 # Source yiimp configuration scripts
 for script in keys.sh yiimpserverconfig.sh main.sh loop2.sh blocks.sh; do
   source "yiimp_confs/$script"
 done
-echo -e "$GREEN => Complete$COL_RESET"
+echo -e "$GREEN => Complete${NC}"
 
 echo
-echo -e "$YELLOW => Setting correct folder permissions <= $COL_RESET"
+echo -e "$YELLOW => Setting correct folder permissions <= ${NC}"
 WHOAMI=$(whoami)
 sudo usermod -aG www-data "$WHOAMI"
 sudo usermod -aG crypto-data "$WHOAMI"
@@ -94,13 +98,13 @@ sudo find "$SITE_DIR" -type f -exec chmod 664 {} +
 
 sudo chgrp www-data "$STORAGE_ROOT" -R
 sudo chmod g+w "$STORAGE_ROOT" -R
-echo -e "$GREEN => Complete$COL_RESET"
+echo -e "$GREEN => Complete${NC}"
 
-cd "$HOME/Yiimpoolv2/yiimp_single"
+cd $HOME/Yiimpoolv2/yiimp_single
 
 # Updating YiiMP files for YiimpPool build
 echo
-echo -e "$YELLOW => Adding the yiimpool flare to YiiMP <= $COL_RESET"
+echo -e "$YELLOW => Adding the yiimpool flare to YiiMP <= ${NC}"
 
 # Apply sed replacements
 for file in \
@@ -128,7 +132,7 @@ if [[ "$wireguard" == "true" ]]; then
   sudo sed -i "/# onlynet=ipv4/i\        echo \"rpcallowip=${internalrpcip}\\n\";" "$SITE_DIR/web/yaamp/modules/site/coin_form.php"
 fi
 
-echo -e "$GREEN Web build complete$COL_RESET"
+echo -e "$GREEN Web build complete${NC}"
 
 set +euo pipefail
-cd "$HOME/Yiimpoolv2/yiimp_single"
+cd $HOME/Yiimpoolv2/yiimp_single

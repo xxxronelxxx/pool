@@ -78,8 +78,12 @@ server {
 }
 ' | sudo -E tee "/etc/nginx/sites-available/${DomainName}.conf" >/dev/null 2>&1
 
-# Create symbolic links for NGINX configuration and web directory
-sudo ln -s "/etc/nginx/sites-available/${DomainName}.conf" "/etc/nginx/sites-enabled/${DomainName}.conf"
+# Check if symbolic link already exists before creating it
+if [[ -L "/etc/nginx/sites-enabled/${DomainName}.conf" ]]; then
+  echo -e "${YELLOW}Symbolic link /etc/nginx/sites-enabled/${DomainName}.conf already exists. Skipping creation.${NC}"
+else
+  sudo ln -s "/etc/nginx/sites-available/${DomainName}.conf" "/etc/nginx/sites-enabled/${DomainName}.conf"
+fi
 sudo ln -s "$STORAGE_ROOT/yiimp/site/web" "/var/www/${DomainName}/html"
 
 # Restart NGINX and PHP-FPM services
@@ -89,4 +93,4 @@ restart_service php7.3-fpm
 # Disable strict mode to avoid unintended errors in subsequent commands
 set +euo pipefail
 
-cd "$HOME/Yiimpoolv2/yiimp_single"
+cd $HOME/Yiimpoolv2/yiimp_single
