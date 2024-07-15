@@ -82,9 +82,9 @@ server {
 if [[ -L "/etc/nginx/sites-enabled/${DomainName}.conf" ]]; then
   echo -e "${YELLOW}Symbolic link /etc/nginx/sites-enabled/${DomainName}.conf already exists. Skipping creation.${NC}"
 else
-  sudo ln -s "/etc/nginx/sites-available/${DomainName}.conf" "/etc/nginx/sites-enabled/${DomainName}.conf"
+  sudo ln -sf "/etc/nginx/sites-available/${DomainName}.conf" "/etc/nginx/sites-enabled/${DomainName}.conf"
 fi
-sudo ln -s "$STORAGE_ROOT/yiimp/site/web" "/var/www/${DomainName}/html"
+sudo ln -sf "$STORAGE_ROOT/yiimp/site/web" "/var/www/${DomainName}/html"
 
 # Restart NGINX and PHP-FPM services
 restart_service nginx

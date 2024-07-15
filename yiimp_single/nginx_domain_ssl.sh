@@ -6,7 +6,7 @@
 source /etc/functions.sh
 source /etc/yiimpool.conf
 source $STORAGE_ROOT/yiimp/.yiimp.conf
-source $HOME/yiimp_install_script/yiimp_single/.wireguard.install.cnf
+#source $HOME/yiimp_install_script/yiimp_single/.wireguard.install.cnf
 
 set -eu -o pipefail
 
@@ -21,7 +21,7 @@ if [[ ("$wireguard" == "true") ]]; then
 	source $STORAGE_ROOT/yiimp/.wireguard.conf
 fi
 
-echo -e "$YELLOW => Generating Certbot Request for$GREEN ${DomainName} <= $COL_RESET"
+echo -e "$YELLOW => Generating Certbot Request for$GREEN ${DomainName} <= $NC"
 sudo mkdir -p /var/www/_letsencrypt
 sudo chown www-data /var/www/_letsencrypt
 hide_output sudo certbot certonly --webroot -d "${DomainName}" --register-unsafely-without-email -w /var/www/_letsencrypt -n --agree-tos --force-renewal
@@ -89,7 +89,7 @@ server {
 	restart_service nginx >/dev/null 2>&1
 	restart_service php7.3-fpm >/dev/null 2>&1
 else
-	echo -e "$GREEN Certbot$RED generation failed, after the installer is finished check$MAGENTA /var/log/letsencrypt$YELLOW (must be root to view) on why it failed. $COL_RESET"
+	echo -e "$GREEN Certbot$RED generation failed, after the installer is finished check$MAGENTA /var/log/letsencrypt$YELLOW (must be root to view) on why it failed. $NC"
 fi
 set +eu +o pipefail
 

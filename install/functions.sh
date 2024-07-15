@@ -24,21 +24,19 @@ MAGENTA=$ESC_SEQ"35;01m"
 CYAN=$ESC_SEQ"36;01m"
 
 spinner() {
-    local infotext=$1
-    local pid=$!
+    local pid=$1
     local delay=0.1
     local spinstr='|/-\'
 
-    echo -n " $infotext "
-    while ps -p $pid > /dev/null; do
-        local temp=${spinstr#?}
-        printf " [%c] " "$spinstr"
-        local spinstr=$temp${spinstr%"$temp"}
-        sleep $delay
-        printf "\b\b\b\b"
+    while ps -p $pid > /dev/null 2>&1; do
+        for char in $spinstr; do
+            printf " [%c] " "$char"
+            sleep $delay
+            printf "\b\b\b\b\b\b\b"
+        done
     done
-    printf "\b\b\b\b    \b\b\b\b"
-    echo -e " \033[0;32mDone\033[0m"
+    printf "\b\b\b\b\b\b\b"
+    echo -e "\033[0;32mDone\033[0m"
 }
 
 
@@ -158,34 +156,35 @@ term_art() {
   offset=$(( (half_cols - 16) / 2 ))  # Adjust offset for even spacing
 
   # Print top border
-  printf "${BOLD_YELLOW}%*s" "$offset"
-  echo -e "${BOLD_YELLOW}╔══════════════════════╗${NC}"
+  printf "%${offset}s" " "
+  echo -e "${BOLD_YELLOW}╔══════════════════════════════╗${NC}"
 
   # Print Yiimp Installer title
-  printf "${BOLD_YELLOW}%*s" "$offset"
+  printf "%${offset}s" " "
   echo -e "${BOLD_YELLOW}║  ${BOLD_CYAN}Yiimp Installer Script${BOLD_YELLOW}  ║${NC}"
 
   # Print subtitle
-  printf "${BOLD_YELLOW}%*s" "$offset"
+  printf "%${offset}s" " "
   echo -e "${BOLD_YELLOW}║${BOLD_CYAN}        Fork By Afiniel!${BOLD_YELLOW} ║${NC}"
 
   # Print bottom border
-  printf "${BOLD_YELLOW}%*s" "$offset"
-  echo -e "${BOLD_YELLOW}╚══════════════════════╝${NC}"
+  printf "%${offset}s" " "
+  echo -e "${BOLD_YELLOW}╚════════════════════════════╝${NC}"
   echo  # New line for spacing
 
   # Print main content
   echo
   echo -e "${BOLD_YELLOW}                      Welcome to the Yiimp Installer!${NC}"
   echo
-  echo -e "${BOLD_YELLOW}  This script will install all dependencies and Yiimp for you, including:"
-  echo -e "${BOLD_YELLOW}    - MySQL for database management"
-  echo -e "${BOLD_YELLOW}    - Nginx web server with PHP for Yiimp operation"
-  echo -e "${BOLD_YELLOW}    - MariaDB as the database backend"
+  echo -e "${BOLD_YELLOW}  This script will install all dependencies and Yiimp for you, including:${NC}"
+  echo -e "${BOLD_YELLOW}    - MySQL for database management${NC}"
+  echo -e "${BOLD_YELLOW}    - Nginx web server with PHP for Yiimp operation${NC}"
+  echo -e "${BOLD_YELLOW}    - MariaDB as the database backend${NC}"
   echo
   echo -e "${BOLD_YELLOW}  **Version:** ${GREEN}$VERSION${NC}"
   echo
 }
+
 
 
 function term_yiimpool {
@@ -229,13 +228,12 @@ function daemonbuiler_files {
 
 hide_output() {
     local OUTPUT=$(mktemp)
-    $@ &>$OUTPUT &
+    "$@" &>"$OUTPUT" &
     local pid=$!
 
     # Run spinner function in the background
     spinner $pid
 
-    local E=$?
     wait $pid # Wait for the background process to finish
     local exit_status=$?
 
@@ -243,13 +241,13 @@ hide_output() {
         echo " "
         echo "FAILED: $@"
         echo "-----------------------------------------"
-        cat $OUTPUT
+        cat "$OUTPUT"
         echo "-----------------------------------------"
-        rm -f $OUTPUT
+        rm -f "$OUTPUT"
         exit $exit_status
     fi
 
-    rm -f $OUTPUT
+    rm -f "$OUTPUT"
 }
 
 

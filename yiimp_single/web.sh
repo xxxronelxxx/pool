@@ -15,8 +15,8 @@
 # Load configuration files
 source /etc/functions.sh
 source /etc/yiimpool.conf
-source "$STORAGE_ROOT/yiimp/.yiimp.conf"
-source "$HOME/Yiimpoolv2/yiimp_single/.wireguard.install.cnf"
+source $STORAGE_ROOT/yiimp/.yiimp.conf
+source $HOME/Yiimpoolv2/yiimp_single/.wireguard.install.cnf
 
 set -euo pipefail
 
@@ -30,9 +30,9 @@ trap print_error ERR
 
 term_art
 
-if [[ "$wireguard" == "true" ]]; then
-  source "$STORAGE_ROOT/yiimp/.wireguard.conf"
-fi
+#if [[ "$wireguard" == "true" ]]; then
+#  source "$STORAGE_ROOT/yiimp/.wireguard.conf"
+#fi
 
 echo
 echo -e "$MAGENTA     <--$YELLOW Building web file structure and copying files$MAGENTA -->${NC}"
@@ -63,17 +63,17 @@ sudo sed -i "s|ROOTDIR=/data/yiimp|ROOTDIR=${SITE_DIR}|g" /bin/yiimp
 
 # Nginx setup based on domain and SSL options
 if [[ ("$UsingSubDomain" == "y" || "$UsingSubDomain" == "Y" || "$UsingSubDomain" == "yes" || "$UsingSubDomain" == "Yes" || "$UsingSubDomain" == "YES") ]]; then
-  cd $HOME/Yiimpoolv2/yiimp_single
-  source nginx_subdomain_nonssl.sh
+    cd $HOME/Yiimpoolv2/yiimp_single
+    source nginx_subdomain_nonssl.sh
   if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
-  cd $HOME/Yiimpoolv2/yiimp_single
+    cd $HOME/Yiimpoolv2/yiimp_single
     source nginx_subdomain_ssl.sh
   fi
 else
-  cd $HOME/Yiimpoolv2/yiimp_single
-  source nginx_domain_nonssl.sh
+    cd $HOME/Yiimpoolv2/yiimp_single
+    source nginx_domain_nonssl.sh
   if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
-  cd $HOME/Yiimpoolv2/yiimp_single
+    cd $HOME/Yiimpoolv2/yiimp_single
     source nginx_domain_ssl.sh
   fi
 fi
