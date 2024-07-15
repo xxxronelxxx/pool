@@ -57,13 +57,15 @@ elif [[ "$DISTRO" == "20" ]]; then
 fi
 
 if [[ "$DISTRO" == "20" ]]; then
+    echo
     echo -e "$MAGENTA Detected$GREEN $DISTRO $RED installing requirements.. ${NC}"
     hide_output sudo apt install -y snapd
     hide_output sudo snap install bitcoin-core
     echo -e "$GREEN Completed${NC}"
 fi
 
-echo -e "$MAGENTA Installing MariaDB...${NC}"
+echo
+echo -e "$MAGENTA Installing MariaDB..${NC}"
 hide_output sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
 
 DISTRO=$(lsb_release -sc)
