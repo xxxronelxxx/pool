@@ -31,6 +31,16 @@ echo
 # Navigate to the setup directory
 cd /home/crypto-data/yiimp/yiimp_setup
 
+#Install dependencies
+echo
+echo -e "$MAGENTA => Installing Package to compile crypto currency <= $COL_RESET"
+hide_output sudo apt-get update
+hide_output sudo apt-get -y upgrade
+hide_output sudo apt-get -y install p7zip-full
+apt_install build-essential libzmq5 libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils cmake libboost-all-dev zlib1g-dev \
+libseccomp-dev libcap-dev libminiupnpc-dev gettext libcanberra-gtk-module libqrencode-dev libzmq3-dev \
+libqt5gui5 libqt5core5a libqt5webkit5-dev libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler
+
 # Informing the user about the build process
 echo
 echo -e "$MAGENTA => Building$GREEN blocknotify$MAGENTA, $GREENiniparser$MAGENTA, $GREENstratum$MAGENTA ... <= $NC"
@@ -41,28 +51,23 @@ blckntifypass=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 # Compile blocknotify
 cd /home/crypto-data/yiimp/yiimp_setup/yiimp/blocknotify
 sudo sed -i "s/tu8tu5/$blckntifypass/" blocknotify.cpp
-hide_output make -j$(nproc)
+hide_output sudo make -j$(nproc)
 
 # Compile stratum
 cd /home/crypto-data/yiimp/yiimp_setup/yiimp/stratum
-hide_output git submodule init
-hide_output git submodule update
+hide_output sudo git submodule init
+hide_output sudo git submodule update
 hide_output sudo make -C algos
 hide_output sudo make -C sha3
 hide_output sudo make -C iniparser
-cd secp256k1
-chmod +x autogen.sh
-hide_output ./autogen.sh
-hide_output ./configure --enable-experimental --enable-module-ecdh --with-bignum=no --enable-endomorphism
-hide_output make -j$(nproc)
-cd ..
+cd secp256k1 && chmod +x autogen.sh && hide_output sudo ./autogen.sh && hide_output sudo ./configure --enable-experimental --enable-module-ecdh --with-bignum=no --enable-endomorphism && hide_output sudo make -j$((`nproc`+1))
 
 # Update Makefile if AutoExchange is enabled
 if [[ "$AutoExchange" =~ ^[Yy][Ee]?[Ss]?$ ]]; then
   sudo sed -i 's/CFLAGS += -DNO_EXCHANGE/#CFLAGS += -DNO_EXCHANGE/' Makefile
 fi
 
-hide_output make -j$(nproc)
+hide_output sudo make -j$(nproc)
 
 # Setting up the stratum folder structure and copying files
 echo -e "$CYAN => Building stratum folder structure and copying files... <= $NC"
@@ -125,5 +130,4 @@ sleep 1.5
 term_art
 echo -e "$GREEN => Stratum build complete $NC"
 
-# Return to the original directory
 cd $HOME/Yiimpoolv2/yiimp_single

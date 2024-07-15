@@ -16,7 +16,7 @@ source /etc/functions.sh
 source /etc/yiimpoolversion.conf
 source /etc/yiimpool.conf
 source "$STORAGE_ROOT/yiimp/.yiimp.conf"
-source "$HOME/Yiimpoolv2/yiimp_single/.wireguard.install.cnf"
+#source "$HOME/Yiimpoolv2/yiimp_single/.wireguard.install.cnf"
 
 # Set error handling and log errors
 set -eu -o pipefail

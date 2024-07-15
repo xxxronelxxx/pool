@@ -29,16 +29,6 @@ cd "$HOME/Yiimpoolv2/daemon_builder"
 hide_output sudo cp -r "$HOME/Yiimpoolv2/daemon_builder/utils/screen-scrypt-daemonbuilder.sh" /etc/
 hide_output sudo chmod +x /etc/screen-scrypt-daemonbuilder.sh
 
-# Install dependencies
-echo -e "\n$MAGENTA => Installing packages to compile cryptocurrency <= ${NC}"
-hide_output sudo apt-get update
-hide_output sudo apt-get -y upgrade
-hide_output sudo apt-get -y install p7zip-full
-apt_install build-essential libzmq5 libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils cmake \
-    libboost-all-dev zlib1g-dev libseccomp-dev libcap-dev libminiupnpc-dev gettext libcanberra-gtk-module libqrencode-dev \
-    libzmq3-dev libqt5gui5 libqt5core5a libqt5webkit5-dev libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev \
-    protobuf-compiler
-
 if [[ "${DISTRO}" == "18" ]]; then
     apt_install libz-dev libminiupnpc10
     hide_output sudo add-apt-repository -y ppa:bitcoin/bitcoin
