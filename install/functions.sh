@@ -23,48 +23,24 @@ BLUE=$ESC_SEQ"34;01m"
 MAGENTA=$ESC_SEQ"35;01m"
 CYAN=$ESC_SEQ"36;01m"
 
-function spinner() {
-  local pid=$!
-  local delay=0.1
-  local spinstr='|/-\'
-  local start_time=$(date +%s)
-  local SECONDS=0  # Initialize timer
-  local total_seconds=300  # Example total duration of the process in seconds (adjust as needed)
+spinner() {
+    local pid=$!
+    local delay=0.1
+    local spinstr='|/-\'
+    local infotext=$1
 
-  # Disable canonical mode and echo buffering
-  stty -icanon min 0
-  stty -icanon echo
-
-  while ps -p $pid > /dev/null; do
-    local current_time=$(date +%s)
-    local elapsed_seconds=$((current_time - start_time))
-
-    # Calculate progress percentage
-    local progress=$(( (elapsed_seconds * 100) / total_seconds ))
-    if [ $progress -gt 100 ]; then
-      progress=100
-    fi
-
-    # Clear timer, spinner, and ETA before printing new values
-    printf "\r\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
-
-    # Print elapsed time, ETA, spinner, and progress
-    printf "[Elapsed: %02d:%02d:%02d] [ETA: %02d:%02d:%02d] [%c] %d%%" \
-      $((elapsed_seconds / 3600)) $(( (elapsed_seconds % 3600) / 60 )) $((elapsed_seconds % 60)) \
-      $(( total_seconds - elapsed_seconds )) / 3600 $(( (total_seconds - elapsed_seconds) % 3600) / 60 ) $((total_seconds - elapsed_seconds) % 60) \
-      "${spinstr:0:1}" \
-      $progress
-
-    # Rotate spinner animation
-    spinstr=${spinstr:1}${spinstr:0:1}
-    sleep $delay
-  done
-
-  # Re-enable canonical mode and echo buffering
-  stty icanon echo
-
-  printf "\r\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"  # Clear final line after spinner finishes
+    echo -n " $infotext "
+    while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
+        local temp=${spinstr#?}
+        printf " [%c] " "$spinstr"
+        local spinstr=$temp${spinstr%"$temp"}
+        sleep $delay
+        printf "\b\b\b\b"
+    done
+    printf "\b\b\b\b    \b\b\b\b"
+    echo -ne " \033[0;32mDone\033[0m\n"
 }
+
 
 # Database functions
 function database_import_sql {
@@ -163,8 +139,7 @@ function install_end_message() {
 }
 
 # terminal art start screen.
-function term_art() {
-
+term_art() {
   clear
 
   # Define color codes (assuming they are not already defined)
@@ -174,25 +149,33 @@ function term_art() {
   BOLD_YELLOW='\033[1;33m'
   CYAN='\033[0;36m'
   BOLD_CYAN='\033[1;36m'
-  NC='\033[0m'  # Reset color
+  NC='\033[0m'  # No Color
 
-  # Centered text with dashes for a modern border
+  # Calculate centered text with dashes for a modern border
   num_cols=$(tput cols)
   half_cols=$((num_cols / 2))
   offset=$(( (half_cols - 16) / 2 ))  # Adjust offset for even spacing
 
-  echo -e "${BOLD_YELLOW}$(printf "%*s" "$offset")"  # Print leading spaces
+  # Print top border
+  printf "${BOLD_YELLOW}%*s" "$offset"
   echo -e "${BOLD_YELLOW}╔══════════════════════╗${NC}"
-  echo -e "${BOLD_YELLOW}$(printf "%*s" "$offset")"  # Print leading spaces
-  echo -e "${BOLD_YELLOW}║  ${BOLD_CYAN}Yiimp Installer Script${BOLD_YELLOW}  ║${NC}"
-  echo -e "${BOLD_YELLOW}$(printf "%*s" "$offset")"  # Print leading spaces
-  echo -e "${BOLD_YELLOW}║${BOLD_CYAN}        Fork By Afiniel!${BOLD_YELLOW} ║${NC}"
-  echo -e "${BOLD_YELLOW}$(printf "%*s" "$offset")"  # Print leading spaces
-  echo -e "${BOLD_YELLOW}╚══════════════════════╝${NC}"
-  echo
 
+  # Print Yiimp Installer title
+  printf "${BOLD_YELLOW}%*s" "$offset"
+  echo -e "${BOLD_YELLOW}║  ${BOLD_CYAN}Yiimp Installer Script${BOLD_YELLOW}  ║${NC}"
+
+  # Print subtitle
+  printf "${BOLD_YELLOW}%*s" "$offset"
+  echo -e "${BOLD_YELLOW}║${BOLD_CYAN}        Fork By Afiniel!${BOLD_YELLOW} ║${NC}"
+
+  # Print bottom border
+  printf "${BOLD_YELLOW}%*s" "$offset"
+  echo -e "${BOLD_YELLOW}╚══════════════════════╝${NC}"
+  echo  # New line for spacing
+
+  # Print main content
   echo
-  echo -e "${BOLD_YELLOW}                       Welcome to the Yiimp Installer!${NC}"
+  echo -e "${BOLD_YELLOW}                      Welcome to the Yiimp Installer!${NC}"
   echo
   echo -e "${BOLD_YELLOW}  This script will install all dependencies and Yiimp for you, including:"
   echo -e "${BOLD_YELLOW}    - MySQL for database management"
@@ -201,8 +184,8 @@ function term_art() {
   echo
   echo -e "${BOLD_YELLOW}  **Version:** ${GREEN}$VERSION${NC}"
   echo
-
 }
+
 
 function term_yiimpool {
 	clear
