@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
 
 ##########################################
-# Created by Afiniel for Yiimpool use... #
+# Created by Afiniel for Yiimpool use
+#
+# This script installs and configures WireGuard
+# for secure VPN communication. It sets up
+# necessary keys, configuration files, and
+# ensures the service is started and enabled
+# at boot.
+#
+# Author: Afiniel
+# Date: 2024-07-15
 ##########################################
 
 # Load configuration files
@@ -45,10 +54,9 @@ ufw_allow 6121
 # Display WireGuard public key and IP
 dbpublic="${PUBLIC_IP}"
 mypublic="${wg_public_key}"
-echo -e "Public Ip: ${dbpublic}\nPublic Key: ${mypublic}" | sudo -E tee "$STORAGE_ROOT/yiimp/.wireguard_public.conf" >/dev/null 2>&1
+echo -e "Public IP: ${dbpublic}\nPublic Key: ${mypublic}" | sudo -E tee "$STORAGE_ROOT/yiimp/.wireguard_public.conf" >/dev/null 2>&1
 
 echo
-echo -e "$GREEN WireGuard setup completed ${NC}"
+echo -e "$GREEN WireGuard setup completed $NC"
 
-# Change directory to yiimp_single
 cd "$HOME/yiimpool/yiimp_single"

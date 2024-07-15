@@ -15,13 +15,13 @@ echo -e "${YELLOW}Running pre-flight checks...${NC}\n"
 UBUNTU_VERSION=$(lsb_release -d | sed 's/.*:\s*//' | sed 's/20\.04\.[0-9]/20.04 LTS/' | sed 's/18\.04\.[0-9]/18.04 LTS/' | sed 's/16\.04\.[0-9]/16.04 LTS/')
 case "$UBUNTU_VERSION" in
     "Ubuntu 20.04 LTS" | "Ubuntu 20.04.06 LTS")
-        DISTRO="20.04 LTS"
+        DISTRO="20.04"
         ;;
     "Ubuntu 18.04 LTS")
-        DISTRO="18.04 LTS"
+        DISTRO="18.04"
         ;;
     "Ubuntu 16.04 LTS")
-        DISTRO="16.04 LTS"
+        DISTRO="16.04"
         ;;
     *)
         echo -e "${RED}This script only supports Ubuntu 16.04 LTS, 18.04 LTS, and 20.04 LTS (including 20.04.06 LTS).${NC}\n"

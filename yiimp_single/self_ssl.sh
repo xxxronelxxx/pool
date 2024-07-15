@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
 #####################################################
-# Source https://mailinabox.email/ https://github.com/mail-in-a-box/mailinabox
-# Updated by afiniel for crypto use...
+# Source: https://mailinabox.email/ https://github.com/mail-in-a-box/mailinabox
+# Updated by: afiniel for crypto use
 #####################################################
 
 # Load required functions and configurations
 source /etc/functions.sh
 source /etc/yiimpool.conf
-source $STORAGE_ROOT/yiimp/.yiimp.conf
+source "$STORAGE_ROOT/yiimp/.yiimp.conf"
 
 # Exit on error and enable pipe fail
 set -euo pipefail
@@ -23,18 +23,19 @@ print_error() {
 
 trap print_error ERR
 
+# Display banner
 term_art
-echo -e "$MAGENTA    <-------------------------------------->${NC}"
-echo -e "$MAGENTA     <--$YELLOW Creating initial SSL certificate$MAGENTA -->${NC}"
-echo -e "$MAGENTA    <-------------------------------------->${NC}"
+echo
+echo -e "$YELLOW Creating initial SSL certificate${NC}"
+echo
 
-# Install OpenSSL
-apt_install openssl
+# Install OpenSSL if not installed
+install_if_not_installed apt_install openssl
 
-# Create SSL directory
+# Create SSL directory if it doesn't exist
 sudo mkdir -p "$STORAGE_ROOT/ssl"
 
-# Generate private key
+# Generate private key if not already generated
 if [ ! -f "$STORAGE_ROOT/ssl/ssl_private_key.pem" ]; then
   (
     umask 077
@@ -42,7 +43,7 @@ if [ ! -f "$STORAGE_ROOT/ssl/ssl_private_key.pem" ]; then
   )
 fi
 
-# Generate self-signed certificate
+# Generate self-signed certificate if not already generated
 if [ ! -f "$STORAGE_ROOT/ssl/ssl_certificate.pem" ]; then
   CSR="/tmp/ssl_cert_sign_req-$RANDOM.csr"
   hide_output sudo openssl req -new -key "$STORAGE_ROOT/ssl/ssl_private_key.pem" -out "$CSR" \
@@ -55,10 +56,11 @@ if [ ! -f "$STORAGE_ROOT/ssl/ssl_certificate.pem" ]; then
   sudo ln -s "$CERT" "$STORAGE_ROOT/ssl/ssl_certificate.pem"
 fi
 
-# Generate Diffie-Hellman cipher bits
+# Generate Diffie-Hellman cipher bits if not already generated
 if [ ! -f /etc/nginx/dhparam.pem ]; then
   hide_output sudo openssl dhparam -out /etc/nginx/dhparam.pem 2048
 fi
 
 echo -e "$GREEN => Initial self-signed SSL generation complete <= ${NC}"
+
 cd "$HOME/Yiimpoolv2/yiimp_single"

@@ -49,9 +49,13 @@ source self_ssl.sh
 source db.sh
 source nginx_upgrade.sh
 source web.sh
-sudo bash stratum.sh
+sudo chmod +x stratum.sh
+source stratum.sh
 source compile_crypto.sh
 #source daemon.sh
+
+# TODO: Fix the wiregard.
+# To let users start us yiimp on multi servers.´
 
 # if [[ ("$UsingDomain" == "yes") ]]; then
 # source send_mail.sh

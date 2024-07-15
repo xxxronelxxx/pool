@@ -322,6 +322,17 @@ function package_compile_crypto {
 	python3 ccache doxygen graphviz default-libmysqlclient-dev libnghttp2-dev librtmp-dev libssh2-1 libssh2-1-dev libldap2-dev libidn11-dev libpsl-dev
 }
 
+# Function to check if a package is installed and install it if not
+install_if_not_installed() {
+  local package="$1"
+  if ! command -v "$package" &>/dev/null; then
+    echo "Installing $package..."
+    apt_install "$package"
+  else
+    echo "$package is already installed."
+  fi
+}
+
 function apt_get_quiet {
 	DEBIAN_FRONTEND=noninteractive hide_output sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confnew" "$@"
 }
