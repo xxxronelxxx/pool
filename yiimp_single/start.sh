@@ -49,7 +49,7 @@ source self_ssl.sh
 source db.sh
 source nginx_upgrade.sh
 source web.sh
-sudo bash stratum.sh
+bash stratum.sh
 source compile_crypto.sh
 #source daemon.sh
 
