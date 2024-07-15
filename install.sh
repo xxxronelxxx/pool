@@ -17,7 +17,7 @@
 set -e
 
 # Default version tag if not provided as environment variable
-TAG=${TAG:-v0.1.9}
+TAG=${TAG:-v0.2.0}
 
 # File paths
 YIIMPOOL_VERSION_FILE="/etc/yiimpoolversion.conf"
