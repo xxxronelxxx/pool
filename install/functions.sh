@@ -226,28 +226,21 @@ function daemonbuiler_files {
 	sleep 2
 }
 
-hide_output() {
-    local OUTPUT=$(mktemp)
-    "$@" &>"$OUTPUT" &
-    local pid=$!
+function hide_output {
+	OUTPUT=$(tempfile)
+	$@ &>$OUTPUT &
+	spinner
+	E=$?
+	if [ $E != 0 ]; then
+		echo
+		echo FAILED: $@
+		echo -----------------------------------------
+		cat $OUTPUT
+		echo -----------------------------------------
+		exit $E
+	fi
 
-    # Run spinner function in the background
-    spinner $pid
-
-    wait $pid # Wait for the background process to finish
-    local exit_status=$?
-
-    if [ $exit_status != 0 ]; then
-        echo " "
-        echo "FAILED: $@"
-        echo "-----------------------------------------"
-        cat "$OUTPUT"
-        echo "-----------------------------------------"
-        rm -f "$OUTPUT"
-        exit $exit_status
-    fi
-
-    rm -f "$OUTPUT"
+	rm -f $OUTPUT
 }
 
 
