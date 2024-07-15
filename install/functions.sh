@@ -136,7 +136,6 @@ function install_end_message() {
 
 }
 
-# terminal art start screen.
 term_art() {
   clear
 
@@ -152,7 +151,8 @@ term_art() {
   # Calculate centered text with dashes for a modern border
   num_cols=$(tput cols)
   half_cols=$((num_cols / 2))
-  offset=$(( (half_cols - 16) / 2 ))  # Adjust offset for even spacing
+  box_width=30
+  offset=$(( (num_cols - box_width) / 2 ))  # Center the box
 
   # Print top border
   printf "%${offset}s" " "
@@ -168,21 +168,22 @@ term_art() {
 
   # Print bottom border
   printf "%${offset}s" " "
-  echo -e "${BOLD_YELLOW}╚════════════════════════════╝${NC}"
+  echo -e "${BOLD_YELLOW}╚══════════════════════════════╝${NC}"
   echo  # New line for spacing
 
   # Print main content
   echo
-  echo -e "${BOLD_YELLOW}                      Welcome to the Yiimp Installer!${NC}"
+  echo -e "${BOLD_YELLOW}$(printf "%${half_cols}s")Welcome to the Yiimp Installer!${NC}"
   echo
-  echo -e "${BOLD_YELLOW}  This script will install all dependencies and Yiimp for you, including:${NC}"
-  echo -e "${BOLD_YELLOW}    - MySQL for database management${NC}"
-  echo -e "${BOLD_YELLOW}    - Nginx web server with PHP for Yiimp operation${NC}"
-  echo -e "${BOLD_YELLOW}    - MariaDB as the database backend${NC}"
+  echo -e "${BOLD_YELLOW}$(printf "%${half_cols}s")This script will install all dependencies and Yiimp for you, including:${NC}"
+  echo -e "${BOLD_YELLOW}$(printf "%${half_cols}s")  - MySQL for database management${NC}"
+  echo -e "${BOLD_YELLOW}$(printf "%${half_cols}s")  - Nginx web server with PHP for Yiimp operation${NC}"
+  echo -e "${BOLD_YELLOW}$(printf "%${half_cols}s")  - MariaDB as the database backend${NC}"
   echo
-  echo -e "${BOLD_YELLOW}  **Version:** ${GREEN}$VERSION${NC}"
+  echo -e "${BOLD_YELLOW}$(printf "%${half_cols}s")**Version:** ${GREEN}$VERSION${NC}"
   echo
 }
+
 
 
 
