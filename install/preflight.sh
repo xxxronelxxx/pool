@@ -33,7 +33,9 @@ fi
 # Apply permissions based on the identified LTS version
 case "$DISTRO" in
   16 | 18 | 20 | 24 | 23)
+    echo -e "${YELLOW}Setting permissions for Ubuntu $DISTRO...${NC}"
     sudo chmod g-w /etc /etc/default /usr
+    echo -e "${GREEN}Permissions set.${NC}\n"
     ;;
   *)
     echo "Unsupported Ubuntu version: ${UBUNTU_DESCRIPTION}"
@@ -44,9 +46,9 @@ esac
 
 
 
-echo -e "${YELLOW}Setting permissions for Ubuntu $DISTRO...${NC}"
-sudo chmod g-w /etc /etc/default /usr
-echo -e "${GREEN}Permissions set.${NC}\n"
+# echo -e "${YELLOW}Setting permissions for Ubuntu $DISTRO...${NC}"
+# sudo chmod g-w /etc /etc/default /usr
+# echo -e "${GREEN}Permissions set.${NC}\n"
 
 
 # Check if swap is needed and allocate if necessary
