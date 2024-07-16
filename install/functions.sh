@@ -164,7 +164,7 @@ term_art() {
 
   # Print Yiimp Installer title
   printf "%${offset}s" " "
-  echo -e "${BOLD_YELLOW}║  ${BOLD_CYAN}Yiimp Installer Script${BOLD_YELLOW}  ║${NC}"
+  echo -e "${BOLD_YELLOW}║  ${BOLD_CYAN}Yiimp Installer${BOLD_YELLOW}  ║${NC}"
 
   # Print subtitle
   printf "%${offset}s" " "
@@ -193,17 +193,24 @@ term_art() {
 
 
 function term_yiimpool {
-	clear
-	source /etc/functions.sh
-	source /etc/yiimpool.conf
-	figlet -f slant -w 100 "YiimpooL" | lolcat
-	echo -e "$CYAN   -----------------|--------------------- 	  											${NC}"
-	echo -e "$YELLOW  Yiimp Installer Script Fork By Afiniel!												${NC}"
-	echo -e "$YELLOW  Version:${NC} $GREEN $VERSION 											${NC}"
-	echo -e "$CYAN   -----------------|--------------------- 	  			${NC}"
-	echo
+  clear
 
+  # Consistent color definitions (assuming you use the same ones from the main script)
+  YIIMP_CYAN="\e[36m"
+  YIIMP_YELLOW="\e[33m"
+  YIIMP_GREEN="\e[32m"
+  YIIMP_RESET="\e[0m"
+
+  # Center-aligned title with a cool ASCII font
+  figlet -f slant -w 100 "YiimpooL" | lolcat -p 0.12 -s 50  # Adjust centering and speed as desired
+
+  echo -e "${YIIMP_CYAN}  ----------------|---------------------  "
+  echo -e "${YIIMP_YELLOW}  Yiimp Installer Script Fork By Afiniel!  "
+  echo -e "${YIIMP_YELLOW}  Version: ${YIIMP_GREEN}$VERSION                   "
+  echo -e "${YIIMP_CYAN}  ----------------|---------------------  "
+  echo
 }
+
 
 function daemonbuiler_files {
 	echo -e "$YELLOW Copy => Copy Daemonbuilder files.  <= ${NC}"
@@ -259,7 +266,7 @@ function last_words {
 	echo "<-------------------------------------|--------------------------------------->"
 	echo -e "$YELLOW                     Donate Wallets:                                   ${NC}"
 	echo "<-------------------------------------|--------------------------------------->"
-	echo -e "$YELLOW Thank you for using Yiimp Install Script $VERSION fork by Afiniel!      ${NC}"
+	echo -e "$YELLOW Thank you for using Yiimpool Installer $VERSION fork by Afiniel!      ${NC}"
 	echo
 	echo -e "$YELLOW =>  To run this installer anytime simply type:$GREEN yiimpool         ${NC}"
 	echo -e "$YELLOW =>  Do you want to support me? Feel free to use wallets below:        ${NC}"

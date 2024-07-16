@@ -67,70 +67,57 @@ source $STORAGE_ROOT/yiimp/.yiimp.conf
 
 clear
 
-if [[ ("$UsingDomain" == "yes") ]]; then
-  source /etc/yiimpool.conf
-  source /etc/yiimpoolversion.conf
-  source /etc/functions.sh
-  term_yiimpool
-  echo -e "$CYAN<-----------------------------------------------------------------------------> ${NC}"
-  echo -e "$YELLOW Thank you for using Yiimp Install Script$GREEN $VERSION $YELLOW fork by Afiniel!     ${NC}"
+
+# Color definitions (feel free to customize these for your liking)
+YIIMP_GREEN="\e[38;5;2m"     # Success Green
+YIIMP_BLUE="\e[38;5;4m"     # Dark Blue (info)
+YIIMP_YELLOW="\e[33m"       # Warning Yellow
+YIIMP_RED="\e[31m"        # Error Red
+YIIMP_WHITE="\e[37m"       # White (data)
+YIIMP_RESET="\e[0m"
+
+# Header line
+YIIMP_HEADER="${YIIMP_GREEN}<--------------------------------------------------------------------------->${YIIMP_RESET}"
+
+# Function to display messages in a consistent format
+print_message() {
+  echo -e "${YIIMP_HEADER}"
+  echo -e "${YIIMP_GREEN}Thanks for using Yiimpool Installer ${YIIMP_BLUE}${VERSION}${YIIMP_GREEN} (by Afiniel!)!${YIIMP_RESET}"
   echo
-  echo -e "$YELLOW =>  To run this installer anytime simply type:$GREEN yiimpool         ${NC}"
-  echo -e "$CYAN<-----------------------------------------------------------------------------> ${NC}"
-  echo -e "$YELLOW => Do you like the installer and want to support the project? use wallets below:             ${NC}"
-  echo -e "$CYAN<-----------------------------------------------------------------------------> ${NC}"
-  echo -e "$YELLOW =>  BTC:$GREEN $BTCDON                                   		       ${NC}"
+  echo -e "${YIIMP_BLUE}To run this installer anytime, simply type: ${YIIMP_GREEN}yiimpool${YIIMP_RESET}"
+  echo -e "${YIIMP_HEADER}"
+  echo -e "${YIIMP_BLUE}Like the installer and want to support the project? Use these wallets:"
+  echo -e "${YIIMP_HEADER}"
+  echo -e "${YIIMP_WHITE}- BTC: ${BTCDON}"
+  echo -e "${YIIMP_WHITE}- BCH: ${BCHDON}"
+  echo -e "${YIIMP_WHITE}- ETH: ${ETHDON}"
+  echo -e "${YIIMP_WHITE}- DOGE: ${DOGEDON}"
+  echo -e "${YIIMP_WHITE}- LTC: ${LTCDON}"
+  echo -e "${YIIMP_HEADER}"
   echo
-  echo -e "$YELLOW =>  BCH:$GREEN $BCHDON                                   		       ${NC}"
+  echo -e "${YIIMP_GREEN}Yiimp installation is now ${YIIMP_GREEN}complete!${YIIMP_RESET}"
+  echo -e "${YIIMP_YELLOW}Please REBOOT your machine to finalize updates and set folder permissions.${YIIMP_YELLOW} YiiMP won't function until a reboot is performed.${YIIMP_RESET}"
   echo
-  echo -e "$YELLOW =>  ETH:$GREEN $ETHDON                                   		       ${NC}"
+  echo -e "${YIIMP_BLUE}After the first reboot, it may take up to 1 minute for the ${YIIMP_GREEN}main${YIIMP_BLUE}|${YIIMP_GREEN}loop2${YIIMP_BLUE}|${YIIMP_GREEN}blocks${YIIMP_BLUE}|${YIIMP_GREEN}debug${YIIMP_BLUE} screens to start."
+  echo -e "${YIIMP_BLUE}If they show ${YIIMP_RED}stopped${YIIMP_BLUE} after 1 minute, type ${YIIMP_GREEN}motd${YIIMP_BLUE} to refresh the screen.${YIIMP_RESET}"
   echo
-  echo -e "$YELLOW =>  DOGE:$GREEN $DOGEDON                                 		       ${NC}"
+  echo -e "${YIIMP_BLUE}Access your ${YIIMP_GREEN}${AdminPanel} at ${YIIMP_BLUE}http://${DomainName}/site/${AdminPanel}${YIIMP_RESET}"
   echo
-  echo -e "$YELLOW =>  LTC:$GREEN $LTCDON                                   		       ${NC}"
-  echo -e "$CYAN<-----------------------------------------------------------------------------> ${NC}"
-  echo
-  echo -e "$YELLOW Installation of your Yiimp is now$GREEN completed. ${NC}"
-  echo -e "$YELLOW You $RED*MUST REBOOT*$YELLOW the machine to finalize the machine updates and folder permissions! $MAGENTA YiiMP will not function until a$RED reboot$YELLOW is performed!${NC}"
-  echo
-  echo -e "$YELLOW Important! After first$RED reboot$YELLOW it may take up to 1 minute for the$GREEN main$YELLOW|$GREEN loop2$YELLOW|$GREEN blocks$YELLOW|$GREEN debug$YELLOW screens to start!${NC}"
-  echo -e "$YELLOW If they show$RED stopped,$YELLOW after 1 minute, type$GREEN motd$YELLOW to$GREEN refresh$YELLOW the screen.${NC}"
-  echo
-  echo -e "$YELLOW You can access your$GREEN ${AdminPanel} $YELLOW at,$BLUE http://${DomainName}/site/${AdminPanel} ${NC}"
-  echo
-  echo -e "$RED By default all stratum ports are blocked by the firewall.$YELLOW To allow a port through, from the command prompt type $GREEN sudo ufw allow port number.${NC}"
-  echo -e "$GREEN Database user names and passwords$YELLOW can be found in$RED $STORAGE_ROOT/yiimp/.my.cnf${NC}"
-  exit 0
-else
-  source /etc/yiimpool.conf
-  source /etc/functions.sh
-  term_yiimpool
-  echo -e "$CYAN<----------------------------------------------------------------------------->   ${NC}"
-  echo -e "$YELLOW Thank you for using Yiimp Install Script$GREEN $VERSION $YELLOW fork by Afiniel! ${NC}"
-  echo
-  echo -e "$YELLOW =>  To run this installer anytime simply type:$GREEN yiimpool                  ${NC}"
-  echo -e "$CYAN<----------------------------------------------------------------------------->   ${NC}"
-  echo -e "$YELLOW => Do you like the installer and want to support the project? use wallets below:             ${NC}"
-  echo -e "$CYAN<----------------------------------------------------------------------------->   ${NC}"
-  echo -e "$CYAN =>  BTC:$GREEN $BTCDON                                   		       ${NC}"
-  echo
-  echo -e "$CYAN =>  BCH:$GREEN $BCHDON                                   		       ${NC}"
-  echo
-  echo -e "$CYAN =>  ETH:$GREEN $ETHDON                                   		       ${NC}"
-  echo
-  echo -e "$CYAN =>  DOGE:$GREEN $DOGEDON                                 		       ${NC}"
-  echo
-  echo -e "$CYAN =>  LTC:$GREEN $LTCDON                                   		       ${NC}"
-  echo -e "$CYAN<-----------------------------------------------------------------------------> ${NC}"
-  echo
-  echo -e "$YELLOW Installation of your Yiimp is now$GREEN completed."
-  echo -e "$YELLOW You $RED*MUST REBOOT*$YELLOW the machine to finalize the machine updates and folder permissions! $MAGENTA YiiMP will not function until a$RED reboot$YELLOW is performed!${NC}"
-  echo
-  echo -e "$YELLOW Important! After first$RED reboot$YELLOW it may take up to 1 minute for the$GREEN main$YELLOW|$GREEN loop2$YELLOW|$GREEN blocks$YELLOW|$GREEN debug$YELLOW screens to start!${NC}"
-  echo -e "$YELLOW If they show$RED stopped,$YELLOW after 1 minute, type$GREEN motd$YELLOW to$GREEN refresh$YELLOW the screen.${NC}"
-  echo
-  echo -e "$YELLOW You can access your$GREEN $AdminPanel $YELLOW at,$BLUE http://${DomainName}/site/${AdminPanel} ${NC}"
-  echo
-  echo -e "$RED By default all stratum ports are blocked by the firewall.$YELLOW To allow a port through, from the command prompt type $GREEN sudo ufw allow port number.${NC}"
-  echo -e "$GREEN Database user names and passwords$YELLOW can be found in$RED $STORAGE_ROOT/yiimp/.my.cnf${NC}"
-fi
+  echo -e "${YIIMP_RED}By default, all stratum ports are blocked by the firewall.${YIIMP_YELLOW} To allow a port, use ${YIIMP_GREEN}sudo ufw allow <port number>${YIIMP_YELLOW} from the command line.${YIIMP_RESET}"
+  echo -e "${YIIMP_WHITE}Database usernames and passwords can be found in ${YIIMP_RED}$STORAGE_ROOT/yiimp/.my.cnf${YIIMP_RESET}"
+}
+
+# Main script
+
+source /etc/yiimpool.conf
+source /etc/yiimpoolversion.conf
+source /etc/functions.sh
+
+term_yiimpool
+
+# Call print_message regardless of UsingDomain
+print_message
+
+exit 0
+
+

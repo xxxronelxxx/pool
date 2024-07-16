@@ -224,13 +224,8 @@ if [[ ("$DISTRO" == "20") ]]; then
 	# sudo systemctl status php8.2-fpm | sed -n "1,3p"
 fi
 
-if [[ "$DISTRO" == "16" || "$DISTRO" == "18" ]]; then
-    echo -e "$CYAN => Fixing DB connection issue... ${NC}"
-    sudo update-alternatives --set php /usr/bin/php7.3
-elif [[ "$DISTRO" == "20" ]]; then
-    echo -e "$CYAN => Fixing DB connection issue... ${NC}"
-    sudo update-alternatives --set php /usr/bin/php7.3
-fi
+echo -e "$CYAN => Fixing DB connection issue... ${NC}"
+sudo update-alternatives --set php /usr/bin/php7.3
 
 echo
 echo -e "$CYAN => Cloning Yiimp Repo <= ${NC}"
