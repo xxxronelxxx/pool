@@ -25,7 +25,7 @@ source $HOME/Yiimpoolv2/yiimp_single/.wireguard.install.cnf
 echo
 term_art
 echo
-echo -e "$MAGENTA     <--$YELLOW Compile Stratum$NC"
+echo -e "$YELLOW Building Stratum...$NC"
 echo
 
 # Navigate to the setup directory
@@ -33,7 +33,7 @@ cd /home/crypto-data/yiimp/yiimp_setup
 
 #Install dependencies
 echo
-echo -e "$MAGENTA => Installing Package to compile crypto currency <= $COL_RESET"
+echo -e "$MAGENTA => Installing Package to compile cryptocurrency... <= $COL_RESET"
 hide_output sudo apt-get update
 hide_output sudo apt-get -y upgrade
 hide_output sudo apt-get -y install p7zip-full
@@ -43,7 +43,7 @@ libqt5gui5 libqt5core5a libqt5webkit5-dev libqt5dbus5 qttools5-dev qttools5-dev-
 
 # Informing the user about the build process
 echo
-echo -e "$MAGENTA => Building$GREEN blocknotify$MAGENTA, $GREENiniparser$MAGENTA, $GREENstratum$MAGENTA ... <= $NC"
+echo -e "$MAGENTA => Building$GREEN blocknotify$MAGENTA, $GREEN iniparser$MAGENTA ... <= $NC"
 
 # Generate a random password for blocknotify
 blckntifypass=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
