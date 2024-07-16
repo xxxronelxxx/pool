@@ -154,6 +154,10 @@ term_art() {
   box_width=30
   offset=$(( (num_cols - box_width) / 2 ))  # Center the box
 
+  if [ "$offset" -lt 0 ]; then
+    offset=0
+  fi
+
   # Print top border
   printf "%${offset}s" " "
   echo -e "${BOLD_YELLOW}╔══════════════════════════════╗${NC}"
@@ -180,9 +184,10 @@ term_art() {
   echo -e "${BOLD_YELLOW}$(printf "%${half_cols}s")  - Nginx web server with PHP for Yiimp operation${NC}"
   echo -e "${BOLD_YELLOW}$(printf "%${half_cols}s")  - MariaDB as the database backend${NC}"
   echo
-  echo -e "${BOLD_YELLOW}$(printf "%${half_cols}s")**Version:** ${GREEN}$VERSION${NC}"
+  echo -e "${BOLD_YELLOW}$(printf "%${half_cols}s")**Version:** ${GREEN}${VERSION:-"unknown"}${NC}"
   echo
 }
+
 
 
 
