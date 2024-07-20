@@ -7,7 +7,7 @@
 source /etc/functions.sh
 source /etc/yiimpool.conf
 source $STORAGE_ROOT/yiimp/.yiimp.conf
-source $HOME/Yiimpoolv2/yiimp_single/.wireguard.install.cnf
+source $HOME/Yiimpoolv1/yiimp_single/.wireguard.install.cnf
 
 if [[ ("$wireguard" == "false") ]]; then
 
@@ -159,4 +159,4 @@ $configAlgoNormCoef = array(
 // '"'"'x11'"'"' => 5.0,
 );' | sudo -E tee $STORAGE_ROOT/yiimp/site/configuration/serverconfig.php >/dev/null 2>&1
 fi
-cd $HOME/Yiimpoolv2/yiimp_single
+cd $HOME/Yiimpoolv1/yiimp_single

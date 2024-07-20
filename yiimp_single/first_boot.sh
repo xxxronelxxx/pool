@@ -21,4 +21,4 @@ sudo chmod 777 $STORAGE_ROOT/yiimp/site/log/debug.log
 # Delete me no longer needed after it runs the first time
 
 sudo rm -r $STORAGE_ROOT/yiimp/first_boot.sh
-cd $HOME/Yiimpoolv2/yiimp_single
+cd $HOME/Yiimpoolv1/yiimp_single

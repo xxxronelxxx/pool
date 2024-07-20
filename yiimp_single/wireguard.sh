@@ -14,7 +14,7 @@
 ##########################################
 
 # Load configuration files
-source "$HOME/Yiimpoolv2/yiimp_single/.wireguard.install.cnf"
+source "$HOME/Yiimpoolv1/yiimp_single/.wireguard.install.cnf"
 source "$STORAGE_ROOT/yiimp/.wireguard.conf"
 source "/etc/functions.sh"
 source "/etc/yiimpool.conf"

@@ -151,11 +151,11 @@ echo -e "$GREEN => blocknotify.sh Completed <= ${NC}"
 
 # Install daemonbuilder
 echo -e "\n$MAGENTA => Installing daemonbuilder <= ${NC}"
-cd $HOME/Yiimpoolv2/daemon_builder
+cd $HOME/Yiimpoolv1/daemon_builder
 sudo mkdir -p conf
-sudo cp -r $HOME/Yiimpoolv2/daemon_builder/utils/* $STORAGE_ROOT/daemon_builder
-sudo cp -r $HOME/Yiimpoolv2/daemon_builder/conf/daemonbuilder.sh /etc/
-hide_output sudo cp -r $HOME/Yiimpoolv2/daemon_builder/utils/addport.sh /usr/bin/addport
+sudo cp -r $HOME/Yiimpoolv1/daemon_builder/utils/* $STORAGE_ROOT/daemon_builder
+sudo cp -r $HOME/Yiimpoolv1/daemon_builder/conf/daemonbuilder.sh /etc/
+hide_output sudo cp -r $HOME/Yiimpoolv1/daemon_builder/utils/addport.sh /usr/bin/addport
 sudo chmod +x $STORAGE_ROOT/daemon_builder/*
 sudo chmod +x /usr/bin/addport
 
@@ -188,4 +188,4 @@ ETHDEP='"${ETHDEP}"'
 DOGEDEP='"${DOGEDEP}"'' | sudo -E tee $STORAGE_ROOT/daemon_builder/conf/info.sh >/dev/null 2>&1
 sudo chmod +x $STORAGE_ROOT/daemon_builder/conf/info.sh
 
-cd $HOME/Yiimpoolv2/yiimp_single
+cd $HOME/Yiimpoolv1/yiimp_single

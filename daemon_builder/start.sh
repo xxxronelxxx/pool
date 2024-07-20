@@ -15,7 +15,7 @@ mkdir -p $STORAGE_ROOT/daemon_builder
 fi
 
 # Start the DeamonBuilder installation.
-cd $HOME/Yiimpoolv2/daemon_builder
+cd $HOME/Yiimpoolv1/daemon_builder
 source requirements.sh
 
-cd $HOME/Yiimpoolv2/yiimp_single
+cd $HOME/Yiimpoolv1/yiimp_single

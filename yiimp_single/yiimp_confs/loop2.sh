@@ -7,7 +7,7 @@
 source /etc/functions.sh
 source /etc/yiimpool.conf
 source $STORAGE_ROOT/yiimp/.yiimp.conf
-source $HOME/Yiimpoolv2/yiimp_single/.wireguard.install.cnf
+source $HOME/Yiimpoolv1/yiimp_single/.wireguard.install.cnf
 
 # Create loop2.sh
 
@@ -23,4 +23,4 @@ sleep 60
 done
 exec bash' | sudo -E tee $STORAGE_ROOT/yiimp/site/crons/loop2.sh >/dev/null 2>&1
 sudo chmod +x $STORAGE_ROOT/yiimp/site/crons/loop2.sh
-cd $HOME/Yiimpoolv2/yiimp_single
+cd $HOME/Yiimpoolv1/yiimp_single

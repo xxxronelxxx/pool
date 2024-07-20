@@ -6,7 +6,7 @@
 source /etc/functions.sh
 source /etc/yiimpool.conf
 source $STORAGE_ROOT/yiimp/.yiimp.conf
-source $HOME/Yiimpoolv2/yiimp_single/.wireguard.install.cnf
+source $HOME/Yiimpoolv1/yiimp_single/.wireguard.install.cnf
 
 set -eu -o pipefail
 
@@ -78,4 +78,4 @@ sudo ln -sf $STORAGE_ROOT/yiimp/site/web /var/www/${DomainName}/html
 restart_service nginx
 restart_service php7.3-fpm
 set +eu +o pipefail
-cd $HOME/Yiimpoolv2/yiimp_single
+cd $HOME/Yiimpoolv1/yiimp_single

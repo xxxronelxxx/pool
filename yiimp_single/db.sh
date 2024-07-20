@@ -16,7 +16,7 @@ source /etc/functions.sh
 source /etc/yiimpoolversion.conf
 source /etc/yiimpool.conf
 source "$STORAGE_ROOT/yiimp/.yiimp.conf"
-#source "$HOME/Yiimpoolv2/yiimp_single/.wireguard.install.cnf"
+#source "$HOME/Yiimpoolv1/yiimp_single/.wireguard.install.cnf"
 
 # Set error handling and log errors
 set -eu -o pipefail
@@ -171,4 +171,4 @@ restart_service mysql
 # Reset error handling
 set +eu +o pipefail
 
-cd $HOME/Yiimpoolv2/yiimp_single
+cd $HOME/Yiimpoolv1/yiimp_single

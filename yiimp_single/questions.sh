@@ -9,7 +9,7 @@
 # Load required functions and configurations
 source /etc/functions.sh
 source /etc/yiimpool.conf
-source "$HOME/Yiimpoolv2/yiimp_single/.wireguard.install.cnf"
+source "$HOME/Yiimpoolv1/yiimp_single/.wireguard.install.cnf"
 
 # Source wireguard configuration if enabled
 if [[ "$wireguard" == "true" ]]; then
@@ -273,4 +273,4 @@ case $response in
 esac
 
 # Change directory back to the initial directory
-cd $HOME/Yiimpoolv2/yiimp_single
+cd $HOME/Yiimpoolv1/yiimp_single

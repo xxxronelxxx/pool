@@ -611,7 +611,7 @@ else
 		sudo rm -rf ${absolutepath}/daemon_setup
 
 		if [ -z "${STRATUMFILE}" ]; then
-		cd $HOME/Yiimpoolv2/yiimp_single
+		cd $HOME/Yiimpoolv1/yiimp_single
 		fi
 	fi
 fi

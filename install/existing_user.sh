@@ -7,7 +7,7 @@
 ##################################################################################
 
 source /etc/functions.sh
-cd ~/Yiimpoolv2/install
+cd ~/Yiimpoolv1/install
 clear
 
 # Get logged in user name
@@ -21,13 +21,13 @@ echo '# yiimp
 ' | sudo -E tee /etc/sudoers.d/${whoami} >/dev/null 2>&1
 
 echo '
-cd ~/Yiimpoolv2/install
+cd ~/Yiimpoolv1/install
 bash start.sh
 ' | sudo -E tee /usr/bin/yiimpool >/dev/null 2>&1
 sudo chmod +x /usr/bin/yiimpool
 
 # Check required files and set global variables
-cd $HOME/Yiimpoolv2/install
+cd $HOME/Yiimpoolv1/install
 source pre_setup.sh
 
 # Create the STORAGE_USER and STORAGE_ROOT directory if they don't already exist.
@@ -56,7 +56,7 @@ BCHDON="qzz0aff2k0xnwyzg7k9fcxlndtaj4wa65uxteqe84m"
 DOGEDON="DSzcmyCRi7JeN4XUiV2qYhRQAydNv7A1Yb"' | sudo -E tee /etc/yiimpooldonate.conf >/dev/null 2>&1
 
 cd ~
-sudo setfacl -m u:${whoami}:rwx /home/${whoami}/Yiimpoolv2
+sudo setfacl -m u:${whoami}:rwx /home/${whoami}/Yiimpoolv1
 clear
 echo -e "$YELLOW Your User:$MAGENTA ${whoami}$YELLOW has been modified for yiimpool support. ${NC}"
 echo -e "$YELLOW You must$RED reboot$YELLOW the system for the new permissions to update and type$GREEN yiimpool$YELLOW to continue setup...${NC}"

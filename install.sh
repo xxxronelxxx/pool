@@ -3,11 +3,11 @@
 #########################################################
 #
 # This script performs the following tasks:
-# 1. Sets the version tag for the Yiimpoolv2 installation.
+# 1. Sets the version tag for the Yiimpoolv1 installation.
 # 2. Checks and installs git if it's not already installed.
-# 3. Clones the Yiimpoolv2 installer repository from GitHub.
+# 3. Clones the Yiimpoolv1 installer repository from GitHub.
 # 4. Updates the repository to the specified version tag if necessary.
-# 5. Starts the Yiimpoolv2 installation process.
+# 5. Starts the Yiimpoolv1 installation process.
 #
 # Author: Afiniel
 # Date: 2024-07-13
@@ -19,7 +19,7 @@ TAG=${TAG:-v0.2.2}
 
 # File paths
 YIIMPOOL_VERSION_FILE="/etc/yiimpoolversion.conf"
-YIIMPOOL_INSTALL_DIR="$HOME/Yiimpoolv2"
+YIIMPOOL_INSTALL_DIR="$HOME/Yiimpoolv1"
 
 # Function to log messages to stderr
 log_error() {
@@ -42,7 +42,7 @@ install_git() {
 clone_or_update_repo() {
   if [ ! -d "$YIIMPOOL_INSTALL_DIR" ]; then
     echo "Cloning Yiimpool Installer ${TAG}..."
-    git clone -b "${TAG}" --depth 1 https://github.com/afiniel/Yiimpoolv2 "$YIIMPOOL_INSTALL_DIR" < /dev/null
+    git clone -b "${TAG}" --depth 1 https://github.com/afiniel/Yiimpoolv1 "$YIIMPOOL_INSTALL_DIR" < /dev/null
     echo "Repository cloned."
   else
     echo "Updating Yiimpool Installer to ${TAG}..."

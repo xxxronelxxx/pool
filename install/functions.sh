@@ -214,7 +214,7 @@ function term_yiimpool {
 
 function daemonbuiler_files {
 	echo -e "$YELLOW Copy => Copy Daemonbuilder files.  <= ${NC}"
-	cd $HOME/Yiimpoolv2
+	cd $HOME/Yiimpoolv1
 	sudo mkdir -p /etc/utils/daemon_builder
 	sudo cp -r utils/start.sh $HOME/utils/daemon_builder
 	sudo cp -r utils/menu.sh $HOME/utils/daemon_builder

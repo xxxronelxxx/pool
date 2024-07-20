@@ -21,14 +21,14 @@ if [ "$RESULT" = "1" ]; then
     clear;
     echo '
     wireguard=true
-    ' | sudo -E tee "$HOME"/Yiimpoolv2/yiimp_single/.wireguard.install.cnf >/dev/null 2>&1;
+    ' | sudo -E tee "$HOME"/Yiimpoolv1/yiimp_single/.wireguard.install.cnf >/dev/null 2>&1;
     
 
 elif [ "$RESULT" = "2" ]; then
     clear;
     echo '
     wireguard=false
-    ' | sudo -E tee "$HOME"/Yiimpoolv2/yiimp_single/.wireguard.install.cnf >/dev/null 2>&1;
+    ' | sudo -E tee "$HOME"/Yiimpoolv1/yiimp_single/.wireguard.install.cnf >/dev/null 2>&1;
     
 
 elif [ "$RESULT" = "3" ]; then

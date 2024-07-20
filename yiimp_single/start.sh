@@ -38,7 +38,7 @@ echo
 # Start the installation.
 source menu.sh
 source questions.sh
-source $HOME/Yiimpoolv2/yiimp_single/.wireguard.install.cnf
+source $HOME/Yiimpoolv1/yiimp_single/.wireguard.install.cnf
 
 if [[ ("$wireguard" == "true") ]]; then
   source wireguard.sh

@@ -19,7 +19,7 @@
 source /etc/functions.sh
 source /etc/yiimpool.conf
 source $STORAGE_ROOT/yiimp/.yiimp.conf
-source $HOME/Yiimpoolv2/yiimp_single/.wireguard.install.cnf
+source $HOME/Yiimpoolv1/yiimp_single/.wireguard.install.cnf
 
 # Display terminal art and initial messages
 echo
@@ -130,4 +130,4 @@ sleep 1.5
 term_art
 echo -e "$GREEN => Stratum build complete $NC"
 
-cd $HOME/Yiimpoolv2/yiimp_single
+cd $HOME/Yiimpoolv1/yiimp_single

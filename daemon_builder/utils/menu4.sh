@@ -20,7 +20,7 @@ if [[ ("${LATESTVER}" > "${VERSION}" && "${LATESTVER}" != "null") ]]; then
 	hide_output sudo git config --global url."https://".insteadOf git://
 	sleep 1
 
-	REPO="Afiniel/Yiimpoolv2"
+	REPO="Afiniel/Yiimpoolv1"
 
 	temp_dir="$(tempfile -d)" && \
 		git clone -q git@github.com:${REPO%.git} "${temp_dir}" && \

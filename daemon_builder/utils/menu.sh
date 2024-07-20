@@ -14,7 +14,7 @@ source $STORAGE_ROOT/daemon_builder/conf/info.sh
 
 cd $STORAGE_ROOT/daemon_builder
 
-LATESTVER=$(curl -sL 'https://api.github.com/repos/Afiniel/Yiimpoolv2/releases/latest' | jq -r '.tag_name')
+LATESTVER=$(curl -sL 'https://api.github.com/repos/Afiniel/Yiimpoolv1/releases/latest' | jq -r '.tag_name')
 
 
 if [[ ("{$LATESTVER}" > "{$VERSION}" && "${LATESTVER}" != "null") ]]; then
@@ -24,7 +24,7 @@ if [[ ("{$LATESTVER}" > "{$VERSION}" && "${LATESTVER}" != "null") ]]; then
     read -r UPDATE
     if [[ ("${UPDATE}" == "y" || "${UPDATE}" == "Y") ]]; then
         echo "Updating..."
-        cd $HOME/Yiimpoolv2
+        cd $HOME/Yiimpoolv1
         git pull
         echo "Update complete!"
         exit 0

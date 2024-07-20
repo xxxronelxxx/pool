@@ -7,7 +7,7 @@
 source /etc/functions.sh
 source /etc/yiimpool.conf
 source $STORAGE_ROOT/yiimp/.yiimp.conf
-source $HOME/Yiimpoolv2/yiimp_single/.wireguard.install.cnf
+source $HOME/Yiimpoolv1/yiimp_single/.wireguard.install.cnf
 
 set -eu -o pipefail
 
@@ -49,4 +49,4 @@ sudo newaliases
 sudo adduser $whoami mail
 echo -e "$GREEN Mail system complete ${NC}"
 set +eu +o pipefail
-cd $HOME/Yiimpoolv2/yiimp_single
+cd $HOME/Yiimpoolv1/yiimp_single

@@ -23,10 +23,10 @@ function print_error {
 trap print_error ERR
 
 # Change directory to DaemonBuilder
-cd "$HOME/Yiimpoolv2/daemon_builder"
+cd "$HOME/Yiimpoolv1/daemon_builder"
 
 # Copy screen-scrypt-daemonbuilder.sh and set permissions
-hide_output sudo cp -r "$HOME/Yiimpoolv2/daemon_builder/utils/screen-scrypt-daemonbuilder.sh" /etc/
+hide_output sudo cp -r "$HOME/Yiimpoolv1/daemon_builder/utils/screen-scrypt-daemonbuilder.sh" /etc/
 hide_output sudo chmod +x /etc/screen-scrypt-daemonbuilder.sh
 
 if [[ "${DISTRO}" == "18" ]]; then
@@ -82,5 +82,5 @@ echo -e "$GREEN => gcc & g++ updated to version 8 <=${NC}"
 set +euo pipefail
 
 # Return to DaemonBuilder directory and source berkeley.sh
-cd "$HOME/Yiimpoolv2/daemon_builder"
-source "$HOME/Yiimpoolv2/daemon_builder/berkeley.sh"
+cd "$HOME/Yiimpoolv1/daemon_builder"
+source "$HOME/Yiimpoolv1/daemon_builder/berkeley.sh"

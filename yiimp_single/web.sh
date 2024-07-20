@@ -16,7 +16,7 @@
 source /etc/functions.sh
 source /etc/yiimpool.conf
 source $STORAGE_ROOT/yiimp/.yiimp.conf
-source $HOME/Yiimpoolv2/yiimp_single/.wireguard.install.cnf
+source $HOME/Yiimpoolv1/yiimp_single/.wireguard.install.cnf
 
 set -euo pipefail
 
@@ -63,17 +63,17 @@ sudo sed -i "s|ROOTDIR=/data/yiimp|ROOTDIR=${SITE_DIR}|g" /bin/yiimp
 
 # Nginx setup based on domain and SSL options
 if [[ ("$UsingSubDomain" == "y" || "$UsingSubDomain" == "Y" || "$UsingSubDomain" == "yes" || "$UsingSubDomain" == "Yes" || "$UsingSubDomain" == "YES") ]]; then
-    cd $HOME/Yiimpoolv2/yiimp_single
+    cd $HOME/Yiimpoolv1/yiimp_single
     source nginx_subdomain_nonssl.sh
   if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
-    cd $HOME/Yiimpoolv2/yiimp_single
+    cd $HOME/Yiimpoolv1/yiimp_single
     source nginx_subdomain_ssl.sh
   fi
 else
-    cd $HOME/Yiimpoolv2/yiimp_single
+    cd $HOME/Yiimpoolv1/yiimp_single
     source nginx_domain_nonssl.sh
   if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
-    cd $HOME/Yiimpoolv2/yiimp_single
+    cd $HOME/Yiimpoolv1/yiimp_single
     source nginx_domain_ssl.sh
   fi
 fi
@@ -100,7 +100,7 @@ sudo chgrp www-data "$STORAGE_ROOT" -R
 sudo chmod g+w "$STORAGE_ROOT" -R
 echo -e "$GREEN => Complete${NC}"
 
-cd $HOME/Yiimpoolv2/yiimp_single
+cd $HOME/Yiimpoolv1/yiimp_single
 
 # Updating YiiMP files for YiimpPool build
 echo
@@ -135,4 +135,4 @@ fi
 echo -e "$GREEN Web build complete${NC}"
 
 set +euo pipefail
-cd $HOME/Yiimpoolv2/yiimp_single
+cd $HOME/Yiimpoolv1/yiimp_single

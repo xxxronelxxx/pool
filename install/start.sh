@@ -36,7 +36,7 @@ fi
 
 if [[ "$FIRST_TIME_SETUP" == "1" ]]; then
     clear
-    cd "$HOME/Yiimpoolv2/install"
+    cd "$HOME/Yiimpoolv1/install"
 
     echo -e "${YELLOW}Performing first-time setup...${NC}\n"
     # Copy functions to /etc
@@ -121,7 +121,7 @@ else
 
     # Start yiimpool
     echo -e "${YELLOW}Starting Yiimpool installation...${NC}\n"
-    cd "$HOME/Yiimpoolv2/install"
+    cd "$HOME/Yiimpoolv1/install"
     source menu.sh
     cd ~
     echo -e "${GREEN}Yiimpool installation started.${NC}\n"

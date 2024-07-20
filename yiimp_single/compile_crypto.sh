@@ -22,8 +22,8 @@ echo
 echo -e "$YELLOW Install DaemonBuilder Requirements${NC}"
 echo
 
-cd $HOME/Yiimpoolv2/daemon_builder
+cd $HOME/Yiimpoolv1/daemon_builder
 source start.sh
 
 set +eu +o pipefail
-cd $HOME/Yiimpoolv2/yiimp_single
+cd $HOME/Yiimpoolv1/yiimp_single

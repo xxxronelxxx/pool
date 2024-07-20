@@ -23,13 +23,13 @@ RESULT=$(dialog --stdout --nocancel --default-item 1 --title "YiimPool Menu $VER
 if [ "$RESULT" = "1" ]; then
     clear
     echo "Preparing to install Yiimp Single Server..."
-    cd $HOME/Yiimpoolv2/yiimp_single
+    cd $HOME/Yiimpoolv1/yiimp_single
     source start.sh
 
 elif [ "$RESULT" = "2" ]; then
     clear
     echo "Preparing to upgrade Yiimp Stratum Server..."
-    cd $HOME/Yiimpoolv2/yiimp_upgrade
+    cd $HOME/Yiimpoolv1/yiimp_upgrade
     source start.sh
 
 elif [ "$RESULT" = "3" ]; then

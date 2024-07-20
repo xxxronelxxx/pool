@@ -8,7 +8,7 @@
 source /etc/functions.sh
 source /etc/yiimpool.conf
 source "$STORAGE_ROOT/yiimp/.yiimp.conf"
-source "$HOME/Yiimpoolv2/yiimp_single/.wireguard.install.cnf"
+source "$HOME/Yiimpoolv1/yiimp_single/.wireguard.install.cnf"
 
 # Enable strict mode and error handling
 set -euo pipefail
@@ -93,4 +93,4 @@ restart_service php7.3-fpm
 # Disable strict mode to avoid unintended errors in subsequent commands
 set +euo pipefail
 
-cd $HOME/Yiimpoolv2/yiimp_single
+cd $HOME/Yiimpoolv1/yiimp_single

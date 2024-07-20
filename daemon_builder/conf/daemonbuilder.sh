@@ -63,7 +63,7 @@ function install_end_message {
 	echo -e "$YELLOW  ETH:${NC} $MAGENTA ethdons	${NC}"
 	echo -e "$YELLOW  BCH:${NC} $MAGENTA bchdons	${NC}"
 	echo -e "$CYAN  --------------------------------------------------------------------------- 	${NC}"
-	echo -e "$CYAN 	https://github.com/Afiniel/Yiimpoolv2									${NC}"
+	echo -e "$CYAN 	https://github.com/Afiniel/Yiimpoolv1									${NC}"
 	echo -e "$CYAN  ---------------------------------------------------------------------------  	${NC}"
 	echo
 	echo -e "$CYAN  ---------------------------------------------------------------------------		${NC}"

@@ -8,7 +8,7 @@
 
 source /etc/yiimpoolversion.conf
 source /etc/functions.sh
-cd ~/Yiimpoolv2/install
+cd ~/Yiimpoolv1/install
 clear
 
 # Welcome
@@ -91,13 +91,13 @@ if [[ ("$UsingSSH" == "yes") ]]; then
   ' | sudo -E tee /etc/sudoers.d/${yiimpadmin} >/dev/null 2>&1
 
     echo '
-  cd ~/Yiimpoolv2/install
+  cd ~/Yiimpoolv1/install
   bash start.sh
   ' | sudo -E tee /usr/bin/yiimpool >/dev/null 2>&1
     sudo chmod +x /usr/bin/yiimpool
 
     # Check required files and set global variables
-    cd $HOME/Yiimpoolv2/install
+    cd $HOME/Yiimpoolv1/install
     source pre_setup.sh
 
     # Create the STORAGE_USER and STORAGE_ROOT directory if they don't already exist.
@@ -125,9 +125,9 @@ if [[ ("$UsingSSH" == "yes") ]]; then
     BCHDON="qzz0aff2k0xnwyzg7k9fcxlndtaj4wa65uxteqe84m"
     DOGEDON="D7bjqNwyevTYK9JDZbJPQJXbd1b7PosPDT"' | sudo -E tee /etc/yiimpooldonate.conf >/dev/null 2>&1
 
-    sudo cp -r ~/Yiimpoolv2 /home/${yiimpadmin}/
+    sudo cp -r ~/Yiimpoolv1 /home/${yiimpadmin}/
     cd ~
-    sudo setfacl -m u:${yiimpadmin}:rwx /home/${yiimpadmin}/Yiimpoolv2
+    sudo setfacl -m u:${yiimpadmin}:rwx /home/${yiimpadmin}/Yiimpoolv1
     sudo rm -r $HOME/yiimpool
     clear
     echo -e "$YELLOW New User:$MAGENTA ${yiimpadmin} $GREEN created!$YELLOW Make sure you save your$RED private key!${NC}"
@@ -195,13 +195,13 @@ case $response in
     ' | sudo -E tee /etc/sudoers.d/${yiimpadmin} >/dev/null 2>&1
 
     echo '
-    cd ~/Yiimpoolv2/install
+    cd ~/Yiimpoolv1/install
     bash start.sh
     ' | sudo -E tee /usr/bin/yiimpool >/dev/null 2>&1
     sudo chmod +x /usr/bin/yiimpool
 
     # Check required files and set global variables
-    cd $HOME/Yiimpoolv2/install
+    cd $HOME/Yiimpoolv1/install
     source pre_setup.sh
 
     # Create the STORAGE_USER and STORAGE_ROOT directory if they don't already exist.
@@ -229,10 +229,10 @@ case $response in
     BCHDON="qzz0aff2k0xnwyzg7k9fcxlndtaj4wa65uxteqe84m"
     DOGEDON="D7bjqNwyevTYK9JDZbJPQJXbd1b7PosPDT"' | sudo -E tee /etc/yiimpooldonate.conf >/dev/null 2>&1
 
-    sudo cp -r ~/Yiimpoolv2 /home/${yiimpadmin}/
+    sudo cp -r ~/Yiimpoolv1 /home/${yiimpadmin}/
     cd ~
-    sudo setfacl -m u:${yiimpadmin}:rwx /home/${yiimpadmin}/Yiimpoolv2
-    sudo rm -r $HOME/Yiimpoolv2
+    sudo setfacl -m u:${yiimpadmin}:rwx /home/${yiimpadmin}/Yiimpoolv1
+    sudo rm -r $HOME/Yiimpoolv1
     clear
     echo -e "$YELLOW New User:$MAGENTA ${yiimpadmin} $GREEN created$RED ${NC}"
     echo
