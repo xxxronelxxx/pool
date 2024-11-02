@@ -16,7 +16,7 @@
 source /etc/functions.sh
 source /etc/yiimpool.conf
 source $STORAGE_ROOT/yiimp/.yiimp.conf
-source $HOME/Yiimpoolv1/yiimp_single/.wireguard.install.cnf
+source "$HOME/Yiimpoolv1/yiimp_single/.wireguard.install.cnf"
 
 set -euo pipefail
 
@@ -30,9 +30,9 @@ trap print_error ERR
 
 term_art
 
-#if [[ "$wireguard" == "true" ]]; then
-#  source "$STORAGE_ROOT/yiimp/.wireguard.conf"
-#fi
+if [[ ("$wireguard" == "true") ]]; then
+ source "$STORAGE_ROOT/yiimp/.wireguard.conf"
+fi
 
 echo
 echo -e "$MAGENTA     <--$YELLOW Building web file structure and copying files$MAGENTA -->${NC}"
@@ -127,7 +127,7 @@ for file in \
 done
 
 # Update coin_form.php for wireguard if necessary
-if [[ "$wireguard" == "true" ]]; then
+if [[ ("$wireguard" == "true") ]]; then
   internalrpcip="${DBInternalIP%.*}.0/26"
   sudo sed -i "/# onlynet=ipv4/i\        echo \"rpcallowip=${internalrpcip}\\n\";" "$SITE_DIR/web/yaamp/modules/site/coin_form.php"
 fi

@@ -16,7 +16,7 @@ source /etc/functions.sh
 source /etc/yiimpoolversion.conf
 source /etc/yiimpool.conf
 source "$STORAGE_ROOT/yiimp/.yiimp.conf"
-#source "$HOME/Yiimpoolv1/yiimp_single/.wireguard.install.cnf"
+source "$HOME/Yiimpoolv1/yiimp_single/.wireguard.install.cnf"
 
 # Set error handling and log errors
 set -eu -o pipefail
@@ -31,8 +31,9 @@ trap print_error ERR
 # Display banner
 term_art
 
+echo
 # Load WireGuard configuration if enabled
-if [[ "$wireguard" == "true" ]]; then
+if [[ ("$wireguard" == "true") ]]; then
     source "$STORAGE_ROOT/yiimp/.wireguard.conf"
 fi
 
@@ -155,7 +156,7 @@ config_changes=(
 )
 
 # Add bind-address if WireGuard is true
-if [[ "$wireguard" == "true" ]]; then
+if [[ ("$wireguard" == "true") ]]; then
     config_changes+=("bind-address=$DBInternalIP")
 fi
 

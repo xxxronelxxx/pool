@@ -1,7 +1,7 @@
 #!/bin/env bash
 
 #
-# This is the main menu
+# WireGuard Menu
 #
 # Author: Afiniel
 #

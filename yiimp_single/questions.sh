@@ -12,12 +12,12 @@ source /etc/yiimpool.conf
 source "$HOME/Yiimpoolv1/yiimp_single/.wireguard.install.cnf"
 
 # Source wireguard configuration if enabled
-if [[ "$wireguard" == "true" ]]; then
+if [[ ("$wireguard" == "true") ]]; then
     source "$STORAGE_ROOT/yiimp/.wireguard.conf"
 fi
 
 # Display installation type based on wireguard setting
-if [[ "$wireguard" == "true" ]]; then
+if [[ ("$wireguard" == "true") ]]; then
     message_box "Yiimpool Yiimp installer" \
     "You have chosen to install Yiimp with WireGuard!
     
@@ -214,7 +214,7 @@ response=$?
 case $response in
     0)
         # Save configuration to .yiimp.conf
-        if [[ "$wireguard" == "true" ]]; then
+        if [[ ("$wireguard" == "true") ]]; then
             echo "STORAGE_USER=${STORAGE_USER}
                   STORAGE_ROOT=${STORAGE_ROOT}
                   PRIMARY_HOSTNAME=${DomainName}

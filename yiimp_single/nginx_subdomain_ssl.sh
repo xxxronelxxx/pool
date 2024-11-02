@@ -22,7 +22,7 @@ function print_error {
 trap print_error ERR
 
 # Source wireguard configuration if enabled
-if [[ "$wireguard" == "true" ]]; then
+if [[ ("$wireguard" == "true") ]]; then
 	source "$STORAGE_ROOT/yiimp/.wireguard.conf"
 fi
 

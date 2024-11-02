@@ -6,7 +6,7 @@
 source /etc/functions.sh
 source /etc/yiimpool.conf
 source $STORAGE_ROOT/yiimp/.yiimp.conf
-#source $HOME/yiimp_install_script/yiimp_single/.wireguard.install.cnf
+source $HOME/yiimp_install_script/yiimp_single/.wireguard.install.cnf
 
 set -eu -o pipefail
 
@@ -93,4 +93,4 @@ else
 fi
 set +eu +o pipefail
 
-cd $HOME/yiimp_install_script/yiimp_single
+cd $HOME/Yiimpoolv1/yiimp_single

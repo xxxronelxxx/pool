@@ -58,7 +58,7 @@ fi
 
 if [[ "$DISTRO" == "20" ]]; then
     echo
-    echo -e "$MAGENTA Detected$GREEN $DISTRO $RED installing requirements.. ${NC}"
+    echo -e "$MAGENTA Detected$GREEN Distro $DISTRO $RED installing requirements.. ${NC}"
     hide_output sudo apt install -y snapd
     hide_output sudo snap install bitcoin-core
     echo -e "$GREEN Completed${NC}"

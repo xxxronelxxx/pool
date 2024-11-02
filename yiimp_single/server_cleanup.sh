@@ -7,6 +7,7 @@
 source /etc/functions.sh
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 source /etc/yiimpooldonate.conf
+
 cd $HOME/Yiimpoolv1/yiimp_single
 
 term_art
@@ -39,7 +40,7 @@ fi
     crontab -l 2>/dev/null
     echo "@reboot source /etc/yiimpool.conf"
 ) | crontab -
-sudo cp -r first_boot.sh $STORAGE_ROOT/yiimp/
+sudo cp -r first_boot.sh /home/crypto-data/yiimp
 
 echo -e "$GREEN Crontab system complete${NC}"
 echo

@@ -104,10 +104,10 @@ term_art() {
   NC='\033[0m'  # No Color
 
   # Calculate centered text with dashes for a modern border
-  num_cols=$(tput cols)
-  half_cols=$((num_cols / 2))
-  box_width=10
-  offset=$(( (num_cols - box_width) / 2 ))  # Center the box
+  # num_cols=$(tput cols)
+  #   half_cols=$((num_cols / 2))
+  # box_width=10
+  # offset=$(( (num_cols - box_width) / 2 ))  # Center the box
 
   if [ "$offset" -lt 0 ]; then
     offset=0

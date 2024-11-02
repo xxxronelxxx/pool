@@ -132,7 +132,7 @@ echo -e "$GREEN => bls-signatures Completed <= ${NC}"
 
 # Build blocknotify.sh
 echo -e "\n$YELLOW => Building blocknotify.sh <= ${NC}"
-if [[ "$wireguard" == "true" ]]; then
+if [[ ("$wireguard" == "true") ]]; then
     source $STORAGE_ROOT/yiimp/.wireguard.conf
     echo '#####################################
     # Created by Afiniel for Yiimpool use...  #

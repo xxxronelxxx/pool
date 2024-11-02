@@ -36,7 +36,7 @@ echo
 echo -e "$GREEN Passwords can be found in$RED $STORAGE_ROOT/yiimp/.my.cnf ${NC}"
 
 # Load WireGuard configuration if enabled
-if [[ "$wireguard" == "true" ]]; then
+if [[ ("$wireguard" == "true") ]]; then
     source "$STORAGE_ROOT/yiimp/.wireguard.conf"
 fi
 

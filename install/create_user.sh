@@ -255,9 +255,10 @@ case $response in
     echo -e "${MAGENTA}DISTRO: ${GREEN}${DISTRO}$NC"
     echo -e "${MAGENTA}FIRST_TIME_SETUP: ${GREEN}${FIRST_TIME_SETUP}$NC"
     echo -e "${MAGENTA}PRIVATE_IP: ${GREEN}${PRIVATE_IP}$NC"
+    echo
     echo -e "$YELLOW New User:$MAGENTA ${yiimpadmin} $GREEN created$RED $NC"
     echo
-    echo -e "$RED Please reboot the system and log in as$GREEN ${yiimpadmin} $YELLOW and type$GREEN yiimpool$YELLOW to$GREEN continu$YELLOW setup...$NC"
+    echo -e "$RED Please reboot the system and log in as:$GREEN ${yiimpadmin} $YELLOW and type$GREEN yiimpool$YELLOW to$GREEN continu$YELLOW setup...$NC"
     exit 0
     ;;
 
