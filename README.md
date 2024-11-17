@@ -1,4 +1,6 @@
-<h1 align="center">Yiimpool Yiimp Installer with DaemonBuilder and Addport Support</h1>
+The code represents a comprehensive Yiimp mining pool installation and management system. Here's my suggested updated README based on analyzing the codebase:
+
+# Yiimpool Yiimp Installer with DaemonBuilder
 
 <p align="center">
   <img alt="Discord" src="https://img.shields.io/discord/904564600354254898?label=Discord">
@@ -6,126 +8,95 @@
   <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/afiniel/yiimp_install_script">
 </p>
 
-<p align="center">
-  <img src="./.assets/motd.png" alt="motd" width="500" height="450">
-</p>
+## Description
 
-<h2 align="center">Description</h2>
-<p>Yiimpool Yiimp Installer is an automated script that sets up a fully functional Yiimp mining pool on an Ubuntu 18.04 or 20.04 VPS. The script includes necessary dependencies, configurations, and security settings to get your pool up and running. Features include:</p>
-<ul>
-  <li>Automatic coin daemon compilation using DaemonBuilder</li>
-  <li>Support for custom ports</li>
-  <li>SSL certificate installation from Let's Encrypt</li>
-  <li>Intuitive web interface for managing your pool</li>
-</ul>
-<p>Designed for both new and experienced users with clear installation instructions and comprehensive documentation.</p>
+This installer provides an automated way to set up a full Yiimp mining pool on Ubuntu 18.04/20.04. Key features include:
 
-<h2>⚙️ Requirements</h2>
-<ul>
-  <li>Fresh Ubuntu 18.04 or 20.04 VPS</li>
-  <li>Minimum 8GB RAM</li>
-</ul>
+- Automated installation and configuration of all required components
+- Built-in DaemonBuilder for compiling coin daemons
+- Multiple SSL configuration options (Let's Encrypt or self-signed)
+- Support for both domain and subdomain setups
+- Enhanced security features and server hardening
+- Automatic stratum setup with autoexchange capability
+- Web-based admin interface
+- Built-in upgrade tools
+- Comprehensive screen management for monitoring
 
-<h2>ℹ️ DaemonBuilder</h2>
-<p>A tool that downloads and compiles coins. To use, type <code>daemonbuilder</code> in the terminal. Compile time depends on VPS CPU power.</p>
+## Requirements
 
-<h2>💾 Installation</h2>
-<h3>Installer will ask:</h3>
-<ul>
-  <li>Using domain name</li>
-  <li>Using sub-domain as main domain?</li>
-  <li>Domain Name</li>
-  <li>Stratum Domain</li>
-  <li>Install SSL</li>
-  <li>Support Email</li>
-  <li>Public IP</li>
-  <li>DB Root Password</li>
-  <li>DB Panel User Password</li>
-  <li>DB Stratum Password</li>
-  <li>Admin Portal Access Location</li>
-  <li>Stratum to be built with autoexchange enable</li>
-</ul>
+- Fresh Ubuntu 18.04 or 20.04 installation
+- Minimum 8GB RAM
+- Clean domain or subdomain pointed to your VPS
 
-<h3>To install:</h3>
-<pre><code>curl https://raw.githubusercontent.com/afiniel/Yiimpoolv1/master/install.sh | bash</code></pre>
-<p>Installation will take approximately 15 minutes. The installer will notify you when the installation is complete. If you encounter any issues, open an issue on GitHub.</p>
+## Quick Install
 
-<h3>Finish!</h3>
-<h4>A server reboot is REQUIRED after the installation is fully completed to finalize the installation process.</h4>
-<p>After rebooting, log back into your user account. The installation process is complete when you log in again. On first reboot, it may take 1-2 minutes for the cron screens to auto-start. After waiting 1-2 minutes, type:</p>
-<pre><code>motd</code></pre>
+```bash
+curl https://raw.githubusercontent.com/afiniel/Yiimpoolv1/master/install.sh | bash
+```
 
-<p>To enhance security, the install locations and directory structure of YiiMP have been changed as follows:</p>
-<table>
-  <thead>
-    <tr>
-      <th>Directory</th>
-      <th>Files</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><pre>/home/crypto-data/yiimp</pre></td>
-      <td>General install location for YiiMP</td>
-    </tr>
-    <tr>
-      <td><pre>/home/crypto-data/yiimp/starts</pre></td>
-      <td>Screens and stratum sh files - you do not need to run these</td>
-    </tr>
-    <tr>
-      <td><pre>/home/crypto-data/yiimp/site</pre></td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <td><pre>/home/crypto-data/yiimp/site/web</pre></td>
-      <td>New location for YiiMP web files</td>
-    </tr>
-    <tr>
-      <td><pre>/home/crypto-data/yiimp/site/backup</pre></td>
-      <td>Backup location for MySQL DB</td>
-    </tr>
-    <tr>
-      <td><pre>/home/crypto-data/yiimp/site/configuration</pre></td>
-      <td>New location of your serverconfig.php</td>
-    </tr>
-    <tr>
-      <td><pre>/home/crypto-data/yiimp/site/crons</pre></td>
-      <td>New location of the "main:blocks:loop2" sh files</td>
-    </tr>
-    <tr>
-      <td><pre>/home/crypto-data/yiimp/site/log</pre></td>
-      <td>New location for debug.log and your nginx server log</td>
-    </tr>
-    <tr>
-      <td><pre>/home/crypto-data/yiimp/site/stratum</pre></td>
-      <td>New location for your stratum files</td>
-    </tr>
-  </tbody>
-</table>
-<p>Permissions have been correctly set up, allowing your main user write access to the /home/crypto-data directories. Changing file or directory permissions after installation will cause YiiMP to malfunction. You have been warned!</p>
+The installer will guide you through configuration options including:
+- Domain setup (main domain or subdomain)
+- SSL certificate installation
+- Database credentials
+- Admin portal location
+- Email settings
+- Stratum configuration
 
-<h3>Commands</h3>
-<p>To view your running screens, run:</p>
-<pre><code>screen -list</code></pre>
-<p>To view a specific screen, run:</p>
-<pre><code>screen -r main|loop2|blocks|debug</code></pre>
-<p>To detach from a screen, type:</p>
-<pre><code>ctrl+a+d</code> (DO NOT use ctrl+c, it will kill your screen)</pre>
-<p>To start, stop, or restart a specific screen (main, loop2, blocks, or debug), type:</p>
-<pre><code>screens start|stop|restart main|loop2|blocks|debug</code></pre>
-<p>We also suggest typing:</p>
-<pre><code>yiimp</code></pre>
+## Post-Install
 
-<h3>Support</h3>
-<p>If you want to support our project, you can make a donation to any of the following addresses:</p>
-<ul>
-  <li>BTC: bc1qc4qqz8eu5j7u8pxfrfvv8nmcka7whhm225a3f9</li>
-  <li>ETH: 0xdA929d4f03e1009Fc031210DDE03bC40ea66D044</li>
-  <li>LTC: ltc1qma2lgr2mgmtu7sn6pzddaeac9d84chjjpatpzm</li>
-  <li>DOGE: D79wmvtDSaNsJPgAz26GYC39LhYbyqXSNL</li>
-  <li>SOLANA: 4Akj4XQXEKX4iPEd9A4ogXEPNrAsLm4wdATePz1XnyCu</li>
-  <li>KASPA: kaspa:qqdwrqfn6n0hf0gsycrqqmv8z7x6s0wgh4x6kat6nzgyksf525w0ups70mrz0</li>
-  <li>BEP-20: 0xdA929d4f03e1009Fc031210DDE03bC40ea66D044</li>
-  <li>Polygon: 0xdA929d4f03e1009Fc031210DDE03bC40ea66D044</li>
-</ul>
-<p>We appreciate your generosity and support. Thank you!</p>
+1. After installation completes, a server reboot is **required**
+2. Upon first login after reboot, wait 1-2 minutes for services to start
+3. Use the `motd` command to view your pool status
+4. Access your admin panel at the configured URL
+
+## Directory Structure
+
+The installer uses a secure directory structure:
+
+| Directory | Purpose |
+|-----------|---------|
+| /home/crypto-data/yiimp | Main YiiMP directory |
+| /home/crypto-data/yiimp/site/web | Web files |
+| /home/crypto-data/yiimp/starts | Screen management scripts |
+| /home/crypto-data/yiimp/site/backup | Database backups |
+| /home/crypto-data/yiimp/site/configuration | Core configuration |
+| /home/crypto-data/yiimp/site/crons | Cron job scripts |
+| /home/crypto-data/yiimp/site/log | Log files |
+| /home/crypto-data/yiimp/site/stratum | Stratum server files |
+
+## Usage Commands
+
+- View all screens: `screen -list`
+- Access specific screen: `screen -r main|loop2|blocks|debug` 
+- Detach from screen: `ctrl+a+d`
+- Start/stop/restart services: `screens start|stop|restart main|loop2|blocks|debug`
+- Pool overview: `yiimp`
+- System status: `motd`
+
+## DaemonBuilder
+
+Built-in coin daemon compiler accessible via the `daemonbuilder` command. Features:
+- Automated dependency handling
+- Support for multiple coins
+- Berkeley DB compilation
+- Custom port configuration
+
+## Support
+
+For assistance:
+- Open an issue on GitHub
+- Join our Discord server
+
+Donations appreciated:
+- BTC: bc1qc4qqz8eu5j7u8pxfrfvv8nmcka7whhm225a3f9
+- ETH: 0xdA929d4f03e1009Fc031210DDE03bC40ea66D044
+- LTC: ltc1qma2lgr2mgmtu7sn6pzddaeac9d84chjjpatpzm
+- DOGE: D79wmvtDSaNsJPgAz26GYC39LhYbyqXSNL
+- SOLANA: 4Akj4XQXEKX4iPEd9A4ogXEPNrAsLm4wdATePz1XnyCu
+- KASPA: kaspa:qqdwrqfn6n0hf0gsycrqqmv8z7x6s0wgh4x6kat6nzgyksf525w0ups70mrz0
+- BEP-20: 0xdA929d4f03e1009Fc031210DDE03bC40ea66D044
+- Polygon: 0xdA929d4f03e1009Fc031210DDE03bC40ea66D044
+
+## Security Notice
+
+Default permissions are configured for security - avoid modifying directory/file permissions as this may cause system instability.
