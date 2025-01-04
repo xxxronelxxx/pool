@@ -1,4 +1,3 @@
-The code represents a comprehensive Yiimp mining pool installation and management system. Here's my suggested updated README based on analyzing the codebase:
 
 # Yiimpool Yiimp Installer with DaemonBuilder
 
@@ -90,12 +89,11 @@ For assistance:
 Donations appreciated:
 - BTC: bc1qc4qqz8eu5j7u8pxfrfvv8nmcka7whhm225a3f9
 - ETH: 0xdA929d4f03e1009Fc031210DDE03bC40ea66D044
-- LTC: ltc1qma2lgr2mgmtu7sn6pzddaeac9d84chjjpatpzm
-- DOGE: D79wmvtDSaNsJPgAz26GYC39LhYbyqXSNL
+- LTC: MC9xjhE7kmeBFMs4UmfAQyWuP99M49sCQp
+- DOGE: DHNhm8FqNAQ1VTNwmCHAp3wfQ6PcfzN1nu
 - SOLANA: 4Akj4XQXEKX4iPEd9A4ogXEPNrAsLm4wdATePz1XnyCu
-- KASPA: kaspa:qqdwrqfn6n0hf0gsycrqqmv8z7x6s0wgh4x6kat6nzgyksf525w0ups70mrz0
 - BEP-20: 0xdA929d4f03e1009Fc031210DDE03bC40ea66D044
-- Polygon: 0xdA929d4f03e1009Fc031210DDE03bC40ea66D044
+- KASPA: kaspa:qrhfn2tl3ppc9qx448pgp6avv88gcav3dntw4p7h6v0ht3eac7pl6lkcjcy7r
 
 ## Security Notice
 
