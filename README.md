@@ -88,6 +88,7 @@ For assistance:
 
 Donations appreciated:
 - BTC: bc1qc4qqz8eu5j7u8pxfrfvv8nmcka7whhm225a3f9
+- BCH: qpse55j0kg0txz0zyx8nsrv3pvd039c09ypplsfn87
 - ETH: 0xdA929d4f03e1009Fc031210DDE03bC40ea66D044
 - LTC: MC9xjhE7kmeBFMs4UmfAQyWuP99M49sCQp
 - DOGE: DHNhm8FqNAQ1VTNwmCHAp3wfQ6PcfzN1nu

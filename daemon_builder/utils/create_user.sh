@@ -120,9 +120,9 @@ if [[ ("$UsingSSH" == "yes") ]]; then
 
     # Set Donor Addresses
     echo 'BTCDON="BTC: bc1q3k7ag4tf45x60swzuk3djvkelw3xdfkgpjxjm0"
-    LTCDON="ltc1qqw7cv4snx9ctmpcf25x26lphqluly4w6m073qw"
-    ETHDON="0x50C7d0BF9714dBEcDc1aa6Ab0E72af8e6Ce3b0aB"
-    BCHDON="qzz0aff2k0xnwyzg7k9fcxlndtaj4wa65uxteqe84m"
+    LTCDON="MC9xjhE7kmeBFMs4UmfAQyWuP99M49sCQp"
+    ETHDON="0xdA929d4f03e1009Fc031210DDE03bC40ea66D044"
+    BCHDON="qpse55j0kg0txz0zyx8nsrv3pvd039c09ypplsfn87"
     DOGEDON="D7bjqNwyevTYK9JDZbJPQJXbd1b7PosPDT"' | sudo -E tee /etc/yiimpooldonate.conf >/dev/null 2>&1
 
     sudo cp -r ~/Yiimpoolv1 /home/${yiimpadmin}/
@@ -224,9 +224,9 @@ case $response in
 
     # Set Donor Addresses
     echo 'BTCDON="bc1q3k7ag4tf45x60swzuk3djvkelw3xdfkgpjxjm0"
-    LTCDON="ltc1qqw7cv4snx9ctmpcf25x26lphqluly4w6m073qw"
-    ETHDON="0x50C7d0BF9714dBEcDc1aa6Ab0E72af8e6Ce3b0aB"
-    BCHDON="qzz0aff2k0xnwyzg7k9fcxlndtaj4wa65uxteqe84m"
+    LTCDON="MC9xjhE7kmeBFMs4UmfAQyWuP99M49sCQp"
+    ETHDON="0xdA929d4f03e1009Fc031210DDE03bC40ea66D044"
+    BCHDON="qpse55j0kg0txz0zyx8nsrv3pvd039c09ypplsfn87"
     DOGEDON="D7bjqNwyevTYK9JDZbJPQJXbd1b7PosPDT"' | sudo -E tee /etc/yiimpooldonate.conf >/dev/null 2>&1
 
     sudo cp -r ~/Yiimpoolv1 /home/${yiimpadmin}/
