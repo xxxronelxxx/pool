@@ -68,25 +68,23 @@ echo
 echo -e "$MAGENTA Installing MariaDB..${NC}"
 hide_output sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
 
-DISTRO=$(lsb_release -sc)
-
 case "$DISTRO" in
-    "xenial")  # Ubuntu 16.04
+    "16")  # Ubuntu 16.04
         sudo add-apt-repository 'deb [arch=amd64,arm64,i386,ppc64el] http://mirror.one.com/mariadb/repo/10.4/ubuntu xenial main' >/dev/null 2>&1
         ;;
-    "bionic")  # Ubuntu 18.04
+    "18")  # Ubuntu 18.04
         sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://mirror.one.com/mariadb/repo/10.4/ubuntu bionic main' >/dev/null 2>&1
         ;;
-    "focal")   # Ubuntu 20.04
+    "20")   # Ubuntu 20.04
         sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el,s390x] http://mirror.one.com/mariadb/repo/10.4/ubuntu focal main' >/dev/null 2>&1
         ;;
-    "jammy")   # Ubuntu 22.04
+    "22")   # Ubuntu 22.04
         sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/10.6/ubuntu jammy main' >/dev/null 2>&1
         ;;
-    "lunar")   # Ubuntu 23.04
+    "23")   # Ubuntu 23.04
         sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el,s390x] http://mirror.one.com/mariadb/repo/10.4/ubuntu lunar main' >/dev/null 2>&1
         ;;
-    "noble")   # Ubuntu 24.04
+    "24")   # Ubuntu 24.04
         sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el,s390x] http://mirror.one.com/mariadb/repo/10.4/ubuntu noble main' >/dev/null 2>&1
         ;;
     *)
