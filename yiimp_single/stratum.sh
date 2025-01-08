@@ -67,7 +67,13 @@ if [[ "$AutoExchange" =~ ^[Yy][Ee]?[Ss]?$ ]]; then
   sudo sed -i 's/CFLAGS += -DNO_EXCHANGE/#CFLAGS += -DNO_EXCHANGE/' Makefile
 fi
 
-hide_output sudo make -j$(nproc)
+if [[ "$DISTRO" == "22" || "$DISTRO" == "23" || "$DISTRO" == "24" ]]; then
+    # Use newer compiler flags for Ubuntu 22.04, 23.04 and 24.04
+    hide_output sudo make CFLAGS="-march=native -O3" CXXFLAGS="-march=native -O3"
+else
+    # Existing compilation command for other versions
+    hide_output sudo make -j$(nproc)
+fi
 
 # Setting up the stratum folder structure and copying files
 echo -e "$CYAN => Building stratum folder structure and copying files... <= $NC"

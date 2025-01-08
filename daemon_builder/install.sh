@@ -204,7 +204,7 @@ else
 		echo -e "$CYAN => Updating system and installing required packages :${NC}"
 		sleep 3
 
-		hide_output sudo apt -y update 
+		hide_output sudo apt update 
 		hide_output sudo apt -y upgrade
 		hide_output sudo apt -y autoremove
 		hide_output sudo apt-get install -y software-properties-common
@@ -285,7 +285,7 @@ else
 		if [[ ("${DISTRO}" == "18") ]]; then
 			hide_output sudo apt-get -y install libz-dev libminiupnpc10
 			hide_output sudo add-apt-repository -y ppa:bitcoin/bitcoin
-			hide_output sudo apt -y update && sudo apt -y upgrade
+			hide_output sudo apt update && sudo apt -y upgrade
 			hide_output sudo apt -y install libdb4.8-dev libdb4.8++-dev libdb5.3 libdb5.3++
 		fi
 		hide_output sudo apt -y install libdb5.3 libdb5.3++

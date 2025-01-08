@@ -25,6 +25,8 @@ elif [[ "${UBUNTU_DESCRIPTION}" == "Ubuntu 24.04 LTS" || "${UBUNTU_DESCRIPTION}"
   DISTRO=24
 elif [[ "${UBUNTU_DESCRIPTION}" == "Ubuntu 23.04 LTS" || "${UBUNTU_DESCRIPTION}" == "Ubuntu 23.04.6 LTS" ]]; then
   DISTRO=23
+elif [[ "${UBUNTU_DESCRIPTION}" == "Ubuntu 22.04 LTS" || "${UBUNTU_DEsSCRIPTION}" == "Ubuntu 22.04.6 LTS" ]]; then
+  DISTRO=22
 else
   echo "This script only supports Ubuntu 16.04 LTS, 18.04 LTS, 20.04/20.04.6 LTS, 24.04 LTS, and 23.04 LTS."
   exit 1

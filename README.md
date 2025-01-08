@@ -1,4 +1,3 @@
-
 # Yiimpool Yiimp Installer with DaemonBuilder
 
 <p align="center">
@@ -26,6 +25,14 @@ This installer provides an automated way to set up a full Yiimp mining pool on U
 - Fresh Ubuntu 18.04 or 20.04 installation
 - Minimum 8GB RAM
 - Clean domain or subdomain pointed to your VPS
+
+## Supported OS
+- Ubuntu 16.04 LTS
+- Ubuntu 18.04 LTS
+- Ubuntu 20.04 LTS
+- Ubuntu 22.04 LTS Not tested yet
+- Ubuntu 23.04 LTS Not tested yet
+- Ubuntu 24.04 LTS Not tested yet
 
 ## Quick Install
 
