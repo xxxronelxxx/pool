@@ -46,7 +46,7 @@ if [[ "$DISTRO" == "16" || "$DISTRO" == "18" ]]; then
     hide_output sudo add-apt-repository -y ppa:certbot/certbot
     hide_output sudo apt-get update
     echo -e "$GREEN => Complete${NC}"
-elif [[ "$DISTRO" == "20" ]]; then
+elif [[ "$DISTRO" == "20" || "$DISTRO" == "22" ]]; then
     echo -e "$MAGENTA => Installing CertBot PPA <= ${NC}"
     hide_output sudo apt install -y snapd
     hide_output sudo snap install core
@@ -56,7 +56,7 @@ elif [[ "$DISTRO" == "20" ]]; then
     echo -e "$GREEN => Complete${NC}"
 fi
 
-if [[ "$DISTRO" == "20" ]]; then
+if [[ "$DISTRO" == "20" || "$DISTRO" == "22" ]]; then
     echo
     echo -e "$MAGENTA Detected$GREEN Distro $DISTRO $RED installing requirements.. ${NC}"
     hide_output sudo apt install -y snapd
@@ -79,6 +79,9 @@ case "$DISTRO" in
         ;;
     "focal")   # Ubuntu 20.04
         sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el,s390x] http://mirror.one.com/mariadb/repo/10.4/ubuntu focal main' >/dev/null 2>&1
+        ;;
+    "jammy")   # Ubuntu 22.04
+        sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el,s390x] http://mirror.one.com/mariadb/repo/10.4/ubuntu jammy main' >/dev/null 2>&1
         ;;
     *)
         echo "Unsupported Ubuntu version: $DISTRO"
@@ -213,15 +216,12 @@ apt_install php8.1-mysql
 apt_install libssh-dev libbrotli-dev
 fi
 
-if [[ ("$DISTRO" == "20") ]]; then
-	apt_install php8.2-fpm php8.2-opcache php8.2 php8.2-common php8.2-gd php8.2-mysql php8.2-imap php8.2-cli
-	apt_install php8.2-cgi php8.2-curl php8.2-intl php8.2-pspell
-	apt_install php8.2-sqlite3 php8.2-tidy php8.2-xmlrpc php8.2-xsl php8.2-zip
-	apt_install php8.2-mbstring php8.2-memcache php8.2-memcached certbot
-	apt_install libssh-dev libbrotli-dev
-	# sleep 2
-	#  sudo systemctl start php8.2-fpm
-	# sudo systemctl status php8.2-fpm | sed -n "1,3p"
+if [[ ("$DISTRO" == "20" || "$DISTRO" == "22") ]]; then
+    apt_install php8.2-fpm php8.2-opcache php8.2 php8.2-common php8.2-gd php8.2-mysql php8.2-imap php8.2-cli
+    apt_install php8.2-cgi php8.2-curl php8.2-intl php8.2-pspell
+    apt_install php8.2-sqlite3 php8.2-tidy php8.2-xmlrpc php8.2-xsl php8.2-zip
+    apt_install php8.2-mbstring php8.2-memcache php8.2-memcached certbot
+    apt_install libssh-dev libbrotli-dev
 fi
 
 echo -e "$CYAN => Fixing DB connection issue... ${NC}"
