@@ -15,18 +15,18 @@ echo -e "${YELLOW}Running pre-flight checks...${NC}\n"
 UBUNTU_DESCRIPTION=$(lsb_release -d | sed 's/.*:\s*//')
 UBUNTU_VERSION=$(lsb_release -rs)
 
-if [[ "${UBUNTU_DESCRIPTION}" == "Ubuntu 20.04 LTS" || "${UBUNTU_DESCRIPTION}" == "Ubuntu 20.04.06 LTS" ]]; then
+if [[ "${UBUNTU_DESCRIPTION}" == "Ubuntu 20.04 LTS" || "${UBUNTU_DESCRIPTION}" == "Ubuntu 20.04.6 LTS" ]]; then
   DISTRO=20
-elif [[ "${UBUNTU_DESCRIPTION}" == "Ubuntu 18.04 LTS" || "${UBUNTU_DESCRIPTION}" == "Ubuntu 18.04.06 LTS" ]]; then
+elif [[ "${UBUNTU_DESCRIPTION}" == "Ubuntu 18.04 LTS" || "${UBUNTU_DESCRIPTION}" == "Ubuntu 18.04.6 LTS" ]]; then
   DISTRO=18
-elif [[ "${UBUNTU_DESCRIPTION}" == "Ubuntu 16.04 LTS" || "${UBUNTU_DESCRIPTION}" == "Ubuntu 16.04.06 LTS" ]]; then
+elif [[ "${UBUNTU_DESCRIPTION}" == "Ubuntu 16.04 LTS" || "${UBUNTU_DESCRIPTION}" == "Ubuntu 16.04.6 LTS" ]]; then
   DISTRO=16
-elif [[ "${UBUNTU_DESCRIPTION}" == "Ubuntu 24.04 LTS" || "${UBUNTU_DESCRIPTION}" == "Ubuntu 24.04.06 LTS" ]]; then
+elif [[ "${UBUNTU_DESCRIPTION}" == "Ubuntu 24.04 LTS" || "${UBUNTU_DESCRIPTION}" == "Ubuntu 24.04.6 LTS" ]]; then
   DISTRO=24
-elif [[ "${UBUNTU_DESCRIPTION}" == "Ubuntu 23.04 LTS" || "${UBUNTU_DESCRIPTION}" == "Ubuntu 23.04.06 LTS" ]]; then
+elif [[ "${UBUNTU_DESCRIPTION}" == "Ubuntu 23.04 LTS" || "${UBUNTU_DESCRIPTION}" == "Ubuntu 23.04.6 LTS" ]]; then
   DISTRO=23
 else
-  echo "This script only supports Ubuntu 16.04 LTS, 18.04 LTS, 20.04 LTS, 24.04 LTS, and 23.04 LTS."
+  echo "This script only supports Ubuntu 16.04 LTS, 18.04 LTS, 20.04/20.04.6 LTS, 24.04 LTS, and 23.04 LTS."
   exit 1
 fi
 
