@@ -91,10 +91,10 @@ function install_end_message() {
 
 }
 
-term_art() {
+function term_art() {
   clear
 
-  # Define color codes (assuming they are not already defined)
+  # Define color codes
   RED='\033[0;31m'
   GREEN='\033[0;32m'
   YELLOW='\033[0;33m'
@@ -103,49 +103,44 @@ term_art() {
   BOLD_CYAN='\033[1;36m'
   NC='\033[0m'  # No Color
 
+  center_text() {
+      local text="$1"
+      local width=$(tput cols)
+      local padding=$(( (width - ${#text}) / 2 ))
+      printf "%${padding}s%s\n" "" "$text"
+  }
+
   # Calculate centered text with dashes for a modern border
-  # num_cols=$(tput cols)
-  #   half_cols=$((num_cols / 2))
-  # box_width=10
-  # offset=$(( (num_cols - box_width) / 2 ))  # Center the box
+  num_cols=$(tput cols)
+  half_cols=$((num_cols / 2))
+  box_width=40
+  offset=$(( (num_cols - box_width) / 2 )) 
 
   if [ "$offset" -lt 0 ]; then
     offset=0
   fi
 
-  # Print top border
   printf "%${offset}s" " "
-  echo -e "${BOLD_YELLOW}╔══════════════════════════════╗${NC}"
-
-  # Print Yiimp Installer title
+  echo -e "${BOLD_YELLOW}╔══════════════════════════════════════════╗${NC}"
   printf "%${offset}s" " "
-  echo -e "${BOLD_YELLOW}║  ${BOLD_CYAN}Yiimp Installer${BOLD_YELLOW}  ║${NC}"
-
-  # Print subtitle
+  echo -e "${BOLD_YELLOW}║${NC}          ${BOLD_CYAN}Yiimp Installer Script${NC}          ${BOLD_YELLOW}║${NC}"
   printf "%${offset}s" " "
-  echo -e "${BOLD_YELLOW}║${BOLD_CYAN}        Fork By Afiniel!${BOLD_YELLOW} ║${NC}"
-
-  # Print bottom border
+  echo -e "${BOLD_YELLOW}║${NC}            ${BOLD_CYAN}Fork By Afiniel!${NC}              ${BOLD_YELLOW}║${NC}"
   printf "%${offset}s" " "
-  echo -e "${BOLD_YELLOW}╚══════════════════════════════╝${NC}"
-  echo  # New line for spacing
+  echo -e "${BOLD_YELLOW}╚══════════════════════════════════════════╝${NC}"
 
-  # Print main content
   echo
-  echo -e "${BOLD_YELLOW}$(printf "%${half_cols}s")Welcome to the Yiimp Installer!${NC}"
+  center_text "Welcome to the Yiimp Installer!"
   echo
-  echo -e "${BOLD_YELLOW}$(printf "%${half_cols}s")This script will install all dependencies and Yiimp for you, including:${NC}"
-  echo -e "${BOLD_YELLOW}$(printf "%${half_cols}s")  - MySQL for database management${NC}"
-  echo -e "${BOLD_YELLOW}$(printf "%${half_cols}s")  - Nginx web server with PHP for Yiimp operation${NC}"
-  echo -e "${BOLD_YELLOW}$(printf "%${half_cols}s")  - MariaDB as the database backend${NC}"
+  echo -e "${BOLD_CYAN}This script will install:${NC}"
   echo
-  echo -e "${BOLD_YELLOW}$(printf "%${half_cols}s")**Version:** ${GREEN}${VERSION:-"unknown"}${NC}"
+  echo -e "  ${GREEN}•${NC} MySQL for database management"
+  echo -e "  ${GREEN}•${NC} Nginx web server with PHP for Yiimp operation"
+  echo -e "  ${GREEN}•${NC} MariaDB as the database backend"
+  echo
+  echo -e "${BOLD_CYAN}Version:${NC} ${GREEN}${VERSION:-"unknown"}${NC}"
   echo
 }
-
-
-
-
 
 function term_yiimpool {
   clear
