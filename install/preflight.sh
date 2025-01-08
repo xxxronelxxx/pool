@@ -33,7 +33,7 @@ else
 fi
 
 # Apply permissions based on the identified LTS version
-case "$DISTRO" ins
+case "$DISTRO" in
   16 | 18 | 20 | 22| 23 | 24)
     echo -e "${YELLOW}Setting permissions for Ubuntu $DISTRO...${NC}"
     sudo chmod g-w /etc /etc/default /usr
