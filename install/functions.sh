@@ -189,7 +189,7 @@ function daemonbuiler_files {
 }
 
 function hide_output {
-	OUTPUT=$(tempfile)
+	OUTPUT=$(mktemp)
 	$@ &>$OUTPUT &
 	spinner
 	E=$?
@@ -204,6 +204,23 @@ function hide_output {
 
 	rm -f $OUTPUT
 }
+
+# function hide_output {
+	# OUTPUT=$(tempfile)
+	# $@ &>$OUTPUT &
+	# spinner
+	# E=$?
+	# if [ $E != 0 ]; then
+		# echo
+		# echo FAILED: $@
+		# echo -----------------------------------------
+		# cat $OUTPUT
+		# echo -----------------------------------------
+		# exit $E
+	# fi
+# 
+	# rm -f $OUTPUT
+# }
 
 
 function last_words {
