@@ -139,6 +139,15 @@ case $response in
    255) echo "[ESC] key pressed.";;
 esac
 
+dialog --title "Use Dedicated Coin Ports" \
+--yesno "Would you like YiiMP to be built with dedicated coin ports?" 7 60
+response=$?
+case $response in
+   0) CoinPort=yes;;
+   1) CoinPort=no;;
+   255) echo "[ESC] key pressed.";;
+esac
+
 # Automatically set PublicIP based on SSH client IP or default private IP
 if [ -z "${PublicIP:-}" ]; then
     if pstree -p | egrep --quiet --extended-regexp ".*sshd.*\($$\)"; then
@@ -217,6 +226,7 @@ case $response in
                   SupportEmail=${SupportEmail}
                   AdminPanel=${AdminPanel}
                   PublicIP=${PublicIP}
+                  CoinPort=${CoinPort}
                   AutoExchange=${AutoExchange}
                   DBInternalIP=${DBInternalIP}
                   YiiMPDBName=${YiiMPDBName}
@@ -238,6 +248,7 @@ case $response in
                   SupportEmail=${SupportEmail}
                   AdminPanel=${AdminPanel}
                   PublicIP=${PublicIP}
+                  CoinPort=${CoinPort}
                   AutoExchange=${AutoExchange}
                   YiiMPDBName=${YiiMPDBName}
                   DBRootPassword='${DBRootPassword}'
