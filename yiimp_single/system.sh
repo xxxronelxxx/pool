@@ -70,22 +70,22 @@ hide_output sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:
 
 case "$DISTRO" in
     "16")  # Ubuntu 16.04
-        sudo add-apt-repository 'deb [arch=amd64,arm64,i386,ppc64el] http://mirror.one.com/mariadb/repo/10.4/ubuntu xenial main' >/dev/null 2>&1
+        sudo add-apt-repository -y 'deb [arch=amd64,arm64,i386,ppc64el] http://mirror.one.com/mariadb/repo/10.4/ubuntu xenial main' >/dev/null 2>&1
         ;;
     "18")  # Ubuntu 18.04
-        sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://mirror.one.com/mariadb/repo/10.4/ubuntu bionic main' >/dev/null 2>&1
+        sudo add-apt-repository  -y 'deb [arch=amd64,arm64,ppc64el] http://mirror.one.com/mariadb/repo/10.4/ubuntu bionic main' >/dev/null 2>&1
         ;;
     "20")   # Ubuntu 20.04
-        sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el,s390x] http://mirror.one.com/mariadb/repo/10.4/ubuntu focal main' >/dev/null 2>&1
+        sudo add-apt-repository -y 'deb [arch=amd64,arm64,ppc64el,s390x] http://mirror.one.com/mariadb/repo/10.4/ubuntu focal main' >/dev/null 2>&1
         ;;
     "22")   # Ubuntu 22.04
-        sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/10.6/ubuntu jammy main' >/dev/null 2>&1
+        sudo add-apt-repository -y 'deb [arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/10.6/ubuntu jammy main' >/dev/null 2>&1
         ;;
     "23")   # Ubuntu 23.04
-        sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el,s390x] http://mirror.one.com/mariadb/repo/10.4/ubuntu lunar main' >/dev/null 2>&1
+        sudo add-apt-repository -y 'deb [arch=amd64,arm64,ppc64el,s390x] http://mirror.one.com/mariadb/repo/10.4/ubuntu lunar main' >/dev/null 2>&1
         ;;
     "24")   # Ubuntu 24.04
-        sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el,s390x] http://mirror.one.com/mariadb/repo/10.4/ubuntu noble main' >/dev/null 2>&1
+        sudo add-apt-repository -y 'deb [arch=amd64,arm64,ppc64el,s390x] http://mirror.one.com/mariadb/repo/10.4/ubuntu noble main' >/dev/null 2>&1
         ;;
     *)
         echo "Unsupported Ubuntu version: $DISTRO"
@@ -177,45 +177,33 @@ echo
 echo -e "$CYAN => Installing PHP <= ${NC}"
 sleep 3
 
-if [[ "$DISTRO" == "16" ]]; then
-    hide_output sudo add-apt-repository -y ppa:ondrej/php
-elif [[ "$DISTRO" == "18" ]]; then
-    if [ ! -f /etc/apt/sources.list.d/ondrej-php-bionic.list ]; then
-        hide_output sudo add-apt-repository -y ppa:ondrej/php
-    fi
-elif [[ "$DISTRO" == "20" || "$DISTRO" == "22" || "$DISTRO" == "23" || "$DISTRO" == "24" ]]; then
-    if [ ! -f /etc/apt/sources.list.d/ondrej-ubuntu-php-$(lsb_release -sc).list ]; then
-        hide_output sudo add-apt-repository -y ppa:ondrej/php
-    fi
+if [ ! -f /etc/apt/sources.list.d/ondrej-php-bionic.list ]; then
+	hide_output sudo add-apt-repository -y ppa:ondrej/php
 fi
 
 hide_output sudo apt-get update
 
-# Install PHP packages
-if [[ "$DISTRO" == "16" || "$DISTRO" == "18" || "$DISTRO" == "20" ]]; then
-    apt_install php7.3-fpm php7.3-opcache php7.3 php7.3-common php7.3-gd \
-        php7.3-mysql php7.3-imap php7.3-cli php7.3-cgi \
-        php-pear php-auth-sasl mcrypt imagemagick libruby \
-        php7.3-curl php7.3-intl php7.3-pspell php7.3-recode php7.3-sqlite3 \
-        php7.3-tidy php7.3-xmlrpc php7.3-xsl memcached php-memcache \
-        php-imagick php-gettext php7.3-zip php7.3-mbstring
-fi
+apt_install php7.3-fpm php7.3-opcache php7.3 php7.3-common php7.3-gd
+apt_install  php7.3-mysql php7.3-imap php7.3-cli php7.3-cgi
+apt_install  php-pear php-auth-sasl mcrypt imagemagick libruby
+apt_install  php7.3-curl php7.3-intl php7.3-pspell php7.3-recode php7.3-sqlite3
+apt_install  php7.3-tidy php7.3-xmlrpc php7.3-xsl memcached php-memcache
+apt_install  php-imagick php-gettext php7.3-zip php7.3-mbstring \
 
-apt_install fail2ban ntpdate python3 python3-dev python3-pip \
-    curl git sudo coreutils pollinate unzip unattended-upgrades cron \
-    pwgen libgmp3-dev libmysqlclient-dev libcurl4-gnutls-dev \
-    libkrb5-dev libldap2-dev libidn11-dev gnutls-dev librtmp-dev \
-    build-essential libtool autotools-dev automake pkg-config libevent-dev bsdmainutils libssl-dev
+apt_install  fail2ban ntpdate python3 python3-dev python3-pip
+apt_install  curl git sudo coreutils pollinate unzip unattended-upgrades cron
+apt_install  pwgen libgmp3-dev libmysqlclient-dev libcurl4-gnutls-dev
+apt_install  libkrb5-dev libldap2-dev libidn11-dev gnutls-dev librtmp-dev
+apt_install  build-essential libtool autotools-dev automake pkg-config libevent-dev bsdmainutils libssl-dev \
 
-if [[ "$DISTRO" == "22" || "$DISTRO" == "23" || "$DISTRO" == "24" ]]; then
+if [[ "$DISTRO" == "20" || "$DISTRO" == "22" || "$DISTRO" == "23" || "$DISTRO" == "24" ]]; then
     apt_install software-properties-common libsodium-dev default-libmysqlclient-dev
-    
-    apt_install php8.2-fpm php8.2-opcache php8.2 php8.2-common php8.2-gd \
-        php8.2-mysql php8.2-imap php8.2-cli php8.2-cgi php8.2-curl \
-        php8.2-intl php8.2-pspell php8.2-sqlite3 php8.2-tidy \
-        php8.2-xmlrpc php8.2-xsl php8.2-zip php8.2-mbstring \
-        php8.2-memcache php8.2-memcached certbot \
-        libssh-dev libbrotli-dev
+    apt_install php8.2-fpm php8.2-opcache php8.2 php8.2-common php8.2-gd
+    apt_install php8.2-mysql php8.2-imap php8.2-cli php8.2-cgi php8.2-curl
+    apt_install php8.2-intl php8.2-pspell php8.2-sqlite3 php8.2-tidy
+    apt_install php8.2-xmlrpc php8.2-xsl php8.2-zip php8.2-mbstring
+    apt_install php8.2-memcache php8.2-memcached certbot
+    apt_install libssh-dev libbrotli-dev
 fi
 
 echo -e "$CYAN => Fixing DB connection issue... ${NC}"
