@@ -212,11 +212,6 @@ sudo update-alternatives --set php /usr/bin/php7.3
 echo
 echo -e "$CYAN => Cloning Yiimp Repo <= ${NC}"
 hide_output sudo git clone ${YiiMPRepo} $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
-if [[ "$CoinPort" == "yes" ]]; then
-    cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
-    sudo git fetch
-    sudo git checkout dev >/dev/null 2>&1
-fi
 
 hide_output sudo service nginx restart
 sleep 0.5
