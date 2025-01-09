@@ -12,23 +12,22 @@ source /etc/functions.sh
 echo -e "${YELLOW}Running pre-flight checks...${NC}\n"
 
 # Identify Ubuntu version and set permissions accordingly
-UBUNTU_DESCRIPTION=$(lsb_release -d | sed 's/.*:\s*//')
-UBUNTU_VERSION=$(lsb_release -rs)
+UBUNTU_DESCRIPTION=$(lsb_release -rs)
 
-if [[ "${UBUNTU_DESCRIPTION}" == "Ubuntu 20.04 LTS" || "${UBUNTU_DESCRIPTION}" == "Ubuntu 20.04.6 LTS" ]]; then
+if [[ "${UBUNTU_DESCRIPTION}" == "20.04" ]]; then
   DISTRO=20
-elif [[ "${UBUNTU_DESCRIPTION}" == "Ubuntu 18.04 LTS" || "${UBUNTU_DESCRIPTION}" == "Ubuntu 18.04.6 LTS" ]]; then
+elif [[ "${UBUNTU_DESCRIPTION}" == "18.04" ]]; then
   DISTRO=18
-elif [[ "${UBUNTU_DESCRIPTION}" == "Ubuntu 16.04 LTS" || "${UBUNTU_DESCRIPTION}" == "Ubuntu 16.04.6 LTS" ]]; then
+elif [[ "${UBUNTU_DESCRIPTION}" == "16.04" ]]; then
   DISTRO=16
-elif [[ "${UBUNTU_DESCRIPTION}" == "Ubuntu 24.04 LTS" || "${UBUNTU_DESCRIPTION}" == "Ubuntu 24.04.6 LTS" ]]; then
+elif [[ "${UBUNTU_DESCRIPTION}" == "24.04"  ]]; then
   DISTRO=24
-elif [[ "${UBUNTU_DESCRIPTION}" == "Ubuntu 23.04 LTS" || "${UBUNTU_DESCRIPTION}" == "Ubuntu 23.04.6 LTS" ]]; then
+elif [[ "${UBUNTU_DESCRIPTION}" == "23.04"  ]]; then
   DISTRO=23
-elif [[ "${UBUNTU_DESCRIPTION}" == "Ubuntu 22.04 LTS" || "${UBUNTU_DEsSCRIPTION}" == "Ubuntu 22.04.6 LTS" ]]; then
+elif [[ "${UBUNTU_DESCRIPTION}" == "22.04"  ]]; then
   DISTRO=22
 else
-  echo "This script only supports Ubuntu 16.04 LTS, 18.04 LTS, 20.04/20.04.6 LTS, 24.04 LTS, and 23.04 LTS."
+  echo "This script only supports Ubuntu 16.04, 18.04, 20.04, 23.04, and 24.04."
   exit 1
 fi
 
