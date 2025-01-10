@@ -30,8 +30,13 @@ export NCURSES_NO_UTF8_ACS=1
 
 # Create the temporary installation directory if it doesn't already exist.
 if [ ! -d $STORAGE_ROOT/yiimp/yiimp_setup ]; then
-mkdir -p $STORAGE_ROOT/{wallets,yiimp/{yiimp_setup/log,site/{web,stratum,configuration,crons,log},starts}}
-touch $STORAGE_ROOT/yiimp/yiimp_setup/log/installer.log
+    sudo mkdir -p $STORAGE_ROOT/{wallets,yiimp/{yiimp_setup/log,site/{web,stratum,configuration,crons,log},starts}}
+    
+    sudo chown -R $STORAGE_USER:$STORAGE_USER $STORAGE_ROOT
+    
+    sudo chmod +x $STORAGE_ROOT
+
+    sudo touch $STORAGE_ROOT/yiimp/yiimp_setup/log/installer.log
 fi
 echo
 
