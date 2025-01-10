@@ -14,35 +14,41 @@ echo -e "${YELLOW}Running pre-flight checks...${NC}\n"
 # Identify Ubuntu version and set permissions accordingly
 UBUNTU_DESCRIPTION=$(lsb_release -rs)
 
-if [[ "${UBUNTU_DESCRIPTION}" == "20.04" ]]; then
-  DISTRO=20
-elif [[ "${UBUNTU_DESCRIPTION}" == "18.04" ]]; then
-  DISTRO=18
-elif [[ "${UBUNTU_DESCRIPTION}" == "16.04" ]]; then
-  DISTRO=16
-elif [[ "${UBUNTU_DESCRIPTION}" == "24.04"  ]]; then
+if [[ "${UBUNTU_DESCRIPTION}" == "24.04" ]]; then
   DISTRO=24
-elif [[ "${UBUNTU_DESCRIPTION}" == "23.04"  ]]; then
+  sudo chmod g-w /etc /etc/default /usr
+elif [[ "${UBUNTU_DESCRIPTION}" == "23.04" ]]; then
   DISTRO=23
-elif [[ "${UBUNTU_DESCRIPTION}" == "22.04"  ]]; then
+  sudo chmod g-w /etc /etc/default /usr
+elif [[ "${UBUNTU_DESCRIPTION}" == "22.04" ]]; then
   DISTRO=22
+  sudo chmod g-w /etc /etc/default /usr
+elif [[ "${UBUNTU_DESCRIPTION}" == "20.04"  ]]; then
+  DISTRO=20
+  sudo chmod g-w /etc /etc/default /usr
+elif [[ "${UBUNTU_DESCRIPTION}" == "18.04"  ]]; then
+  DISTRO=18
+  sudo chmod g-w /etc /etc/default /usr
+elif [[ "${UBUNTU_DESCRIPTION}" == "16.04"  ]]; then
+  DISTRO=16
+  sudo chmod g-w /etc /etc/default /usr
 else
   echo "This script only supports Ubuntu 16.04, 18.04, 20.04, 23.04, and 24.04."
   exit 1
 fi
 
 # Apply permissions based on the identified LTS version
-case "$DISTRO" in
-  16 | 18 | 20 | 22| 23 | 24)
-    echo -e "${YELLOW}Setting permissions for Ubuntu $DISTRO...${NC}"
-    sudo chmod g-w /etc /etc/default /usr
-    echo -e "${GREEN}Permissions set.${NC}\n"
-    ;;
-  *)
-    echo "Unsupported Ubuntu version: ${UBUNTU_DESCRIPTION}"
-    exit 1
-    ;;
-esac
+# case "$DISTRO" in
+  # 16 | 18 | 20 | 22| 23 | 24)
+    # echo -e "${YELLOW}Setting permissions for Ubuntu $DISTRO...${NC}"
+    # sudo chmod g-w /etc /etc/default /usr
+    # echo -e "${GREEN}Permissions set.${NC}\n"
+    # ;;
+  # *)
+    # echo "Unsupported Ubuntu version: ${UBUNTU_DESCRIPTION}"
+    # exit 1
+    # ;;
+# esac
 
 
 
