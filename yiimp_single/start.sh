@@ -112,12 +112,6 @@ print_message() {
   echo -e "${YIIMP_WHITE}Database usernames and passwords can be found in ${YIIMP_RED}$STORAGE_ROOT/yiimp/.my.cnf${YIIMP_RESET}"
 }
 
-# Main script
-
-source /etc/yiimpool.conf
-source /etc/yiimpoolversion.conf
-source /etc/functions.sh
-
 term_yiimpool
 
 # Call print_message regardless of UsingDomain

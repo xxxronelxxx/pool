@@ -287,6 +287,14 @@ install_if_not_installed() {
   fi
 }
 
+# Function to check package installation status
+function check_package_installed() {
+    if ! dpkg -l | grep -q "^ii  $1"; then
+        echo "Failed to install package: $1"
+        return 1
+    fi
+}
+
 function apt_get_quiet {
 	DEBIAN_FRONTEND=noninteractive hide_output sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confnew" "$@"
 }
