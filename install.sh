@@ -67,14 +67,6 @@ start_installation() {
   bash "$YIIMPOOL_INSTALL_DIR/install/start.sh"
 }
 
-# Main execution starts here
-
-# Ensure the script is run with sudo privileges for setting Yiimpool version
-if [[ $EUID -ne 0 ]]; then
-  log_error "This script must be run with sudo."
-  exit 1
-fi
-
 # Perform installation steps
 install_git
 clone_or_update_repo
