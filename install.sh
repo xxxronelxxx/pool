@@ -15,7 +15,7 @@
 #########################################################
 
 # Default version tag if not provided as environment variable
-TAG=${TAG:-v2.2.9}
+TAG=${TAG:-v2.3.0}
 
 # File paths
 YIIMPOOL_VERSION_FILE="/etc/yiimpoolversion.conf"
@@ -66,14 +66,6 @@ set_yiimpool_version() {
 start_installation() {
   bash "$YIIMPOOL_INSTALL_DIR/install/start.sh"
 }
-
-# Main execution starts here
-
-# Ensure the script is run with sudo privileges for setting Yiimpool version
-if [[ $EUID -ne 0 ]]; then
-  log_error "This script must be run with sudo."
-  exit 1
-fi
 
 # Perform installation steps
 install_git

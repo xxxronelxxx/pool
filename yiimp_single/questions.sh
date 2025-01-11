@@ -98,11 +98,20 @@ if [[ "$UsingDomain" == "yes" ]]; then
        255) echo "[ESC] key pressed.";;
     esac
 else
-    # Automatically set DomainName and StratumURL to server IP if not using a domain
+    # Set DomainName and StratumURL to server IP if not using a domain
     DomainName=$(get_publicip_from_web_service 4 || get_default_privateip 4)
     StratumURL=${DomainName}
     UsingSubDomain=no
-    InstallSSL=no
+    
+    # Add SSL prompt even when using IP
+    dialog --title "Install SSL" \
+    --yesno "Would you like the system to install SSL automatically?\n\nNote: Self-signed SSL will be used when installing with IP address." 8 60
+    response=$?
+    case $response in
+       0) InstallSSL=yes;;
+       1) InstallSSL=no;;
+       255) echo "[ESC] key pressed.";;
+    esac
 fi
 
 # Further prompts for support email, admin panel location, auto-exchange, dedicated coin ports, and public IP

@@ -37,7 +37,7 @@ This installer provides an automated way to set up a full Yiimp mining pool on U
 ## Quick Install
 
 ```bash
-curl https://raw.githubusercontent.com/afiniel/Yiimpoolv1/master/install.sh | sudo bash
+curl https://raw.githubusercontent.com/afiniel/Yiimpoolv1/master/install.sh | bash
 ```
 
 The installer will guide you through configuration options including:

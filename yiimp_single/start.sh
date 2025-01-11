@@ -30,8 +30,13 @@ export NCURSES_NO_UTF8_ACS=1
 
 # Create the temporary installation directory if it doesn't already exist.
 if [ ! -d $STORAGE_ROOT/yiimp/yiimp_setup ]; then
-mkdir -p $STORAGE_ROOT/{wallets,yiimp/{yiimp_setup/log,site/{web,stratum,configuration,crons,log},starts}}
-touch $STORAGE_ROOT/yiimp/yiimp_setup/log/installer.log
+    sudo mkdir -p $STORAGE_ROOT/{wallets,yiimp/{yiimp_setup/log,site/{web,stratum,configuration,crons,log},starts}}
+    
+    sudo chown -R $STORAGE_USER:$STORAGE_USER $STORAGE_ROOT
+    
+    sudo chmod +x $STORAGE_ROOT
+
+    sudo touch $STORAGE_ROOT/yiimp/yiimp_setup/log/installer.log
 fi
 echo
 
@@ -106,12 +111,6 @@ print_message() {
   echo -e "${YIIMP_RED}By default, all stratum ports are blocked by the firewall.${YIIMP_YELLOW} To allow a port, use ${YIIMP_GREEN}sudo ufw allow <port number>${YIIMP_YELLOW} from the command line.${YIIMP_RESET}"
   echo -e "${YIIMP_WHITE}Database usernames and passwords can be found in ${YIIMP_RED}$STORAGE_ROOT/yiimp/.my.cnf${YIIMP_RESET}"
 }
-
-# Main script
-
-source /etc/yiimpool.conf
-source /etc/yiimpoolversion.conf
-source /etc/functions.sh
 
 term_yiimpool
 
