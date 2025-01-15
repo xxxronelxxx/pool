@@ -106,35 +106,9 @@ echo
 echo -e "$YELLOW => Importing YiiMP Default database values <= ${NC}"
 cd "$STORAGE_ROOT/yiimp/yiimp_setup/yiimp/sql"
 
-# Import SQL dump
-#sudo zcat 2020-11-10-yaamp.sql.gz | sudo mysql -u root -p"${DBRootPassword}" "${YiiMPDBName}"
+sudo zcat 2024-03-06-complete_export.sql.gz | sudo mysql -u root -p"${DBRootPassword}" "${YiiMPDBName}"
 
-# Import additional SQL files
-#SQL_FILES=(
-    # 2016-04-24-market_history.sql
-    # 2016-04-27-settings.sql
-    # 2016-05-11-coins.sql
-    # 2016-05-15-benchmarks.sql
-    # 2016-05-23-bookmarks.sql
-    # 2016-06-01-notifications.sql
-    # 2016-06-04-bench_chips.sql
-    # 2016-11-23-coins.sql
-    # 2017-02-05-benchmarks.sql
-    # 2017-03-31-earnings_index.sql
-    # 2017-05-accounts_case_swaptime.sql
-    # 2017-06-payouts_coinid_memo.sql
-    # 2017-09-notifications.sql
-    # 2017-10-bookmarks.sql
-    # 2017-11-segwit.sql
-    # 2018-01-stratums_ports.sql
-    # 2018-02-coins_getinfo.sql
-    # 2018-09-22-workers.sql
-    # 2019-03-coins_thepool_life.sql
-    # 2020-06-03-blocks.sql
-    # 2022-10-14-shares_solo.sql
-    # 2022-10-29-blocks_effort.sql
-# )
-
+# Import SQL files
 SQL_FILES=(
     2024-03-06-complete_export.sql.gz
     2024-03-18-add_aurum_algo.sql
@@ -150,7 +124,13 @@ SQL_FILES=(
 )
 
 for file in "${SQL_FILES[@]}"; do
-    sudo mysql -u root -p"${DBRootPassword}" "${YiiMPDBName}" --force < "$file"
+    if [[ "$file" == *.gz ]]; then
+        # Handle gzipped files
+        sudo zcat "$file" | sudo mysql -u root -p"${DBRootPassword}" "${YiiMPDBName}" --force --binary-mode
+    else
+        # Handle regular SQL files
+        sudo mysql -u root -p"${DBRootPassword}" "${YiiMPDBName}" --force < "$file"
+    fi
 done
 
 echo
@@ -161,12 +141,13 @@ echo -e "$YELLOW => Tweaking MariaDB for better performance <= ${NC}"
 
 # Define MariaDB configuration changes
 config_changes=(
-    'max_connections = 800'
-    'thread_cache_size = 512'
-    'tmp_table_size = 128M'
-    'max_heap_table_size = 128M'
-    'wait_timeout = 60'
-    'max_allowed_packet = 64M'
+    '[mysqld]'
+    'max_connections=800'
+    'thread_cache_size=512'
+    'tmp_table_size=128M'
+    'max_heap_table_size=128M'
+    'wait_timeout=60'
+    'max_allowed_packet=64M'
 )
 
 # Add bind-address if WireGuard is true
