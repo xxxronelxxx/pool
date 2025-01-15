@@ -73,7 +73,7 @@ if [[ "$AutoExchange" =~ ^[Yy][Ee]?[Ss]?$ ]]; then
 fi
 
 cd /home/crypto-data/yiimp/yiimp_setup/yiimp/stratum
-hide_output make -j$((`nproc`+1))
+hide_output sudo make -j$((`nproc`+1))
 
 # Setting up the stratum folder structure and copying files
 echo -e "$CYAN => Building stratum folder structure and copying files... <= $NC"
