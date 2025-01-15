@@ -50,21 +50,25 @@ echo -e "\n$MAGENTA => Building Berkeley 4.8 <= ${NC}"
 sudo mkdir -p $STORAGE_ROOT/berkeley/db4/
 hide_output sudo wget 'http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz'
 hide_output sudo tar -xzvf db-4.8.30.NC.tar.gz
+sed -i 's/__atomic_compare_exchange/__atomic_compare_exchange_db/g' db-4.8.30.NC/dbinc/atomic.h
 cd db-4.8.30.NC/build_unix/
-hide_output sudo ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=$STORAGE_ROOT/berkeley/db4/
+hide_output sudo ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=/home/crypto-data/berkeley/db4
 hide_output sudo make -j$((`nproc`+1))
+hide_output sudo make install -j$((`nproc`+1))
 cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 sudo rm -r db-4.8.30.NC.tar.gz db-4.8.30.NC
 echo -e "$GREEN => Berkeley 4.8 Completed <= ${NC}"
 
 # Build BerkeleyDB 5.1
 echo -e "\n$MAGENTA => Building Berkeley 5.1 <= ${NC}"
-sudo mkdir -p $STORAGE_ROOT/berkeley/db5/
+sudo mkdir -p $STORAGE_ROOT/berkeley/db5.1/
 hide_output sudo wget 'http://download.oracle.com/berkeley-db/db-5.1.29.tar.gz'
 hide_output sudo tar -xzvf db-5.1.29.tar.gz
+sudo sed -i 's/__atomic_compare_exchange/__atomic_compare_exchange_db/g' db-5.1.29/src/dbinc/atomic.h
 cd db-5.1.29/build_unix/
-hide_output sudo ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=$STORAGE_ROOT/berkeley/db5/
+hide_output sudo ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=/home/crypto-data/berkeley/db5.1
 hide_output sudo make -j$((`nproc`+1))
+hide_output sudo make install -j$((`nproc`+1))
 cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 sudo rm -r db-5.1.29.tar.gz db-5.1.29
 echo -e "$GREEN => Berkeley 5.1 Completed <= ${NC}"
@@ -74,9 +78,11 @@ echo -e "\n$MAGENTA => Building Berkeley 5.3 <= ${NC}"
 sudo mkdir -p $STORAGE_ROOT/berkeley/db5.3/
 hide_output sudo wget 'http://anduin.linuxfromscratch.org/BLFS/bdb/db-5.3.28.tar.gz'
 hide_output sudo tar -xzvf db-5.3.28.tar.gz
+sudo sed -i 's/__atomic_compare_exchange/__atomic_compare_exchange_db/g' db-5.3.28/src/dbinc/atomic.h
 cd db-5.3.28/build_unix/
-hide_output sudo ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=$STORAGE_ROOT/berkeley/db5.3/
+hide_output sudo ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=/home/crypto-data/berkeley/db5.3
 hide_output sudo make -j$((`nproc`+1))
+hide_output sudo make install -j$((`nproc`+1))
 cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 sudo rm -r db-5.3.28.tar.gz db-5.3.28
 echo -e "$GREEN => Berkeley 5.3 Completed <= ${NC}"
@@ -84,13 +90,15 @@ echo -e "$GREEN => Berkeley 5.3 Completed <= ${NC}"
 # Build BerkeleyDB 6.2
 echo -e "\n$MAGENTA => Building Berkeley 6.2 <= ${NC}"
 sudo mkdir -p $STORAGE_ROOT/berkeley/db6.2/
-hide_output sudo wget 'https://download.oracle.com/berkeley-db/db-6.2.23.tar.gz'
-hide_output sudo tar -xzvf db-6.2.23.tar.gz
-cd db-6.2.23/build_unix/
-hide_output sudo ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=$STORAGE_ROOT/berkeley/db6.2/
+hide_output sudo wget 'http://download.oracle.com/berkeley-db/db-6.2.32.tar.gz'
+hide_output sudo tar -xzvf db-6.2.32.tar.gz
+sudo sed -i 's/__atomic_compare_exchange/__atomic_compare_exchange_db/g' db-6.2.32/src/dbinc/atomic.h
+cd db-6.2.32/build_unix/
+hide_output sudo ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=/home/crypto-data/berkeley/db6.2
 hide_output sudo make -j$((`nproc`+1))
+hide_output sudo make install -j$((`nproc`+1))
 cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
-sudo rm -r db-6.2.23.tar.gz db-6.2.23
+sudo rm -r db-6.2.32.tar.gz db-6.2.32
 echo -e "$GREEN => Berkeley 6.2 Completed <= ${NC}"
 
 # Build BerkeleyDB 18
@@ -99,8 +107,9 @@ sudo mkdir -p $STORAGE_ROOT/berkeley/db18/
 hide_output sudo wget 'https://download.oracle.com/berkeley-db/db-18.1.40.tar.gz'
 hide_output sudo tar -xzvf db-18.1.40.tar.gz
 cd db-18.1.40/build_unix/
-hide_output sudo ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=$STORAGE_ROOT/berkeley/db18/
+hide_output sudo ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=/home/crypto-data/berkeley/db18
 hide_output sudo make -j$((`nproc`+1))
+hide_output sudo make install -j$((`nproc`+1))
 cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 sudo rm -r db-18.1.40.tar.gz db-18.1.40
 echo -e "$GREEN => Berkeley 18 Completed <= ${NC}"
