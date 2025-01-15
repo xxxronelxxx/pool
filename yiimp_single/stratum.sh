@@ -37,11 +37,16 @@ echo -e "$MAGENTA => Installing Package to compile cryptocurrency... <= $COL_RES
 hide_output sudo apt-get update
 hide_output sudo apt-get -y upgrade
 hide_output sudo apt-get -y install p7zip-full
+
+# Ny
+hide_output sudo apt-get -y install libgmp-dev
+hide_output sudo apt-get -y libmysqlclient-dev
+hide_output sudo apt-get -y install libcurl4-openssl-dev
+
 apt_install build-essential libzmq5 libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils cmake libboost-all-dev zlib1g-dev \
 libseccomp-dev libcap-dev libminiupnpc-dev gettext libcanberra-gtk-module libqrencode-dev libzmq3-dev \
 libqt5gui5 libqt5core5a libqt5webkit5-dev libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler
 
-# Informing the user about the build process
 echo
 echo -e "$MAGENTA => Building$GREEN blocknotify$MAGENTA, $GREEN iniparser$MAGENTA ... <= $NC"
 
@@ -67,13 +72,8 @@ if [[ "$AutoExchange" =~ ^[Yy][Ee]?[Ss]?$ ]]; then
   sudo sed -i 's/CFLAGS += -DNO_EXCHANGE/#CFLAGS += -DNO_EXCHANGE/' Makefile
 fi
 
-if [[ "$DISTRO" == "22" || "$DISTRO" == "23" || "$DISTRO" == "24" ]]; then
-    # Use newer compiler flags for Ubuntu 22.04, 23.04 and 24.04
-    hide_output sudo make CFLAGS="-march=native -O3" CXXFLAGS="-march=native -O3"
-else
-    # Existing compilation command for other versions
-    hide_output sudo make -j$(nproc)
-fi
+cd /home/crypto-data/yiimp/yiimp_setup/yiimp/stratum
+hide_output make -j$((`nproc`+1))
 
 # Setting up the stratum folder structure and copying files
 echo -e "$CYAN => Building stratum folder structure and copying files... <= $NC"
