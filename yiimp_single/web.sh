@@ -23,11 +23,11 @@ if [[ ("$wireguard" == "true") ]]; then
   source $STORAGE_ROOT/yiimp/.wireguard.conf
 fi
 
-echo -e "$MAGENTA    <--------------------------------------------------->$COL_RESET"
-echo -e "$MAGENTA     <--$YELLOW Building web file structure and copying files$MAGENTA -->$COL_RESET"
-echo -e "$MAGENTA    <--------------------------------------------------->$COL_RESET"
+echo -e "$MAGENTA    <--------------------------------------------------->$NC"
+echo -e "$MAGENTA     <--$YELLOW Building web file structure and copying files$MAGENTA -->$NC"
+echo -e "$MAGENTA    <--------------------------------------------------->$NC"
 echo
-echo -e "$CYAN => Building web file structure and copying files <= $COL_RESET"
+echo -e "$CYAN => Building web file structure and copying files <= $NC"
 
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
 sudo sed -i 's/myadmin/'${AdminPanel}'/' $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/web/yaamp/modules/site/SiteController.php
@@ -56,17 +56,17 @@ else
 fi
 
 echo
-echo -e "$MAGENTA => Creating YiiMP configuration files <= $COL_RESET"
+echo -e "$MAGENTA => Creating YiiMP configuration files <= $NC"
 cd $HOME/Yiimpoolv1/yiimp_single
 source yiimp_confs/keys.sh
 source yiimp_confs/yiimpserverconfig.sh
 source yiimp_confs/main.sh
 source yiimp_confs/loop2.sh
 source yiimp_confs/blocks.sh
-echo -e "$GREEN => Complete$COL_RESET"
+echo -e "$GREEN => Complete$NC"
 
 echo
-echo -e "$YELLOW => Setting correct folder permissions <= $COL_RESET"
+echo -e "$YELLOW => Setting correct folder permissions <= $NC"
 whoami=$(whoami)
 sudo usermod -aG www-data $whoami
 sudo usermod -a -G www-data $whoami
@@ -78,13 +78,13 @@ sudo find $STORAGE_ROOT/yiimp/site/ -type f -exec chmod 664 {} +
 
 sudo chgrp www-data $STORAGE_ROOT -R
 sudo chmod g+w $STORAGE_ROOT -R
-echo -e "$GREEN => Complete$COL_RESET"
+echo -e "$GREEN => Complete$NC"
 
 cd $HOME/Yiimpoolv1/yiimp_single
 
 #Updating YiiMP files for YiimPool build
 echo
-echo -e "$YELLOW => Adding the yiimpool flare to YiiMP <= $COL_RESET"
+echo -e "$YELLOW => Adding the yiimpool flare to YiiMP <= $NC"
 
 sudo sed -i 's/YII MINING POOLS/'${DomainName}' Mining Pool/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/index.php
 sudo sed -i 's/domain/'${DomainName}'/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/index.php
@@ -107,7 +107,7 @@ if [[ ("$wireguard" == "true") ]]; then
   sudo sed -i '/# onlynet=ipv4/i\        echo "rpcallowip='${internalrpcip}'\\n";' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/coin_form.php
 fi
 
-echo -e "$GREEN Web build complete$COL_RESET"
+echo -e "$GREEN Web build complete$NC"
 
 set +eu +o pipefail
 cd $HOME/Yiimpoolv1/yiimp_single
