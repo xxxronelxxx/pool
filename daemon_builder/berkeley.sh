@@ -50,7 +50,7 @@ echo -e "\n$MAGENTA => Building Berkeley 4.8 <= ${NC}"
 sudo mkdir -p $STORAGE_ROOT/berkeley/db4/
 hide_output sudo wget 'http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz'
 hide_output sudo tar -xzvf db-4.8.30.NC.tar.gz
-sed -i 's/__atomic_compare_exchange/__atomic_compare_exchange_db/g' db-4.8.30.NC/dbinc/atomic.h
+sudo sed -i 's/__atomic_compare_exchange/__atomic_compare_exchange_db/g' db-4.8.30.NC/dbinc/atomic.h
 cd db-4.8.30.NC/build_unix/
 hide_output sudo ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=/home/crypto-data/berkeley/db4
 hide_output sudo make -j$((`nproc`+1))
