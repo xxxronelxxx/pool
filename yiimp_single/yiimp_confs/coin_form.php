@@ -556,5 +556,3 @@ echo "</div>";
 echo CUFHtml::closeTag('fieldset');
 showSubmitButton($update? 'Save': 'Create');
 echo CUFHtml::endForm();
-
-
