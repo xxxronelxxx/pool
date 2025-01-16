@@ -148,15 +148,6 @@ case $response in
    255) echo "[ESC] key pressed.";;
 esac
 
-dialog --title "Use Dedicated Coin Ports" \
---yesno "Would you like YiiMP to be built with dedicated coin ports?" 7 60
-response=$?
-case $response in
-   0) CoinPort=yes;;
-   1) CoinPort=no;;
-   255) echo "[ESC] key pressed.";;
-esac
-
 # Automatically set PublicIP based on SSH client IP or default private IP
 if [ -z "${PublicIP:-}" ]; then
     if pstree -p | egrep --quiet --extended-regexp ".*sshd.*\($$\)"; then
@@ -175,7 +166,7 @@ if [ -z "${PublicIP:-}" ]; then
     fi
 fi
 
-# Function for secure password handling, to generate random passwords if not already set
+# Function for secure password handling for database
 generate_random_password_database() {
     local default_value=$1
     local variable_name=$2
@@ -192,9 +183,48 @@ generate_random_password_database() {
     fi
 }
 
+# Function for secure password handling for YiiMP admin panel
+generate_random_password_yiimp_admin() {
+    local default_value=$1
+    local variable_name=$2
+    if [ -z "${!variable_name:-}" ]; then
+        local default_password=$(openssl rand -base64 29 | tr -d "=+/")
+        input_box "Admin Password" \
+        "Enter your desired admin password for YiiMP panel.\n\nYou may use the system generated password shown.\n\nThis will be used to login to your admin panel.\n\nDesired Admin Password:" \
+        "${default_password}" \
+        "${variable_name}"
+
+        if [ -z "${!variable_name}" ]; then
+            exit
+        fi
+    fi
+}
+
+# Function for YiiMP admin username
+generate_yiimp_admin_user() {
+    local default_value=$1
+    local variable_name=$2
+    if [ -z "${!variable_name:-}" ]; then
+        local default_username="admin"
+        input_box "Admin Username" \
+        "Enter your desired admin username for YiiMP panel.\n\nThis will be used to login to your admin panel.\n\nDefault username is 'admin'.\n\nDesired Admin Username:" \
+        "${default_username}" \
+        "${variable_name}"
+
+        if [ -z "${!variable_name}" ]; then
+            exit
+        fi
+    fi
+}
+
+# Generate database passwords
 generate_random_password_database "${DEFAULT_DBRootPassword}" "DBRootPassword"
 generate_random_password_database "${DEFAULT_PanelUserDBPassword}" "PanelUserDBPassword"
 generate_random_password_database "${DEFAULT_StratumUserDBPassword}" "StratumUserDBPassword"
+
+# Generate YiiMP admin credentials
+generate_yiimp_admin_user "${DEFAULT_AdminUser}" "AdminUser"
+generate_random_password_yiimp_admin "${DEFAULT_AdminPassword}" "AdminPassword"
 
 # Generate unique names for YiiMP DB and users for increased security
 YiiMPDBName=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13)
@@ -213,7 +243,6 @@ Stratum URL           : ${StratumURL}
 Install SSL           : ${InstallSSL}
 System Email          : ${SupportEmail}
 Admin Panel Location  : ${AdminPanel}
-Dedicated Coin Ports  : ${CoinPort}
 AutoExchange          : ${AutoExchange}
 Your Public IP        : ${PublicIP}" 16 60
 
@@ -235,7 +264,6 @@ case $response in
                   SupportEmail=${SupportEmail}
                   AdminPanel=${AdminPanel}
                   PublicIP=${PublicIP}
-                  CoinPort=${CoinPort}
                   AutoExchange=${AutoExchange}
                   DBInternalIP=${DBInternalIP}
                   YiiMPDBName=${YiiMPDBName}
@@ -244,6 +272,8 @@ case $response in
                   PanelUserDBPassword='${PanelUserDBPassword}'
                   StratumDBUser=${StratumDBUser}
                   StratumUserDBPassword='${StratumUserDBPassword}'
+                  AdminPassword='${AdminPassword}'
+                  AdminUser='${AdminUser}'
                   YiiMPRepo='https://github.com/Kudaraidee/yiimp.git'" | sudo -E tee "$STORAGE_ROOT/yiimp/.yiimp.conf" >/dev/null 2>&1
         else
             echo "STORAGE_USER=${STORAGE_USER}
@@ -257,7 +287,6 @@ case $response in
                   SupportEmail=${SupportEmail}
                   AdminPanel=${AdminPanel}
                   PublicIP=${PublicIP}
-                  CoinPort=${CoinPort}
                   AutoExchange=${AutoExchange}
                   YiiMPDBName=${YiiMPDBName}
                   DBRootPassword='${DBRootPassword}'
@@ -265,7 +294,8 @@ case $response in
                   PanelUserDBPassword='${PanelUserDBPassword}'
                   StratumDBUser=${StratumDBUser}
                   StratumUserDBPassword='${StratumUserDBPassword}'
-                  YiiMPStratumName=${YiiMPStratumName}
+                  AdminPassword='${AdminPassword}'
+                  AdminUser='${AdminUser}'
                   YiiMPRepo='https://github.com/Kudaraidee/yiimp.git'" | sudo -E tee "$STORAGE_ROOT/yiimp/.yiimp.conf" >/dev/null 2>&1
         fi
         ;;
@@ -281,5 +311,4 @@ case $response in
         ;;
 esac
 
-# Change directory back to the initial directory
 cd $HOME/Yiimpoolv1/yiimp_single
