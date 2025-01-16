@@ -106,25 +106,65 @@ echo
 echo -e "$YELLOW => Importing YiiMP Default database values <= ${NC}"
 cd "$STORAGE_ROOT/yiimp/yiimp_setup/yiimp/sql"
 
-sudo zcat 2024-03-06-complete_export.sql.gz | sudo mysql -u root -p"${DBRootPassword}" "${YiiMPDBName}"
+# Check if we're in the correct directory
+if [[ ! -d "$(pwd)" ]]; then
+    echo -e "${RED}Error: SQL directory not found at $(pwd)${NC}"
+    exit 1
+fi
 
-# Import SQL files
-SQL_FILES=(
-    2024-03-06-complete_export.sql.gz
-    2024-03-18-add_aurum_algo.sql
-    2024-03-29-add_github_version.sql
-    2024-03-31-add_payout_threshold.sql
-    2024-04-01-add_auto_exchange.sql
-    2024-04-01-shares_blocknumber.sql
-    2024-04-05-algos_port_color.sql
-    2024-04-22-add_equihash_algos.sql
-    2024-04-23-add_pers_string.sql
-    2024-04-29-add_sellthreshold.sql
-    2024-05-04-add_neoscrypt_xaya_algo.sql
+# Look for the base database file
+BASE_DB_FILE=""
+for file in *.sql *.sql.gz; do
+    if [[ -f "$file" ]]; then
+        if [[ "$file" == *"complete"* ]] || [[ "$file" == *"base"* ]] || [[ "$file" == *"structure"* ]]; then
+            BASE_DB_FILE="$file"
+            break
+        fi
+    fi
+done
+
+if [[ -z "$BASE_DB_FILE" ]]; then
+    echo -e "${RED}Error: Could not find base database file. Please ensure a database export file exists in $(pwd)${NC}"
+    echo -e "${YELLOW}The file should be named something like 'complete_export.sql' or 'base_structure.sql'${NC}"
+    exit 1
+fi
+
+# Create the database structure
+echo -e "Creating database structure from $BASE_DB_FILE..."
+if [[ "$BASE_DB_FILE" == *.gz ]]; then
+    sudo zcat "$BASE_DB_FILE" | sudo mysql -u root -p"${DBRootPassword}" "${YiiMPDBName}" || {
+        echo -e "${RED}Error: Failed to import gzipped database file${NC}"
+        exit 1
+    }
+else
+    sudo mysql -u root -p"${DBRootPassword}" "${YiiMPDBName}" < "$BASE_DB_FILE" || {
+        echo -e "${RED}Error: Failed to import database file${NC}"
+        exit 1
+    }
+fi
+
+# Then apply updates in order, ignoring errors
+echo -e "Applying database updates..."
+SQL_UPDATE_FILES=(
+    "2024-03-18-add_aurum_algo.sql"
+    "2024-03-29-add_github_version.sql"
+    "2024-03-31-add_payout_threshold.sql"
+    "2024-04-01-add_auto_exchange.sql"
+    "2024-04-01-shares_blocknumber.sql"
+    "2024-04-05-algos_port_color.sql"
+    "2024-04-22-add_equihash_algos.sql"
+    "2024-04-23-add_pers_string.sql"
+    "2024-04-29-add_sellthreshold.sql"
+    "2024-05-04-add_neoscrypt_xaya_algo.sql"
 )
 
-for file in "${SQL_FILES[@]}"; do
-    sudo mysql -u root -p"${DBRootPassword}" "${YiiMPDBName}" --force < "$file"
+for file in "${SQL_UPDATE_FILES[@]}"; do
+    if [[ -f "$file" ]]; then
+        echo -e "Applying update from $file..."
+        sudo mysql -u root -p"${DBRootPassword}" "${YiiMPDBName}" < "$file" || true
+    else
+        echo -e "${YELLOW}Warning: Update file $file not found${NC}"
+    fi
 done
 
 echo
