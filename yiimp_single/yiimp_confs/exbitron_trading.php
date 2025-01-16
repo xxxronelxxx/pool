@@ -1,13 +1,4 @@
 <?php
-	#set_time_limit(60);
-	
-	require_once("/home/crypto-data/yiimp/site/web/yaamp/core/trading/exbitron_trading.php");
-	//require_once("/var/web/keys.php");
-    // require_once("/var/web/yaamp/core/core.php");
-
-	
-	
- 
 
 function doExbitronTrading()
 {
@@ -174,12 +165,15 @@ function doExbitronTrading()
 function exbitron_api_query($method)
 {
 	$uri = "https://www.exbitron.com/api/v2/peatio/public/$method";
+
 	$ch = curl_init($uri);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
 	curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+
 	$res = curl_exec($ch);
 	$obj = json_decode($res,true);
+
 	return $obj;
 }
 */

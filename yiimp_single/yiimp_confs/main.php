@@ -2,17 +2,22 @@
 
 require('misc.php');
 echo <<<END
+
 <!doctype html>
 <!--[if IE 7 ]>		 <html class="no-js ie ie7 lte7 lte8 lte9" lang="en-US"> <![endif]-->
 <!--[if IE 8 ]>		 <html class="no-js ie ie8 lte8 lte9" lang="en-US"> <![endif]-->
 <!--[if IE 9 ]>		 <html class="no-js ie ie9 lte9>" lang="en-US"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js" lang="en-US"> <!--<![endif]-->
+
 <head>
+
 <meta charset="utf-8">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
 <meta name="description" content="Yii mining pools for alternative crypto currencies">
 <meta name="keywords" content="anonymous,mining,pool,maxcoin,bitcoin,altcoin,auto,switch,exchange,profit,decred,scrypt,x11,x13,x14,x15,lbry,lyra2re,neoscrypt,sha256,quark,skein2">
+
 END;
 
 $pageTitle = empty($this->pageTitle) ? YAAMP_SITE_NAME : YAAMP_SITE_NAME." - ".$this->pageTitle;
@@ -99,23 +104,30 @@ function showPageHeader()
 	if (YAAMP_RENTAL)
 		showItemHeader(controller()->id=='renting', '/renting', 'Rental');
 
-	if(controller()->admin)
-	{
-		if (isAdminIP($_SERVER['REMOTE_ADDR']) === false)
-			debuglog("admin {$_SERVER['REMOTE_ADDR']}");
+	if (YIIMP_ADMIN_LOGIN) {
+		if(controller()->admin)
+		{
+			if (isAdminIP($_SERVER['REMOTE_ADDR']) === false)
+				debuglog("admin {$_SERVER['REMOTE_ADDR']}");
 
-		showItemHeader(controller()->id=='coin', '/coin', 'Coins');
-		showItemHeader($action=='common', '/site/common', 'Dashboard');
-		showItemHeader(controller()->id=='site'&&$action=='admin', "/site/admin", 'Wallets');
+			showItemHeader(controller()->id=='coin', '/coin', 'Coins');
+			showItemHeader($action=='common', '/admin/dashboard', 'Dashboard');
+			showItemHeader(controller()->id=='admin'&&$action=='coinwallets', "/admin/coinwallets", 'Wallets');
 
-		if (YAAMP_RENTAL)
-			showItemHeader(controller()->id=='renting' && $action=='admin', '/renting/admin', 'Jobs');
+			if (YAAMP_RENTAL)
+				showItemHeader(controller()->id=='renting' && $action=='admin', '/renting/admin', 'Jobs');
 
-		if (YAAMP_ALLOW_EXCHANGE)
-			showItemHeader(controller()->id=='trading', '/trading', 'Trading');
+			if (YAAMP_ALLOW_EXCHANGE)
+				showItemHeader(controller()->id=='trading', '/trading', 'Trading');
 
-		if (YAAMP_USE_NICEHASH_API)
-			showItemHeader(controller()->id=='nicehash', '/nicehash', 'Nicehash');
+			if (YAAMP_USE_NICEHASH_API)
+				showItemHeader(controller()->id=='nicehash', '/nicehash', 'Nicehash');
+
+			showItemHeader(controller()->id=='logout', '/admin/logout', 'Logout');
+		}
+		else {
+			showItemHeader(controller()->id=='login', '/admin/login', 'Login');
+		}
 	}
 
 	echo '<span style="float: right;">';
@@ -137,7 +149,8 @@ function showPageFooter()
 	$year = date("Y", time());
 
 	echo "<p>&copy; $year ".YAAMP_SITE_NAME.' - '.
-		'<a href="https://github.com/afiniel/Yiimpoolv1">Build with Yiimpool Installer by Afiniel</a></p>';
+		'<a href="https://github.com/afiniel/Yiimpoolv1">Build with YiimPool Yiimp Install script</a></p>';
 
 	echo '</div><!-- footer -->';
 }
+
