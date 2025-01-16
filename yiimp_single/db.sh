@@ -161,10 +161,8 @@ config_string=$(printf "%s\n" "${config_changes[@]}")
 # Apply changes to MariaDB configuration
 sudo bash -c "echo \"$config_string\" >> /etc/mysql/my.cnf"
 
-# Restart MariaDB
 restart_service mysql
 
-# Reset error handling
 set +eu +o pipefail
 
 cd $HOME/Yiimpoolv1/yiimp_single
