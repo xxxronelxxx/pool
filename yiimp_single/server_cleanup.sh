@@ -239,7 +239,6 @@ sudo rm -r /home/crypto-data/yiimp/site/web/yaamp/ui/main.php
 sudo rm -r /home/crypto-data/yiimp/site/web/yaamp/modules/site/coin_form.php
 
 sudo cp -r main.php /home/crypto-data/yiimp/site/web/yaamp/ui
-sudo cp -r exbitron_trading.php /home/crypto-data/yiimp/site/web/yaamp/core/trading
 sudo cp -r coin_form.php /home/crypto-data/yiimp/site/web/yaamp/modules/site
 
 cd $HOME/Yiimpoolv1/yiimp_single
