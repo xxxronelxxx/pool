@@ -166,7 +166,7 @@ if [ -z "${PublicIP:-}" ]; then
     fi
 fi
 
-# Function for secure password handling, to generate random passwords if not already set
+# Function for secure password handling for database
 generate_random_password_database() {
     local default_value=$1
     local variable_name=$2
@@ -183,9 +183,48 @@ generate_random_password_database() {
     fi
 }
 
+# Function for secure password handling for YiiMP admin panel
+generate_random_password_yiimp_admin() {
+    local default_value=$1
+    local variable_name=$2
+    if [ -z "${!variable_name:-}" ]; then
+        local default_password=$(openssl rand -base64 29 | tr -d "=+/")
+        input_box "Admin Password" \
+        "Enter your desired admin password for YiiMP panel.\n\nYou may use the system generated password shown.\n\nThis will be used to login to your admin panel.\n\nDesired Admin Password:" \
+        "${default_password}" \
+        "${variable_name}"
+
+        if [ -z "${!variable_name}" ]; then
+            exit
+        fi
+    fi
+}
+
+# Function for YiiMP admin username
+generate_yiimp_admin_user() {
+    local default_value=$1
+    local variable_name=$2
+    if [ -z "${!variable_name:-}" ]; then
+        local default_username="admin"
+        input_box "Admin Username" \
+        "Enter your desired admin username for YiiMP panel.\n\nThis will be used to login to your admin panel.\n\nDefault username is 'admin'.\n\nDesired Admin Username:" \
+        "${default_username}" \
+        "${variable_name}"
+
+        if [ -z "${!variable_name}" ]; then
+            exit
+        fi
+    fi
+}
+
+# Generate database passwords
 generate_random_password_database "${DEFAULT_DBRootPassword}" "DBRootPassword"
 generate_random_password_database "${DEFAULT_PanelUserDBPassword}" "PanelUserDBPassword"
 generate_random_password_database "${DEFAULT_StratumUserDBPassword}" "StratumUserDBPassword"
+
+# Generate YiiMP admin credentials
+generate_yiimp_admin_user "${DEFAULT_AdminUser}" "AdminUser"
+generate_random_password_yiimp_admin "${DEFAULT_AdminPassword}" "AdminPassword"
 
 # Generate unique names for YiiMP DB and users for increased security
 YiiMPDBName=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13)
@@ -233,6 +272,8 @@ case $response in
                   PanelUserDBPassword='${PanelUserDBPassword}'
                   StratumDBUser=${StratumDBUser}
                   StratumUserDBPassword='${StratumUserDBPassword}'
+                  AdminPassword='${AdminPassword}'
+                  AdminUser='${AdminUser}'
                   YiiMPRepo='https://github.com/Kudaraidee/yiimp.git'" | sudo -E tee "$STORAGE_ROOT/yiimp/.yiimp.conf" >/dev/null 2>&1
         else
             echo "STORAGE_USER=${STORAGE_USER}
@@ -253,7 +294,8 @@ case $response in
                   PanelUserDBPassword='${PanelUserDBPassword}'
                   StratumDBUser=${StratumDBUser}
                   StratumUserDBPassword='${StratumUserDBPassword}'
-                  YiiMPStratumName=${YiiMPStratumName}
+                  AdminPassword='${AdminPassword}'
+                  AdminUser='${AdminUser}'
                   YiiMPRepo='https://github.com/Kudaraidee/yiimp.git'" | sudo -E tee "$STORAGE_ROOT/yiimp/.yiimp.conf" >/dev/null 2>&1
         fi
         ;;
