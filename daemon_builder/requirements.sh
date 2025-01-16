@@ -66,9 +66,9 @@ fi
 echo -e "$GREEN Additional System Files Completed...$NC"
 echo
 
-# Updating gcc & g++ to version 8
+# Updating gcc & g++ to version 9
 echo
-echo -e "$CYAN => Updating gcc & g++ to version 8 $NC"
+echo -e "$CYAN => Updating gcc & g++ to version 9 $NC"
 hide_output sudo apt-get update
 hide_output sudo apt-get -y upgrade
 apt_dist_upgrade
@@ -80,12 +80,12 @@ hide_output sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
 fi
 hide_output sudo apt-get update
 
-apt_install gcc-8 g++-8
+apt_install gcc-9 g++-9
 
-hide_output sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-8
+hide_output sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-9
 hide_output sudo update-alternatives --config gcc
 
-echo -e "$GREEN gcc & g++ Updated...$NC"
+echo -e "$GREEN gcc & g++ Updated to version 9...$NC"
 
 set +eu +o pipefail
 cd $HOME/Yiimpoolv1/daemon_builder
