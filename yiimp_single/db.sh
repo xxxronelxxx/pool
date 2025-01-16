@@ -124,13 +124,7 @@ SQL_FILES=(
 )
 
 for file in "${SQL_FILES[@]}"; do
-    if [[ "$file" == *.gz ]]; then
-        # Handle gzipped files
-        sudo zcat "$file" | sudo mysql -u root -p"${DBRootPassword}" "${YiiMPDBName}" --force --binary-mode
-    else
-        # Handle regular SQL files
-        sudo mysql -u root -p"${DBRootPassword}" "${YiiMPDBName}" --force < "$file"
-    fi
+    sudo mysql -u root -p"${DBRootPassword}" "${YiiMPDBName}" --force < "$file"
 done
 
 echo
