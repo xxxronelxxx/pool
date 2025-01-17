@@ -34,7 +34,7 @@ if [ ! -d $STORAGE_ROOT/yiimp/yiimp_setup ]; then
     sudo touch $STORAGE_ROOT/yiimp/yiimp_setup/log/installer.log
 fi
 
-if [[ "$DISTRO" == "24" ]]; then
+if [[ "$DISTRO" == "24" || "$DISTRO" == "23" || "$DISTRO" == "22" ]]; then
     sudo chmod 755 /home/crypto-data/
 fi
 
