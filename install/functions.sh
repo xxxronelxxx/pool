@@ -91,6 +91,14 @@ function install_end_message() {
 
 }
 
+# A function to ask if the user wants to reboot the system
+function ask_reboot() {
+  read -p "Do you want to reboot the system? (y/n): " reboot_choice
+  if [[ "$reboot_choice" == "y" ]]; then
+    sudo reboot
+  fi
+}
+
 function term_art() {
   clear
 

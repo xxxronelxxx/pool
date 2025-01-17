@@ -33,7 +33,10 @@ if [ ! -d $STORAGE_ROOT/yiimp/yiimp_setup ]; then
     sudo mkdir -p $STORAGE_ROOT/{wallets,yiimp/{yiimp_setup/log,site/{web,stratum,configuration,crons,log},starts}}
     sudo touch $STORAGE_ROOT/yiimp/yiimp_setup/log/installer.log
 fi
-echo
+
+if [[ "$DISTRO" == "24" || "$DISTRO" == "23" || "$DISTRO" == "22" ]]; then
+    sudo chmod 755 /home/crypto-data/
+fi
 
 # Start the installation.
 source menu.sh
@@ -108,10 +111,7 @@ print_message() {
 }
 
 term_yiimpool
-
-# Call print_message regardless of UsingDomain
 print_message
-
 exit 0
-
+ask_reboot
 
