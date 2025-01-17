@@ -111,10 +111,7 @@ print_message() {
 }
 
 term_yiimpool
-
-# Call print_message regardless of UsingDomain
 print_message
-
 exit 0
-
+ask_reboot
 

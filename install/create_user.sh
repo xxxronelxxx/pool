@@ -144,6 +144,7 @@ if [[ ("$UsingSSH" == "yes") ]]; then
     echo
     echo -e "$RED Please reboot the system and log in as$GREEN ${yiimpadmin} $YELLOW and type$GREEN yiimpool$YELLOW to$GREEN continu$YELLOW setup...$NC"
     exit 0
+    ask_reboot
 fi
 
 # New User Password Login Creation
@@ -260,6 +261,7 @@ case $response in
     echo
     echo -e "$RED Please reboot the system and log in as:$GREEN ${yiimpadmin} $YELLOW and type$GREEN yiimpool$YELLOW to$GREEN continu$YELLOW setup...$NC"
     exit 0
+    ask_reboot
     ;;
 
 1)
