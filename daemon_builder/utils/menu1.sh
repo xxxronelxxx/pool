@@ -9,8 +9,7 @@
 #
 
 source /etc/daemonbuilder.sh
-
-source $STORAGE_ROOT/daemon_builder
+source $STORAGE_ROOT/daemon_builder/conf/info.sh
 
 RESULT=$(dialog --stdout --title "DaemonBuilder $VERSION" --menu "Choose an option" 16 60 9 \
     ' ' "- Install coin with Berkeley autogen file -" \
