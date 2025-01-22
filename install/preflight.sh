@@ -32,8 +32,11 @@ elif [[ "${UBUNTU_DESCRIPTION}" == "18.04"  ]]; then
 elif [[ "${UBUNTU_DESCRIPTION}" == "16.04"  ]]; then
   DISTRO=16
   sudo chmod g-w /etc /etc/default /usr
+elif [[ "${DEBIAN_DESCRIPTION}" == "12" ]]; then
+  DISTRO=12
+  sudo chmod g-w /etc /etc/default /usr
 else
-  echo "This script only supports Ubuntu 16.04, 18.04, 20.04, 23.04, and 24.04."
+  echo "This script only supports Ubuntu 16.04, 18.04, 20.04, 23.04, and 24.04. Debian 12 is also supported."
   exit 1
 fi
 

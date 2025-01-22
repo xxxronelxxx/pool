@@ -54,15 +54,20 @@ elif [[ "$DISTRO" == "20" || "$DISTRO" == "22" || "$DISTRO" == "23" || "$DISTRO"
     hide_output sudo snap install --classic certbot
     sudo ln -s /snap/bin/certbot /usr/bin/certbot
     echo -e "$GREEN => Complete${NC}"
+
+elif [[ "$DISTRO" == "12" ]]; then
+    echo -e "$MAGENTA => Installing CertBot PPA <= ${NC}"
+    hide_output sudo apt install -y certbot
+    echo -e "$GREEN => Complete${NC}"
 fi
 
-if [[ "$DISTRO" == "20" || "$DISTRO" == "22" || "$DISTRO" == "23" || "$DISTRO" == "24" ]]; then
-    echo
-    echo -e "$MAGENTA Detected$GREEN Distro $DISTRO $RED installing requirements.. ${NC}"
-    hide_output sudo apt install -y snapd
-    hide_output sudo snap install bitcoin-core
-    echo -e "$GREEN Completed${NC}"
-fi
+#if [[ "$DISTRO" == "20" || "$DISTRO" == "22" || "$DISTRO" == "23" || "$DISTRO" == "24" ]]; then
+#    echo
+#    echo -e "$MAGENTA Detected$GREEN Distro $DISTRO $RED installing requirements.. ${NC}"
+#    hide_output sudo apt install -y snapd
+#    hide_output sudo snap install bitcoin-core
+#    echo -e "$GREEN Completed${NC}"
+#fi
 
 echo
 echo -e "$MAGENTA Installing MariaDB..${NC}"
@@ -86,6 +91,9 @@ case "$DISTRO" in
         ;;
     "24")   # Ubuntu 24.04
         sudo add-apt-repository -y 'deb [arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/11.6/ubuntu noble main' >/dev/null 2>&1
+        ;;
+    "12")   # Debian 12
+        sudo add-apt-repository -y 'deb [arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/11.6/debian bookworm main' >/dev/null 2>&1
         ;;
     *)
         echo "Unsupported Ubuntu version: $DISTRO"
@@ -176,6 +184,10 @@ hide_output sudo apt-get update
 echo
 echo -e "$CYAN => Installing PHP <= ${NC}"
 sleep 3
+
+if [[ "$DISTRO" == "12" ]]; then
+    apt_install python3-launchpadlib
+fi
 
 if [ ! -f /etc/apt/sources.list.d/ondrej-php-bionic.list ]; then
 	hide_output sudo add-apt-repository -y ppa:ondrej/php
