@@ -211,6 +211,23 @@ apt_install automake cmake gnupg2 ca-certificates lsb-release nginx certbot libs
 apt_install libnghttp2-dev librtmp-dev libssh2-1 libssh2-1-dev libldap2-dev libidn11-dev libpsl-dev libkrb5-dev php7.3-memcache php7.3-memcached memcached
 apt_install php8.1-mysql
 apt_install libssh-dev libbrotli-dev php8.2-curl
+elif [[ "$DISTRO" == "12" ]]; then
+    # Install packages specific to Debian 12
+    apt_install php7.3-fpm php7.3-opcache php7.3 php7.3-common php7.3-gd
+    apt_install php7.3-mysql php7.3-imap php7.3-cli php7.3-cgi
+    apt_install php-pear php-auth-sasl mcrypt imagemagick libruby
+    apt_install php7.3-curl php7.3-intl php7.3-pspell php7.3-recode php7.3-sqlite3
+    apt_install php7.3-tidy php7.3-xmlrpc php7.3-xsl memcached php-memcache
+    apt_install php-imagick php-gettext php7.3-zip php7.3-mbstring
+    apt_install fail2ban ntpdate python3 python3-dev python3-pip
+    apt_install curl git sudo coreutils pollinate unzip unattended-upgrades cron
+    apt_install pwgen libgmp3-dev libmysqlclient-dev libcurl4-gnutls-dev
+    apt_install libkrb5-dev libldap2-dev libidn11-dev gnutls-dev librtmp-dev
+    apt_install build-essential libtool autotools-dev automake pkg-config libevent-dev bsdmainutils libssl-dev
+    apt_install automake cmake gnupg2 ca-certificates lsb-release nginx certbot libsodium-dev
+    apt_install libnghttp2-dev librtmp-dev libssh2-1 libssh2-1-dev libldap2-dev libidn11-dev libpsl-dev libkrb5-dev php7.3-memcache php7.3-memcached memcached
+    apt_install php8.1-mysql
+    apt_install libssh-dev libbrotli-dev php8.2-curl
 fi
 
 if [[ ("$DISTRO" == "20" ) || "$DISTRO" == "22" || "$DISTRO" == "23" || "$DISTRO" == "24" ]]; then
@@ -222,6 +239,16 @@ if [[ ("$DISTRO" == "20" ) || "$DISTRO" == "22" || "$DISTRO" == "23" || "$DISTRO
 	sleep 2
 	sudo systemctl start php8.2-fpm
 	sudo systemctl status php8.2-fpm | sed -n "1,3p"
+
+    elif [[ "$DISTRO" == "12" ]]; then
+    apt_install php8.2-fpm php8.2-opcache php8.2 php8.2-common php8.2-gd php8.2-mysql php8.2-imap php8.2-cli
+    apt_install php8.2-cgi php8.2-curl php8.2-intl php8.2-pspell
+    apt_install php8.2-sqlite3 php8.2-tidy php8.2-xmlrpc php8.2-xsl php8.2-zip
+    apt_install php8.2-mbstring php8.2-memcache php8.2-memcached certbot
+    apt_install libssh-dev libbrotli-dev
+    sleep 2
+    sudo systemctl start php8.2-fpm
+    sudo systemctl status php8.2-fpm | sed -n "1,3p"
 fi
 
 echo -e "$CYAN => Fixing DB connection issue... ${NC}"
