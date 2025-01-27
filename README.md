@@ -35,7 +35,7 @@ This installer provides an automated way to set up a full Yiimp mining pool on U
 - Ubuntu 24.04 LTS Install Works But system not tested
 
 ## Supported Debian Version
-- Debian 12
+- Debian 12 Install Works But System not tested
 
 ## Quick Install
 
