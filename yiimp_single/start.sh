@@ -66,11 +66,9 @@ source compile_crypto.sh
 source server_cleanup.sh
 source motd.sh
 source server_harden.sh
-# source phpmyadmin.sh
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 
 clear
-
 
 # Color definitions (feel free to customize these for your liking)
 YIIMP_GREEN="\e[38;5;2m"     # Success Green
