@@ -66,7 +66,7 @@ source compile_crypto.sh
 source server_cleanup.sh
 source motd.sh
 source server_harden.sh
-source phpmyadmin.sh
+# source phpmyadmin.sh
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 
 clear

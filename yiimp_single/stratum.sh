@@ -68,9 +68,9 @@ hide_output sudo make -C iniparser
 cd secp256k1 && sudo chmod +x autogen.sh && hide_output sudo ./autogen.sh && hide_output sudo ./configure --enable-experimental --enable-module-ecdh --with-bignum=no --enable-endomorphism && hide_output sudo make -j$((`nproc`+1))
 
 # Update Makefile if AutoExchange is enabled
-if [[ "$AutoExchange" =~ ^[Yy][Ee]?[Ss]?$ ]]; then
-  sudo sed -i 's/CFLAGS += -DNO_EXCHANGE/#CFLAGS += -DNO_EXCHANGE/' Makefile
-fi
+# if [[ "$AutoExchange" =~ ^[Yy][Ee]?[Ss]?$ ]]; then
+  # sudo sed -i 's/CFLAGS += -DNO_EXCHANGE/#CFLAGS += -DNO_EXCHANGE/' Makefile
+# fi
 
 cd /home/crypto-data/yiimp/yiimp_setup/yiimp/stratum
 hide_output sudo make -j$((`nproc`+1))
