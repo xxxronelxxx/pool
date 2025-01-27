@@ -189,8 +189,17 @@ if [[ "$DISTRO" == "12" ]]; then
     apt_install python3-launchpadlib
 fi
 
-if [ ! -f /etc/apt/sources.list.d/ondrej-php-bionic.list ]; then
-	hide_output sudo add-apt-repository -y ppa:ondrej/php
+if [[ "$DISTRO" == "16" || "$DISTRO" == "18" || "$DISTRO" == "20" || "$DISTRO" == "22" || "$DISTRO" == "23" || "$DISTRO" == "24" ]]; then
+    if [ ! -f /etc/apt/sources.list.d/ondrej-php-bionic.list ]; then
+        hide_output sudo add-apt-repository -y ppa:ondrej/php
+    fi
+elif [[ "$DISTRO" == "12" ]]; then
+    if [ ! -f /etc/apt/sources.list.d/ondrej-php.list ]; then
+        hide_outputsudo apt-get install -y apt-transport-https lsb-release ca-certificates
+        wget -qO - https://packages.sury.org/php/apt.gpg | sudo apt-key add -
+        echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/php.list
+        hide_output sudo apt-get update
+    fi
 fi
 
 hide_output sudo apt-get update

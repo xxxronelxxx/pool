@@ -26,13 +26,16 @@ This installer provides an automated way to set up a full Yiimp mining pool on U
 - Minimum 8GB RAM
 - Clean domain or subdomain pointed to your VPS
 
-## Supported OS
+## Supported Ubuntu Version
 - Ubuntu 16.04 LTS
 - Ubuntu 18.04 LTS
 - Ubuntu 20.04 LTS
 - Ubuntu 22.04 LTS Install Works But system not tested
 - Ubuntu 23.04 LTS Install Works But System not tested
 - Ubuntu 24.04 LTS Install Works But system not tested
+
+## Supported Debian Version
+- Debian 12
 
 ## Quick Install
 
