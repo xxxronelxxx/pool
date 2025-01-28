@@ -236,9 +236,9 @@ sudo rm -r $STORAGE_ROOT/yiimp/yiimp_setup
 # Fixing exbitron that make white screen and update main.php
 cd $HOME/Yiimpoolv1/yiimp_single/yiimp_confs
 sudo rm -r /home/crypto-data/yiimp/site/web/yaamp/ui/main.php
-sudo rm -r /home/crypto-data/yiimp/site/web/yaamp/modules/site/coin_form.php
+sudo rm -r /home/crypto-data/yiimp/site/web/yaamp/modules/admin/coin_form.php
 
 sudo cp -r main.php /home/crypto-data/yiimp/site/web/yaamp/ui
-sudo cp -r coin_form.php /home/crypto-data/yiimp/site/web/yaamp/modules/site
+sudo cp -r coin_form.php /home/crypto-data/yiimp/site/web/yaamp/modules/admin
 
 cd $HOME/Yiimpoolv1/yiimp_single
