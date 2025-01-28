@@ -233,7 +233,7 @@ echo
 echo -e "$YELLOW Starting your new stratum...${NC}"
 bash stratum.${coinsymbollower} start ${coinsymbollower}
 
-if [[("$CREATECOIN" == 'true')]]; then
+if [[ ("$CREATECOIN" == 'true') ]]; then
 	echo '
 	COINPORT='""''"${coinport}"''""'
 	COINALGO='""''"${coinalgo}"''""'
