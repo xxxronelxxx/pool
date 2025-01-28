@@ -11,7 +11,7 @@
 #  Berkeley 6.2 with autogen.sh file.
 #  makefile.unix file.
 #  CMake file.
-#  UTIL folder contains BULD.sh file.
+#  UTIL folder contains BUILD.sh file.
 #  precompiled coin. NEED TO BE LINUX Version!
 #
 # Updated: 2021-04-13
@@ -46,7 +46,6 @@ else
     NPROC=$((NPROC - 2))
 fi
 
-
 # Create the temporary installation directory if it doesn't already exist.
 echo
 echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
@@ -64,6 +63,7 @@ else
     echo -e "$GREEN   temp_coin_builds already exists.... Skipping  								$NC"
     echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
 fi
+
 # Just double checking folder permissions
 sudo setfacl -m u:${USERSERVER}:rwx $STORAGE_ROOT/daemon_builder/temp_coin_builds
 cd $STORAGE_ROOT/daemon_builder/temp_coin_builds
@@ -80,7 +80,7 @@ convertlistalgos=$(find ${PATH_STRATUM}/config/ -mindepth 1 -maxdepth 1 -type f 
 optionslistalgos=$(echo -e "${convertlistalgos}" | awk '{ printf "%s on\n", $1}' | sort | uniq | grep [[:alnum:]])
 
 DIALOGFORLISTALGOS=${DIALOGFORLISTALGOS=dialog}
-tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
+tempfile=$(tempfile 2>/dev/null) || tempfile=/tmp/test$$
 trap "rm -f $tempfile" 0 1 2 5 15
 
 $DIALOGFORLISTALGOS --colors --title "\Zb\Zr\Z7| Select the algorithm for coin: \Zn\ZR\ZB\Z0${coin^^}\Zn\Zb\Zr\Z7 |" --clear --colors --no-items --nocancel --shadow \
@@ -93,22 +93,25 @@ $DIALOGFORLISTALGOS --colors --title "\Zb\Zr\Z7| Select the algorithm for coin: 
 What is your algorithm? choose from the following..." \
 55 60 47 $optionslistalgos 2> $tempfile
 retvalalgoselected=$?
-ALGOSELECTED=`cat $tempfile`
+ALGOSELECTED=$(cat $tempfile)
 case $retvalalgoselected in
     0)
-    coinalgo="${ALGOSELECTED}";;
+        coinalgo="${ALGOSELECTED}"
+        ;;
     1)
         echo
         echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
         echo -e "$GREEN   Cancel pressed STOP of installation! use daemonbuilder to new start!				$NC"
         echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
-    exit;;
+        exit
+        ;;
     255)
         echo
         echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
         echo -e "$GREEN   ESC pressed STOP of installation! use daemonbuilder to new start!				$NC"
         echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
-    exit;;
+        exit
+        ;;
 esac
 
 if [[ ("${precompiled}" == "true") ]]; then
@@ -130,7 +133,7 @@ else
     git_hub
     
     dialog --title " Switch To development " \
-    --yesno "Switch from main repo git in to develop ?
+    --yesno "Switch from main repo git in to develop?
     Selecting Yes use Git developments." 6 50
     response=$?
     case $response in
@@ -141,7 +144,7 @@ else
     
     if [[ ("${swithdevelop}" == "no") ]]; then
         
-        dialog --title " Do you want to use a specific branch ? " \
+        dialog --title " Do you want to use a specific branch? " \
         --yesno "Do you need to use a specific github branch of the coin?
         Selecting Yes use a selected version Git." 7 60
         response=$?
@@ -209,7 +212,7 @@ else
     exit 0
 fi
 
-if [[("${errorexist}" == "false")]]; then
+if [[ ("${errorexist}" == "false") ]]; then
     sudo chmod -R 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}
     sudo find $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/ -type d -exec chmod 777 {} \;
     sudo find $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/ -type f -exec chmod 777 {} \;
@@ -233,7 +236,7 @@ if [[ ("$autogen" == "true") ]]; then
             echo -e "$YELLOW"
             find . -maxdepth 1 -type d \( -perm -1 -o \( -perm -10 -o -perm -100 \) \) -printf "%f\n"
             echo -e "$NC$MAGENTA"
-            read -r -e -p "Where is the folder that contains the installation ${coin^^}, example bitcoin :" ${repotherinstall}
+            read -r -e -p "Where is the folder that contains the installation ${coin^^}, example bitcoin :" repotherinstall
             echo -e "$NC"
 			clear;
             echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
@@ -827,92 +830,98 @@ else
 fi
 
 if [[ "$precompiled" == "true" ]]; then
-    # Search recursively for compressed files
+
     COINTARGZ=$(find . -type f -name "*.tar.gz")
     COINZIP=$(find . -type f -name "*.zip")
     COIN7Z=$(find . -type f -name "*.7z")
 
-    # Extract the compressed file
     if [[ -f "$COINZIP" ]]; then
-        coinzipped="${COINZIP}"
-        sudo unzip -q "$coinzipped" -d newcoin
+        hide_output sudo unzip -q "$COINZIP"
     elif [[ -f "$COINTARGZ" ]]; then
-        coinzipped="${COINTARGZ}"
-        sudo tar xzvf "$coinzipped"
+        hide_output sudo tar xzvf "$COINTARGZ"
     elif [[ -f "$COIN7Z" ]]; then
-        coinzipped="${COIN7Z}"
-        sudo 7z x "$coinzipped" -o"newcoin"
+        hide_output sudo 7z x "$COIN7Z"
     else
         echo -e "$RED => No valid compressed files found (.zip, .tar.gz, or .7z).$NC"
         exit 1
     fi
 
-    # Search recursively for daemon and CLI files
-    echo -e "$CYAN Searching for wallet executables...$NC"
-    
-    # Find all executable types with descriptive variables
+    echo
+    echo -e "$CYAN === Searching for wallet files ===$NC"
+    echo
+
+    # Find the directory containing wallet files
+    WALLET_DIR=$(find . -type d -exec sh -c '
+        cd "{}" 2>/dev/null && 
+        if find . -maxdepth 1 -type f -executable \( -name "*d" -o -name "*daemon" -o -name "*-cli" \) 2>/dev/null | grep -q .; then
+            pwd
+            exit 0
+        fi' \; | head -n 1)
+
+    if [[ -z "$WALLET_DIR" ]]; then
+        echo -e "$RED => Could not find directory containing wallet files.$NC"
+        exit 1
+    fi
+
+    echo -e "$CYAN === Found wallet directory: $YELLOW$WALLET_DIR $NC"
+    cd $WALLET_DIR
+
+    # Now search for executables in the correct directory
     COINDFIND=$(find . -type f -executable \( -name "*d" -o -name "*daemon" \) ! -name "*.sh" 2>/dev/null)
     COINCLIFIND=$(find . -type f -executable -name "*-cli" 2>/dev/null)
     COINTXFIND=$(find . -type f -executable -name "*-tx" 2>/dev/null)
     COINUTILFIND=$(find . -type f -executable -name "*-util" 2>/dev/null)
     COINHASHFIND=$(find . -type f -executable -name "*-hash" 2>/dev/null)
     COINWALLETFIND=$(find . -type f -executable -name "*-wallet" 2>/dev/null)
+    COINUTILFIND=$(find . -type f -executable -name "*-util" 2>/dev/null)
+    COINQTFIND=$(find . -type f -executable -name "*-qt" 2>/dev/null)
 
-    # Initialize arrays for found and not found executables
-    declare -A found_files
-    declare -A not_found_files
-
-    # Check and categorize each executable type
+    declare -A wallet_files_found
+    declare -A wallet_files_not_found
+    
     if [[ -n "$COINDFIND" ]]; then
-        found_files["Daemon"]=$(basename "$COINDFIND")
+        wallet_files_found["Daemon"]=$(basename "$COINDFIND")
     else
-        not_found_files["Daemon"]="true"
+        wallet_files_not_found["Daemon"]="true"
     fi
 
-    [[ -n "$COINCLIFIND" ]] && found_files["CLI"]=$(basename "$COINCLIFIND") || not_found_files["CLI"]="true"
-    [[ -n "$COINTXFIND" ]] && found_files["TX"]=$(basename "$COINTXFIND") || not_found_files["TX"]="true"
-    [[ -n "$COINUTILFIND" ]] && found_files["Util"]=$(basename "$COINUTILFIND") || not_found_files["Util"]="true"
-    [[ -n "$COINHASHFIND" ]] && found_files["Hash"]=$(basename "$COINHASHFIND") || not_found_files["Hash"]="true"
-    [[ -n "$COINWALLETFIND" ]] && found_files["Wallet"]=$(basename "$COINWALLETFIND") || not_found_files["Wallet"]="true"
+    [[ -n "$COINCLIFIND" ]] && wallet_files_found["CLI"]=$(basename "$COINCLIFIND") || wallet_files_not_found["CLI"]="true"
+    [[ -n "$COINTXFIND" ]] && wallet_files_found["TX"]=$(basename "$COINTXFIND") || wallet_files_not_found["TX"]="true"
+    [[ -n "$COINUTILFIND" ]] && wallet_files_found["Util"]=$(basename "$COINUTILFIND") || wallet_files_not_found["Util"]="true"
+    [[ -n "$COINHASHFIND" ]] && wallet_files_found["Hash"]=$(basename "$COINHASHFIND") || wallet_files_not_found["Hash"]="true"
+    [[ -n "$COINWALLETFIND" ]] && wallet_files_found["Wallet"]=$(basename "$COINWALLETFIND") || wallet_files_not_found["Wallet"]="true"
+    [[ -n "$COINQTFIND" ]] && wallet_files_found["QT"]=$(basename "$COINQTFIND") || wallet_files_not_found["QT"]="true"
+    [[ -n "$COINUTILSFIND" ]] && wallet_files_found["Utils"]=$(basename "$COINUTILSFIND") || wallet_files_not_found["Utils"]="true"
 
-    # Display comprehensive results
-    echo -e "\n$GREEN=== Found Executables ===$NC"
-    for type in "${!found_files[@]}"; do
-        echo -e "$type: $YELLOW${found_files[$type]}$NC"
-        # Set variables for compatibility with existing code
-        case "$type" in
-            "Daemon") coind=${found_files[$type]} ;;
-            "CLI") coincli=${found_files[$type]} ;;
-            "TX") cointx=${found_files[$type]} ;;
-            "Util") coinutil=${found_files[$type]} ;;
-            "Hash") coinhash=${found_files[$type]} ;;
-            "Wallet") coinwallet=${found_files[$type]} ;;
-        esac
+    echo -e "$GREEN === Found Wallet Files ===$NC"
+    echo
+    for type in "${!wallet_files_found[@]}"; do
+        echo -e "$type: $YELLOW${wallet_files_found[$type]}$NC"
+        sleep 0.5
     done
 
-    echo -e "\n$RED=== Missing Executables ===$NC"
-    for type in "${!not_found_files[@]}"; do
+    echo
+    echo -e "$RED => === Missing Wallet Files in zip/tar/7z file ===$NC"
+    echo
+    for type in "${!wallet_files_not_found[@]}"; do
         echo -e "$type: Not found"
+        sleep 0.5
     done
 
-    # If daemon is not found, try common names
-    if [[ -z "$COINDFIND" ]]; then
-        echo -e "\n$YELLOW=> No daemon executable found with standard pattern. Trying common names...$NC"
-        COINDFIND=$(find . -type f -executable \( -name "*coind" -o -name "*daemon" -o -name "*d" \) ! -name "*.sh" 2>/dev/null)
-        
-        if [[ -z "$COINDFIND" ]]; then
-            echo -e "$RED=> Could not find daemon executable. Installation failed.$NC"
-            exit 1
-        else
-            coind=$(basename "$COINDFIND")
-            echo -e "$GREEN=> Found daemon with alternate naming: $YELLOW$coind$NC"
-        fi
+    if [[ -n "$COINDFIND" ]]; then
+    echo
+        echo -e "$GREEN => Found Daemon: $YELLOW${wallet_files_found["Daemon"]}$NC"
+    else
+        echo
+        echo -e "$RED=> Could not find daemon executable. Installation failed.$NC"
+        echo
+        exit 1
     fi
 
-    echo -e "\n$CYAN=== Installation Path ===$NC"
-    echo -e "Executables will be installed to: $YELLOW/usr/local/bin$NC"
+    echo -e "$CYAN === Install Directory ===$NC"
+    echo -e "Executables will be installed to: $YELLOW$HOME/daemon_builder/src$NC"
 
-    # Set variables for found executables
+    echo
     coind=$(basename "$COINDFIND")
     [[ -n "$COINCLIFIND" ]] && coincli=$(basename "$COINCLIFIND")
     [[ -n "$COINTXFIND" ]] && cointx=$(basename "$COINTXFIND") 
@@ -920,79 +929,59 @@ if [[ "$precompiled" == "true" ]]; then
     [[ -n "$COINHASHFIND" ]] && coinhash=$(basename "$COINHASHFIND")
     [[ -n "$COINWALLETFIND" ]] && coinwallet=$(basename "$COINWALLETFIND")
 
-    echo -e "$GREEN Found executables:$NC"
-    echo -e "Daemon: $YELLOW$coind$NC"
-    [[ -n "$coincli" ]] && echo -e "CLI: $YELLOW$coincli$NC"
-    [[ -n "$cointx" ]] && echo -e "TX: $YELLOW$cointx$NC"
-    [[ -n "$coinutil" ]] && echo -e "Util: $YELLOW$coinutil$NC"
-    [[ -n "$coinhash" ]] && echo -e "Hash: $YELLOW$coinhash$NC"
-    [[ -n "$coinwallet" ]] && echo -e "Wallet: $YELLOW$coinwallet$NC"
-
-    # Rest of existing code...
 fi
 
 clear
 
-# LS the SRC dir to have user input bitcoind and bitcoin-cli names
-if [[ ! ("$precompiled" == "true") ]]; then
-    
-    cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/
+if [[ "$precompiled" == "true" ]]; then
+
+    cd $WALLET_DIR
+
+    echo -e "$CYAN === CD TO $WALLET_DIR ===$NC"
+    echo
+
+    echo -e "$CYAN === List of files in $WALLET_DIR: $NC"
+    echo
+    for type in "${!wallet_files_found[@]}"; do
+        echo -e "$type: $YELLOW${wallet_files_found[$type]}$NC"
+    done
     echo
     echo -e "$CYAN --------------------------------------------------------------------------------------- 	$NC"
-    echo -e "$GREEN   List os avalible daemons: $NC"
-    echo -e "$YELLOW"
-    find . -maxdepth 1 -type f ! -name "*.*" \( -perm -1 -o \( -perm -10 -o -perm -100 \) \) -printf "%f\n"
-    echo -e "$NC"
-    echo -e "$CYAN --------------------------------------------------------------------------------------- 	$NC"
     echo
-    echo -e "$CYAN --------------------------------------------------------------------------------------- 	$NC"
+
+    read -r -e -p "please enter the coind name from the directory above, example $coind :" coind
     echo
-    
-    read -r -e -p "Please enter the coind name from the directory above, example bitcoind :" coind
-    
-    echo
-    read -r -e -p "Is there a coin-cli, example bitcoin-cli [y/N] :" ifcoincli
+    read -r -e -p "Is there a $coincli, example $coincli [y/N] :" ifcoincli
     if [[ ("$ifcoincli" == "y" || "$ifcoincli" == "Y") ]]; then
-        read -r -e -p "Please enter the coin-cli name :" coincli
+        read -r -e -p "Please enter the coin-cli name :" ifcoincli
     fi
-    
+
     echo
-    read -r -e -p "Is there a coin-tx, example bitcoin-tx [y/N] :" ifcointx
+    read -r -e -p "Is there a coin-tx [y/N] :" ifcointx
     if [[ ("$ifcointx" == "y" || "$ifcointx" == "Y") ]]; then
-        read -r -e -p "Please enter the coin-tx name :" cointx
+        read -r -e -p "Please enter the coin-tx name :" ifcointx
     fi
-    
+
     echo
-    read -r -e -p "Is there a coin-util, example bitcoin-util [y/N] :" ifcoinutil
+    read -r -e -p "Is there a coin-util [y/N] :" ifcoinutil
     if [[ ("$ifcoinutil" == "y" || "$ifcoinutil" == "Y") ]]; then
-        read -r -e -p "Please enter the coin-util name :" coinutil
+        read -r -e -p "Please enter the coin-util name :" ifcoinutil
     fi
-    
+
     echo
-    read -r -e -p "Is there a coin-hash, example bitcoin-hash [y/N] :" ifcoinhash
-    if [[ ("$ifcoinhash" == "y" || "$ifcoinhash" == "Y") ]]; then
-        read -r -e -p "Please enter the coin-hash name :" coinhash
-    fi
-    
-    echo
-    read -r -e -p "Is there a coin-wallet, example bitcoin-wallet [y/N] :" ifcoinwallet
+    read -r -e -p "Is there a coin-wallet [y/N] :" ifcoinwallet
     if [[ ("$ifcoinwallet" == "y" || "$ifcoinwallet" == "Y") ]]; then
-        read -r -e -p "Please enter the coin-wallet name :" coinwallet
+        read -r -e -p "Please enter the coin-wallet name :" ifcoinwallet
     fi
-    
-    if [[ ("$buildutil" == "true" || "$precompiled" == "true") ]]; then
-        echo
-        read -r -e -p "Is there a coin-tools, example bitcoin-wallet-tools [y/N] :" ifcointools
-        if [[ ("$ifcointools" == "y" || "$ifcointools" == "Y") ]]; then
-            read -r -e -p "Please enter the coin-tools name :" cointools
-        fi
-        
-        echo
-        read -r -e -p "Is there a coin-gtest, example bitcoin-gtest [y/N] :" ifcoingtest
-        if [[ ("$ifcoingtest" == "y" || "$ifcoingtest" == "Y") ]]; then
-            read -r -e -p "Please enter the coin-gtest name :" coingtest
-        fi
+
+    echo
+    read -r -e -p "Is there a coin-qt [y/N] :" ifcoinqt
+    if [[ ("$ifcoinqt" == "y" || "$ifcoinqt" == "Y") ]]; then
+        read -r -e -p "Please enter the coin-qt name :" ifcoinqt
     fi
+
+
+
     echo
     echo -e "$CYAN --------------------------------------------------------------------------------------- 	$NC"
     echo
@@ -1077,7 +1066,7 @@ if [[ ("$precompiled" == "true") ]]; then
                 echo -e "$CYAN --------------------------------------------------------------------------- $NC"
                 secstosleep=$((1 * 20))
                 while [ $secstosleep -gt 0 ]; do
-                    echo -ne "$GREEN	STOP THE DAEMON => $YELLOW${coind}$GREEN Sleep $CYAN$secstosleep$GREEN ...$NC\033[0K\r"
+                    echo -ne "$GREEN	STOP THE DAEMON => $YELLOW${coind}$GREEN Sleep $CYAN$secstosleep$GREEN ...$NC"
                     
                     : $((secstosleep--))
                 done
@@ -1234,7 +1223,7 @@ else
     echo
 fi
 
-if [[ "${YIIMPCONF}" == "true" ]]; then
+if [[ "$YIIMPCONF" == "true" ]]; then
     # Make the new wallet folder have user paste the coin.conf and finally start the daemon
     if [[ ! -e "$STORAGE_ROOT/wallets" ]]; then
         sudo mkdir -p $STORAGE_ROOT/wallets
@@ -1251,19 +1240,16 @@ if [[ "${YIIMPCONF}" == "true" ]]; then
         echo -e "$CYAN ----------------------------------------------------------------------------------- 	$NC"
         echo
         "${coinwallet}" -datadir="${STORAGE_ROOT}/wallets/.${coind%?}" -wallet=. create
-        
     fi
-    
 fi
 
-if [[("$DAEMOND" != 'true')]]; then
+if [[ ("$DAEMOND" != "true") ]]; then
     echo
-	clear;
+    clear
     echo -e "$CYAN --------------------------------------------------------------------------------------- 	$NC"
     echo -e "$GREEN   Adding dedicated port to ${coin^^}$NC"
     echo -e "$CYAN --------------------------------------------------------------------------------------- 	$NC"
     echo
-    
     
     addport "CREATECOIN" "${coin^^}" "${coinalgo}"
     
@@ -1287,7 +1273,6 @@ if [[("$DAEMOND" != 'true')]]; then
 			# Please adding dedicated port in line blocknotify= replace :XXXX to '""''"${COINPORT}"''""'
             ' | sudo -E tee ${absolutepath}/wallets/."${coind::-1}"/${coind::-1}.conf >/dev/null 2>&1;
         fi
-        
     fi
     
     echo
@@ -1316,7 +1301,7 @@ figlet -f slant -w 100 "    DaemonBuilder" | lolcat
 echo -e "$CYAN --------------------------------------------------------------------------- 	"
 echo -e "$CYAN    Starting ${coind::-1} $NC"
 
-if [[("$DAEMOND" == 'true')]]; then
+if [[ ("$DAEMOND" == "true") ]]; then
     echo -e "$NC$GREEN    UPDATE of ${coind::-1} is completed and running. $NC"
 else
     echo -e "$NC$GREEN    Installation of ${coind::-1} is completed and running. $NC"
@@ -1327,54 +1312,59 @@ if [[ "$coindmv" == "true" ]]; then
     echo -e "$GREEN    Name of COIND :$NC $MAGENTA ${coind} $NC"
     echo -e "$GREEN    path in : $NC$YELLOW/usr/bin/${coind} $NC"
 fi
+
 if [[ "$coinclimv" == "true" ]]; then
     echo
     echo -e "$GREEN    Name of COIN-CLI :$NC $MAGENTA ${coincli} $NC"
     echo -e "$GREEN    path in : $NC$YELLOW/usr/bin/${coincli} $NC"
 fi
+
 if [[ "$cointxmv" == "true" ]]; then
     echo
     echo -e "$GREEN    Name of COIN-TX :$NC $MAGENTA ${cointx} $NC"
     echo -e "$GREEN    path in : $NC$YELLOW/usr/bin/${cointx} $NC"
 fi
+
 if [[ "$coingtestmv" == "true" ]]; then
     echo
     echo -e "$GREEN    Name of COIN-TX :$NC $MAGENTA ${coingtest} $NC"
     echo -e "$GREEN    path in : $NC$YELLOW/usr/bin/${coingtest} $NC"
 fi
-if [[ "$coingtestmv" == "true" ]]; then
-    echo
-    echo -e "$GREEN    Name of COIN-TX :$NC $MAGENTA ${coingtest} $NC"
-    echo -e "$GREEN    path in : $NC$YELLOW/usr/bin/${coingtest} $NC"
-fi
+
 if [[ "$coinutilmv" == "true" ]]; then
     echo
-    echo -e "$GREEN    Name of COIN-TX :$NC $MAGENTA ${coinutil} $NC"
+    echo -e "$GREEN    Name of COIN-UTIL :$NC $MAGENTA ${coinutil} $NC"
     echo -e "$GREEN    path in : $NC$YELLOW/usr/bin/${coinutil} $NC"
 fi
+
 if [[ "$cointoolsmv" == "true" ]]; then
     echo
-    echo -e "$GREEN    Name of COIN-TX :$NC $MAGENTA ${cointools} $NC"
+    echo -e "$GREEN    Name of COIN-TOOLS :$NC $MAGENTA ${cointools} $NC"
     echo -e "$GREEN    path in : $NC$YELLOW/usr/bin/${cointools} $NC"
 fi
+
 if [[ "$coinhashmv" == "true" ]]; then
     echo
     echo -e "$GREEN    Name of COIN-HASH :$NC $MAGENTA ${coinhash} $NC"
     echo -e "$GREEN    path in : $NC$YELLOW/usr/bin/${coinhash} $NC"
 fi
+
 if [[ "$coinwalletmv" == "true" ]]; then
     echo
     echo -e "$GREEN    Name of COIN-WALLET :$NC $MAGENTA ${coinwallet} $NC"
     echo -e "$GREEN    path in : $NC$YELLOW/usr/bin/${coinwallet} $NC"
 fi
+
 echo -e "$CYAN --------------------------------------------------------------------------- 	$NC"
 echo
 echo -e "$CYAN --------------------------------------------------------------------------- 	$NC"
 echo -e "$GREEN    Name of Symbol coin: $NC$MAGENTA ${coin^^} 						$NC"
+
 if [[ -f "$ADDPORTCONF" ]]; then
     echo -e "$GREEN    Algo of to Symbol ${coin^^} :$NC$MAGENTA ${COINALGO}				$NC"
     echo -e "$GREEN    Dedicated port of to Symbol ${coin^^} :$NC$MAGENTA ${COINPORT} 	$NC"
 fi
+
 echo
 echo -e "$YELLOW    To use your Stratum type,$BLUE stratum.${coin,,} start|stop|restart ${coin,,} $NC"
 echo -e "$YELLOW    To see the stratum screen type,$MAGENTA screen -r ${coin,,}			$NC"
@@ -1389,11 +1379,13 @@ echo
 sudo rm -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/.lastcoin.conf
 sudo rm -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}
 sudo rm -r $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf
+
 if [[ -f "$ADDPORTCONF" ]]; then
     sudo rm -r $STORAGE_ROOT/daemon_builder/.addport.cnf
 fi
+
 echo -e "$CYAN"
-if [[ ("${YIIMPCONF}" == "true") ]]; then
+if [[ "$YIIMPCONF" == "true" ]]; then
     "${coind}" -datadir=$STORAGE_ROOT/wallets/."${coind::-1}" -conf="${coind::-1}".conf -daemon -shrinkdebugfile
 else
     "${coind}" -datadir=${absolutepath}/wallets/."${coind::-1}" -conf="${coind::-1}".conf -daemon -shrinkdebugfile
