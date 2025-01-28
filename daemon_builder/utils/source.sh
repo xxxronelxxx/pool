@@ -1157,64 +1157,64 @@ else
     echo
     echo -e "$CYAN --------------------------------------------------------------------------------------- $NC"
     echo
-    echo -e "$GREEN  Coin-tx moving to => /usr/bin/$NC$YELLOW${coind} $NC"
+    echo -e "$GREEN  Daemon moving to => /usr/bin/$NC$YELLOW${coind} $NC"
     
-    sudo cp $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coind} /usr/bin
+    sudo cp -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coind} /usr/bin
     sudo strip /usr/bin/${coind}
     coindmv=true
     
     if [[ ("$ifcoincli" == "y" || "$ifcoincli" == "Y") ]]; then
-        echo -e "$GREEN  Coin-tx moving to => /usr/bin/$NC$YELLOW${coincli} $NC"
+        echo -e "$GREEN  CLI moving to => /usr/bin/$NC$YELLOW${coincli} $NC"
         
-        sudo cp $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coincli} /usr/bin
+        sudo cp -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coincli} /usr/bin
         sudo strip /usr/bin/${coincli}
         coinclimv=true
     fi
     
     if [[ ("$ifcointx" == "y" || "$ifcointx" == "Y") ]]; then
-        echo -e "$GREEN  Coin-tx moving to => /usr/bin/$NC$YELLOW${cointx} $NC"
+        echo -e "$GREEN  TX moving to => /usr/bin/$NC$YELLOW${cointx} $NC"
         
-        sudo cp $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${cointx} /usr/bin
+        sudo cp -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${cointx} /usr/bin
         sudo strip /usr/bin/${cointx}
         cointxmv=true
     fi
     
     if [[ ("$ifcoinutil" == "y" || "$ifcoinutil" == "Y") ]]; then
-        echo -e "$GREEN  Coin-tx moving to => /usr/bin/$NC$YELLOW${coinutil} $NC"
+        echo -e "$GREEN  UTIL moving to => /usr/bin/$NC$YELLOW${coinutil} $NC"
         
-        sudo cp $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coinutil} /usr/bin
+        sudo cp -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coinutil} /usr/bin
         sudo strip /usr/bin/${coinutil}
         coinutilmv=true
     fi
     
     if [[ ("$ifcoingtest" == "y" || "$ifcoingtest" == "Y") ]]; then
-        echo -e "$GREEN  Coin-tx moving to => /usr/bin/$NC$YELLOW${coingtest} $NC"
+        echo -e "$GREEN  GTEST moving to => /usr/bin/$NC$YELLOW${coingtest} $NC"
         
-        sudo cp $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coingtest} /usr/bin
+        sudo cp -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coingtest} /usr/bin
         sudo strip /usr/bin/${coingtest}
         coingtestmv=true
     fi
     
     if [[ ("$ifcointools" == "y" || "$ifcointools" == "Y") ]]; then
-        echo -e "$GREEN  Coin-tx moving to => /usr/bin/$NC$YELLOW${cointools} $NC"
+        echo -e "$GREEN  TOOLS moving to => /usr/bin/$NC$YELLOW${cointools} $NC"
         
-        sudo cp $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${cointools} /usr/bin
+        sudo cp -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${cointools} /usr/bin
         sudo strip /usr/bin/${cointools}
         cointoolsmv=true
     fi
     
     if [[ ("$ifcoinhash" == "y" || "$ifcoinhash" == "Y") ]]; then
-        echo -e "$GREEN  Coin-hash moving to => /usr/bin/$NC$YELLOW${coinhash} $NC"
+        echo -e "$GREEN  HASH moving to => /usr/bin/$NC$YELLOW${coinhash} $NC"
         
-        sudo cp $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coinhash} /usr/bin
+        sudo cp -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coinhash} /usr/bin
         sudo strip /usr/bin/${coinhash}
         coinhashmv=true
     fi
     
     if [[ ("$ifcoinwallet" == "y" || "$ifcoinwallet" == "Y") ]]; then
-        echo -e "$GREEN  Coin-wallet moving to => /usr/bin/$NC$YELLOW${coinwallet} $NC"
+        echo -e "$GREEN  WALLET moving to => /usr/bin/$NC$YELLOW${coinwallet} $NC"
         
-        sudo cp $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coinwallet} /usr/bin
+        sudo cp -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coinwallet} /usr/bin
         sudo strip /usr/bin/${coinwallet}
         coinwalletmv=true
     fi
