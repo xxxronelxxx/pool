@@ -195,7 +195,7 @@ if [[ "$DISTRO" == "16" || "$DISTRO" == "18" || "$DISTRO" == "20" || "$DISTRO" =
     fi
 elif [[ "$DISTRO" == "12" ]]; then
     if [ ! -f /etc/apt/sources.list.d/ondrej-php.list ]; then
-        hide_outputsudo apt-get install -y apt-transport-https lsb-release ca-certificates
+        hide_output sudo apt-get install -y apt-transport-https lsb-release ca-certificates
         wget -qO - https://packages.sury.org/php/apt.gpg | sudo apt-key add -
         echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/php.list
         hide_output sudo apt-get update
