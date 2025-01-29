@@ -937,7 +937,6 @@ if [[ "$precompiled" == "true" ]]; then
 
     cd $WALLET_DIR
 
-    echo -e "$CYAN === CD TO $WALLET_DIR ===$NC"
     echo
 
     echo -e "$CYAN === List of files in $WALLET_DIR: $NC"
@@ -1303,7 +1302,7 @@ if [[ ("$DAEMOND" != "true") ]]; then
     echo
     
     if [[ "${YIIMPCONF}" == "true" ]]; then
-        sudo nano $STORAGE_ROOT/wallets/."${coind::-1}"/${coind}.conf
+        sudo nano $STORAGE_ROOT/wallets/."${coind::-1}"/${coind::-1}.conf
     else
         sudo nano ${absolutepath}/wallets/."${coind::-1}"/${coind::-1}.conf
     fi

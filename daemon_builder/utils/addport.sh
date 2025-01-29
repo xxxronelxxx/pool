@@ -193,7 +193,7 @@ source $STORAGE_ROOT/yiimp/.yiimp.conf
 STRATUM_DIR=$STORAGE_ROOT/yiimp/site/stratum
 LOG_DIR=$STORAGE_ROOT/yiimp/site/log
 #!/usr/bin/env bash
-'""''"${coinsymbollower}"''""'="screen -dmS '""''"${coinsymbollower}"''""' bash $STRATUM_DIR/run.sh '""''"${coinsymbollower}"''""'.'""''"${coinalgo}"''""'"
+'""''"${coinsymbollower}"''""'="screen -dmS '""''"${coinsymbollower}"''""' bash $STRATUM_DIR/run.sh '""''"${coinsymbollower}"''""'.'""''"${coinalgo}"''".conf"'"
 '""''"${coinsymbollower}"''""'stop="'screen -X -S ${coinsymbollower} quit'"
 startstop_'""''"${coinsymbollower}"''""'() {
     cmd=$1
