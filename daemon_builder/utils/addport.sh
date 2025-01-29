@@ -9,6 +9,7 @@
 #####################################################
 
 source /etc/yiimpool.conf
+source /etc/yiimpooldonate.conf
 source /etc/functions.sh
 source /etc/daemonbuilder.sh
 source $STORAGE_ROOT/yiimp/.yiimp.conf
@@ -258,10 +259,10 @@ else
 	echo
 	echo -e "$CYAN  --------------------------------------------------------------------------- 	${NC}"
 	echo -e "$GREEN	Donations are welcome at wallets below:					  	${NC}"
-	echo -e "$YELLOW  BTC: ${NC} $MAGENTA ${BTCDEP}	${NC}"
-	echo -e "$YELLOW  LTC: ${NC} $MAGENTA ${LTCDEP}	${NC}"
-	echo -e "$YELLOW  ETH: ${NC} $MAGENTA ${ETHDEP}	${NC}"
-	echo -e "$YELLOW  BCH: ${NC} $MAGENTA ${DOGEDEP}	${NC}"
+	echo -e "$YELLOW  BTC: ${NC} $MAGENTA ${BTCDON}	${NC}"
+	echo -e "$YELLOW  LTC: ${NC} $MAGENTA ${LTCDON}	${NC}"
+	echo -e "$YELLOW  ETH: ${NC} $MAGENTA ${ETHDON}	${NC}"
+	echo -e "$YELLOW  BCH: ${NC} $MAGENTA ${DOGEDON}	${NC}"
 	echo -e "$CYAN  --------------------------------------------------------------------------- 	${NC}"
 	echo
 	cd ~

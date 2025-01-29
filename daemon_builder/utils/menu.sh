@@ -8,7 +8,6 @@
 # Updated: 2023-03-20
 #
 
-source /etc/yiimpoolversion.conf
 source /etc/daemonbuilder.sh
 source $STORAGE_ROOT/daemon_builder/conf/info.sh
 

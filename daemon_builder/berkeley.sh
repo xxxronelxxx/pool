@@ -6,28 +6,11 @@
 # Updated by Afiniel for Yiimpool use...                                         #
 ##################################################################################
 
-BTCDEP="bc1qc4qqz8eu5j7u8pxfrfvv8nmcka7whhm225a3f9"
-LTCDEP="ltc1qma2lgr2mgmtu7sn6pzddaeac9d84chjjpatpzm"
-ETHDEP="0xdA929d4f03e1009Fc031210DDE03bC40ea66D044"
-DOGEDEP="DFPg3VnH4kTbWiejpwsXvq1sP9qbuwYe6Z"
-
 # Update configuration file with dependencies
-sudo sed -i 's#btcdons#'"$BTCDEP"'#' conf/daemonbuilder.sh
-sleep 1
-sudo sed -i 's#ltcdons#'"$LTCDEP"'#' conf/daemonbuilder.sh
-sleep 1
-sudo sed -i 's#ethdons#'"$ETHDEP"'#' conf/daemonbuilder.sh
-sleep 1
-sudo sed -i 's#bchdons#'"$DOGEDEP"'#' conf/daemonbuilder.sh
-sleep 1
-sudo sed -i 's#daemonnameserver#'"$daemonname"'#' conf/daemonbuilder.sh
-sleep 1
-sudo sed -i 's#installpath#'"$installtoserver"'#' conf/daemonbuilder.sh
+
+
 sleep 1
 sudo sed -i 's#absolutepathserver#'"$absolutepath"'#' conf/daemonbuilder.sh
-sleep 1
-sudo sed -i 's#versiontag#'"$TAG"'#' conf/daemonbuilder.sh
-sleep 1
 
 # Source configuration files
 source /etc/yiimpoolversion.conf
@@ -171,6 +154,7 @@ sudo chmod +x /usr/bin/addport
 # Set up daemonbuilder command
 echo '
 #!/usr/bin/env bash
+source /etc/yiimpooldonate.conf
 source /etc/yiimpool.conf
 source /etc/functions.sh
 cd $STORAGE_ROOT/daemon_builder
@@ -188,13 +172,15 @@ fi
 # Create info.sh
 echo '#!/bin/sh
 USERSERVER='"${whoami}"'
+VERSION='"${TAG}"'
+
 PATH_STRATUM='"${STRATUM_DIR}"'
 FUNCTION_FILE='"${FUNCTIONFILE}"'
-VERSION='"${TAG}"'
-BTCDEP='"${BTCDEP}"'
-LTCDEP='"${LTCDEP}"'
-ETHDEP='"${ETHDEP}"'
-DOGEDEP='"${DOGEDEP}"'' | sudo -E tee $STORAGE_ROOT/daemon_builder/conf/info.sh >/dev/null 2>&1
+
+BTCDON='"${BTCDON}"'
+LTCDON='"${LTCDON}"'
+ETHDON='"${ETHDON}"'
+DOGEDON='"${DOGEDON}"'' | sudo -E tee $STORAGE_ROOT/daemon_builder/conf/info.sh >/dev/null 2>&1
 sudo chmod +x $STORAGE_ROOT/daemon_builder/conf/info.sh
 
 cd $HOME/Yiimpoolv1/yiimp_single
