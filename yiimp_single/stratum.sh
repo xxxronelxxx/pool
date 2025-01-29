@@ -38,7 +38,6 @@ hide_output sudo apt-get update
 hide_output sudo apt-get -y upgrade
 hide_output sudo apt-get -y install p7zip-full
 
-# Ny
 hide_output sudo apt-get -y install libgmp-dev
 hide_output sudo apt-get -y libmysqlclient-dev
 hide_output sudo apt-get -y install libcurl4-openssl-dev
@@ -58,7 +57,6 @@ cd /home/crypto-data/yiimp/yiimp_setup/yiimp/blocknotify
 sudo sed -i "s/tu8tu5/$blckntifypass/" blocknotify.cpp
 hide_output sudo make -j$(nproc)
 
-# Compile stratum
 cd /home/crypto-data/yiimp/yiimp_setup/yiimp/stratum
 hide_output sudo git submodule init
 hide_output sudo git submodule update
@@ -67,21 +65,14 @@ hide_output sudo make -C sha3
 hide_output sudo make -C iniparser
 cd secp256k1 && sudo chmod +x autogen.sh && hide_output sudo ./autogen.sh && hide_output sudo ./configure --enable-experimental --enable-module-ecdh --with-bignum=no --enable-endomorphism && hide_output sudo make -j$((`nproc`+1))
 
-# Update Makefile if AutoExchange is enabled
-# if [[ "$AutoExchange" =~ ^[Yy][Ee]?[Ss]?$ ]]; then
-  # sudo sed -i 's/CFLAGS += -DNO_EXCHANGE/#CFLAGS += -DNO_EXCHANGE/' Makefile
-# fi
-
 cd /home/crypto-data/yiimp/yiimp_setup/yiimp/stratum
 hide_output sudo make -j$((`nproc`+1))
 
-# Setting up the stratum folder structure and copying files
 echo -e "$CYAN => Building stratum folder structure and copying files... <= $NC"
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/stratum
 sudo cp -a config.sample/. $STORAGE_ROOT/yiimp/site/stratum/config
 sudo cp -r stratum run.sh $STORAGE_ROOT/yiimp/site/stratum
 
-# Copy blocknotify to the appropriate directories
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
 sudo cp blocknotify/blocknotify $STORAGE_ROOT/yiimp/site/stratum
 sudo cp blocknotify/blocknotify /usr/bin
