@@ -28,27 +28,34 @@ case "$RESULT" in
     1)
         clear;
         echo '
+        autogen=true
         berkeley="4.8"
         ' | sudo -E tee $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf >/dev/null 2>&1;
         source upgrade.sh;
         ;;
+
     2)
         clear;
         echo '
+        autogen=true
         berkeley="5.1"
         ' | sudo -E tee $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf >/dev/null 2>&1;
         source upgrade.sh;
         ;;
+
     3)
         clear;
         echo '
+        autogen=true
         berkeley="5.3"
         ' | sudo -E tee $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf >/dev/null 2>&1;
         source upgrade.sh;
         ;;
+
     4)
         clear;
         echo '
+        autogen=true
         berkeley="6.2"
         ' | sudo -E tee $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf >/dev/null 2>&1;
         source upgrade.sh;
@@ -56,33 +63,41 @@ case "$RESULT" in
     5)
         clear;
         echo '
-        berkeley="Makefile.unix"
+        autogen=false
+        unix=true
         ' | sudo -E tee $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf >/dev/null 2>&1;
         source upgrade.sh;
         ;;
+
     6)
         clear;
         echo '
-        berkeley="CMake file & DEPENDS folder"
+        autogen=false
+        cmake=true
         ' | sudo -E tee $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf >/dev/null 2>&1;
         source upgrade.sh;
         ;;
+
     7)
         clear;
         echo '
-        berkeley="UTIL folder contains BULD.sh"
+        buildutil=true
+        autogen=true
         ' | sudo -E tee $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf >/dev/null 2>&1;
         source upgrade.sh;
         ;;
+
     8)
         clear;
         echo '
-        berkeley="Precompiled coin. NEED TO BE LINUX Version!"
+        precompiled=true
         ' | sudo -E tee $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf >/dev/null 2>&1;
         source upgrade.sh;
         ;;
+
     9)
         clear;
+        echo "You have chosen to exit the Daemon Builder. Type: daemonbuilder anytime to start the menu again.";
         exit;
         ;;
 esac

@@ -13,6 +13,16 @@ source /etc/functions.sh
 source $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf
 source $STORAGE_ROOT/daemon_builder/conf/info.sh
 
+YIIMPOLL=/etc/yiimpool.conf
+if [[ -f "$YIIMPOLL" ]]; then
+    source /etc/yiimpool.conf
+    YIIMPCONF=true
+fi
+CREATECOIN=false
+
+# Set what we need
+now=$(date +"%m_%d_%Y")
+
 # Sets the number of CPU cores to use for compiling.
 MIN_CPUS_FOR_COMPILATION=3
 
@@ -27,16 +37,30 @@ else
     NPROC=$((NPROC - 2))
 fi
 
+# Create the temporary installation directory if it doesn't already exist.
+echo
+echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
+echo -e "$CYAN Creating temporary installation directory if it doesn't already exist. 			$NC"
+echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
+
+source $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf
+
+if [[ ! -e "$STORAGE_ROOT/daemon_builder/temp_coin_builds" ]]; then
+    sudo mkdir -p $STORAGE_ROOT/daemon_builder/temp_coin_builds
+else
+    sudo rm -rf $STORAGE_ROOT/daemon_builder/temp_coin_builds/*
+    echo
+    echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
+    echo -e "$GREEN   temp_coin_builds already exists.... Skipping  								$NC"
+    echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
+fi
+
+# Just double checking folder permissions
 sudo setfacl -m u:${USERSERVER}:rwx $STORAGE_ROOT/daemon_builder/temp_coin_builds
 cd $STORAGE_ROOT/daemon_builder/temp_coin_builds
 
-input_box "Coin Information" \
-"Please enter the coind name of the coin you want to upgrade.
-\n\n*Paste press CTRL+RIGHT mouse button.
-\n\nCoind Name:" \
-"" \
-pkillcoin
 
+# Gitcoin coin information.
 input_box "Coin Information" \
 "Please enter the Coin Symbol. Example: BTC
 \n\n*Paste press CTRL+RIGHT mouse button.
@@ -97,7 +121,7 @@ else
     fi
 fi
 
-
+clear
 coindir=$coin$now
 
 # save last coin information in case coin build fails
@@ -747,6 +771,192 @@ else
     fi
 fi
 
+if [[ "$precompiled" == "true" ]]; then
+
+    COINTARGZ=$(find . -type f -name "*.tar.gz")
+    COINZIP=$(find . -type f -name "*.zip")
+    COIN7Z=$(find . -type f -name "*.7z")
+
+    if [[ -f "$COINZIP" ]]; then
+        hide_output sudo unzip -q "$COINZIP"
+    elif [[ -f "$COINTARGZ" ]]; then
+        hide_output sudo tar xzvf "$COINTARGZ"
+    elif [[ -f "$COIN7Z" ]]; then
+        hide_output sudo 7z x "$COIN7Z"
+    else
+        echo -e "$RED => No valid compressed files found (.zip, .tar.gz, or .7z).$NC"
+        exit 1
+    fi
+
+    echo
+    echo -e "$CYAN === Searching for wallet files ===$NC"
+    echo
+
+    # Find the directory containing wallet files
+    WALLET_DIR=$(find . -type d -exec sh -c '
+        cd "{}" 2>/dev/null && 
+        if find . -maxdepth 1 -type f -executable \( -name "*d" -o -name "*daemon" -o -name "*-cli" \) 2>/dev/null | grep -q .; then
+            pwd
+            exit 0
+        fi' \; | head -n 1)
+
+    if [[ -z "$WALLET_DIR" ]]; then
+        echo -e "$RED => Could not find directory containing wallet files.$NC"
+        exit 1
+    fi
+
+    echo -e "$CYAN === Found wallet directory: $YELLOW$WALLET_DIR $NC"
+    cd $WALLET_DIR
+
+    # Now search for executables in the correct directory
+    COINDFIND=$(find . -type f -executable \( -name "*d" -o -name "*daemon" \) ! -name "*.sh" 2>/dev/null)
+    COINCLIFIND=$(find . -type f -executable -name "*-cli" 2>/dev/null)
+    COINTXFIND=$(find . -type f -executable -name "*-tx" 2>/dev/null)
+    COINUTILFIND=$(find . -type f -executable -name "*-util" 2>/dev/null)
+    COINHASHFIND=$(find . -type f -executable -name "*-hash" 2>/dev/null)
+    COINWALLETFIND=$(find . -type f -executable -name "*-wallet" 2>/dev/null)
+    COINUTILFIND=$(find . -type f -executable -name "*-util" 2>/dev/null)
+    COINQTFIND=$(find . -type f -executable -name "*-qt" 2>/dev/null)
+
+    declare -A wallet_files_found
+    declare -A wallet_files_not_found
+    
+    if [[ -n "$COINDFIND" ]]; then
+        wallet_files_found["Daemon"]=$(basename "$COINDFIND")
+    else
+        wallet_files_not_found["Daemon"]="true"
+    fi
+
+    [[ -n "$COINCLIFIND" ]] && wallet_files_found["CLI"]=$(basename "$COINCLIFIND") || wallet_files_not_found["CLI"]="true"
+    [[ -n "$COINTXFIND" ]] && wallet_files_found["TX"]=$(basename "$COINTXFIND") || wallet_files_not_found["TX"]="true"
+    [[ -n "$COINUTILFIND" ]] && wallet_files_found["Util"]=$(basename "$COINUTILFIND") || wallet_files_not_found["Util"]="true"
+    [[ -n "$COINHASHFIND" ]] && wallet_files_found["Hash"]=$(basename "$COINHASHFIND") || wallet_files_not_found["Hash"]="true"
+    [[ -n "$COINWALLETFIND" ]] && wallet_files_found["Wallet"]=$(basename "$COINWALLETFIND") || wallet_files_not_found["Wallet"]="true"
+    [[ -n "$COINQTFIND" ]] && wallet_files_found["QT"]=$(basename "$COINQTFIND") || wallet_files_not_found["QT"]="true"
+    [[ -n "$COINUTILSFIND" ]] && wallet_files_found["Utils"]=$(basename "$COINUTILSFIND") || wallet_files_not_found["Utils"]="true"
+
+    echo -e "$GREEN === Found Wallet Files ===$NC"
+    echo
+    for type in "${!wallet_files_found[@]}"; do
+        echo -e "$type: $YELLOW${wallet_files_found[$type]}$NC"
+        sleep 0.5
+    done
+
+    echo
+    echo -e "$RED => === Missing Wallet Files in zip/tar/7z file ===$NC"
+    echo
+    for type in "${!wallet_files_not_found[@]}"; do
+        echo -e "$type: Not found"
+        sleep 0.5
+    done
+
+    if [[ -n "$COINDFIND" ]]; then
+    echo
+        echo -e "$GREEN => Found Daemon: $YELLOW${wallet_files_found["Daemon"]}$NC"
+    else
+        echo
+        echo -e "$RED=> Could not find daemon executable. Installation failed.$NC"
+        echo
+        exit 1
+    fi
+
+    echo -e "$CYAN === Install Directory ===$NC"
+    echo -e "Executables will be installed to: $YELLOW$HOME/daemon_builder/src$NC"
+
+    echo
+    coind=$(basename "$COINDFIND")
+    [[ -n "$COINCLIFIND" ]] && coincli=$(basename "$COINCLIFIND")
+    [[ -n "$COINTXFIND" ]] && cointx=$(basename "$COINTXFIND") 
+    [[ -n "$COINUTILFIND" ]] && coinutil=$(basename "$COINUTILFIND")
+    [[ -n "$COINHASHFIND" ]] && coinhash=$(basename "$COINHASHFIND")
+    [[ -n "$COINWALLETFIND" ]] && coinwallet=$(basename "$COINWALLETFIND")
+
+fi
+
+clear
+
+if [[ "$precompiled" == "true" ]]; then
+
+    cd $WALLET_DIR
+
+    echo
+
+    echo -e "$CYAN === List of files in $WALLET_DIR: $NC"
+    echo
+    for type in "${!wallet_files_found[@]}"; do
+        echo -e "$type: $YELLOW${wallet_files_found[$type]}$NC"
+    done
+    echo
+    echo -e "$CYAN --------------------------------------------------------------------------------------- 	$NC"
+    echo
+
+    read -r -e -p "please enter the coind name from the directory above, example $coind :" coind
+    echo
+    read -r -e -p "Is there a $coincli, example $coincli [y/N] :" ifcoincli
+    if [[ ("$ifcoincli" == "y" || "$ifcoincli" == "Y") ]]; then
+        read -r -e -p "Please enter the coin-cli name :" ifcoincli
+    fi
+
+    echo
+    read -r -e -p "Is there a coin-tx [y/N] :" ifcointx
+    if [[ ("$ifcointx" == "y" || "$ifcointx" == "Y") ]]; then
+        read -r -e -p "Please enter the coin-tx name :" ifcointx
+    fi
+
+    echo
+    read -r -e -p "Is there a coin-util [y/N] :" ifcoinutil
+    if [[ ("$ifcoinutil" == "y" || "$ifcoinutil" == "Y") ]]; then
+        read -r -e -p "Please enter the coin-util name :" ifcoinutil
+    fi
+
+    echo
+    read -r -e -p "Is there a coin-qt [y/N] :" ifcoinqt
+    if [[ ("$ifcoinqt" == "y" || "$ifcoinqt" == "Y") ]]; then
+        read -r -e -p "Please enter the coin-qt name :" ifcoinqt
+    fi
+
+
+
+    echo
+    echo -e "$CYAN --------------------------------------------------------------------------------------- 	$NC"
+    echo
+    
+    FILECOIN=/usr/bin/${coind}
+    if [[ -f "$FILECOIN" ]]; then
+        DAEMOND="true"
+        SERVICE="${coind}"
+        if pgrep -x "$SERVICE" >/dev/null; then
+            if [[ ("${YIIMPCONF}" == "true") ]]; then
+                if [[ ("$ifcoincli" == "y" || "$ifcoincli" == "Y") ]]; then
+                    "${coincli}" -datadir=$STORAGE_ROOT/wallets/."${coind::-1}" -conf="${coind::-1}".conf stop
+                else
+                    "${coind}" -datadir=$STORAGE_ROOT/wallets/."${coind::-1}" -conf="${coind::-1}".conf stop
+                fi
+            else
+                if [[ ("$ifcoincli" == "y" || "$ifcoincli" == "Y") ]]; then
+                    "${coincli}" -datadir=${absolutepath}/wallets/."${coind::-1}" -conf="${coind::-1}".conf stop
+                else
+                    "${coind}" -datadir=${absolutepath}/wallets/."${coind::-1}" -conf="${coind::-1}".conf stop
+                fi
+            fi
+
+            echo -e "$CYAN --------------------------------------------------------------------------- $NC"
+            secstosleep=$((1 * 20))
+            while [ $secstosleep -gt 0 ]; do
+                echo -ne "$GREEN	STOP THE DAEMON => $YELLOW${coind}$GREEN Sleep $CYAN$secstosleep$GREEN ...$NC\033[0K\r"
+                
+                : $((secstosleep--))
+            done
+            echo -e "$CYAN --------------------------------------------------------------------------- $NC $GREEN"
+            echo -e "$GREEN Done... $NC$"
+            echo -e "$NC$CYAN --------------------------------------------------------------------------- $NC"
+            echo
+        fi
+    fi
+fi
+
+clear
+
 # Strip and copy to /usr/bin
 if [[ ("$precompiled" == "true") ]]; then
     cd $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/${repzipcoin}/
@@ -761,7 +971,6 @@ if [[ ("$precompiled" == "true") ]]; then
     sleep 0.5
     COINHASHFIND=$(find ~+ -type f -name "*-hash")
     sleep 0.5
-    COINWALLETFIND=$(find ~+ -type f -name "*-wallet")
     
     
     if [[ -f "$COINDFIND" ]]; then
@@ -807,7 +1016,7 @@ if [[ ("$precompiled" == "true") ]]; then
         
         sudo cp $COINDFIND /usr/bin
         sudo chmod +x /usr/bin/${coind}
-        sudo strip "/usr/bin/${coind}"
+        sudo strip /usr/bin/${coind}
         coindmv=true
         
         echo
@@ -824,7 +1033,7 @@ if [[ ("$precompiled" == "true") ]]; then
         
         sudo cp $COINCLIFIND /usr/bin
         sudo chmod +x /usr/bin/${coincli}
-        sudo strip "/usr/bin/${coincli}"
+        sudo strip /usr/bin/${coincli}
         coinclimv=true
         
         echo -e "$GREEN  Coin-cli moving to => /usr/bin/$NC$YELLOW${coincli} $NC"
@@ -837,7 +1046,7 @@ if [[ ("$precompiled" == "true") ]]; then
         
         sudo cp $COINTXFIND /usr/bin
         sudo chmod +x /usr/bin/${cointx}
-        sudo strip "/usr/bin/${cointx}"
+        sudo strip /usr/bin/${cointx}
         cointxmv=true
         
         echo -e "$GREEN  Coin-tx moving to => /usr/bin/$NC$YELLOW${cointx} $NC"
@@ -850,7 +1059,7 @@ if [[ ("$precompiled" == "true") ]]; then
         
         sudo cp $COINUTILFIND /usr/bin
         sudo chmod +x /usr/bin/${coinutil}
-        sudo strip "/usr/bin/${coinutil}"
+        sudo strip /usr/bin/${coinutil}
         coinutilmv=true
         
         echo -e "$GREEN  Coin-tx moving to => /usr/bin/$NC$YELLOW${coinutil} $NC"
@@ -863,26 +1072,13 @@ if [[ ("$precompiled" == "true") ]]; then
         
         sudo cp $COINHASHFIND /usr/bin
         sudo chmod +x /usr/bin/${coinhash}
-        sudo strip "/usr/bin/${coinhash}"
+        sudo strip /usr/bin/${coinhash}
         coinhashmv=true
         
         echo -e "$GREEN  Coin-hash moving to => /usr/bin/$NC$YELLOW${coinwallet} $NC"
         
     fi
     
-    if [[ -f "$COINWALLETFIND" ]]; then
-        coinwallet=$(basename $COINWALLETFIND)
-        sudo strip $COINWALLETFIND
-        
-        sudo cp $COINWALLETFIND /usr/bin
-        sudo chmod +x /usr/bin/${coinwallet}
-        sudo strip "/usr/bin/${coinwallet}"
-        sudo strip /usr/bin/${coinwallet}
-        coinwalletmv=true
-        
-        echo -e "$GREEN  Moving ${coinwallet} to => /usr/bin/$NC$YELLOW${coinwallet} $NC"
-        
-    fi
     echo
     echo -e "$CYAN --------------------------------------------------------------------------------------- $NC"
     echo
@@ -959,20 +1155,11 @@ else
         fi
     fi
     
-    # Copy and strip WALLET if enabled
-    if [[ ("$ifcoinwallet" == "y" || "$ifcoinwallet" == "Y") && ! -z "${coinwallet}" ]]; then
-        if [[ -f "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coinwallet}" ]]; then
-            echo -e "$GREEN  WALLET moving to => /usr/bin/${coinwallet} $NC"
-            sudo cp "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coinwallet}" "/usr/bin/${coinwallet}"
-            sudo strip "/usr/bin/${coinwallet}"
-            coinwalletmv=true
-        fi
-    fi
-    
     echo
     echo -e "$CYAN --------------------------------------------------------------------------------------- $NC"
     echo
 fi
+
 
 echo
 echo -e "$CYAN ------------------------------------------------ 	$NC"
@@ -981,12 +1168,10 @@ echo -e "$CYAN ------------------------------------------------ 	$NC"
 echo
 read -n 1 -s -r -p "Press any key to continue"
 echo
+sudo nano $STORAGE_ROOT/wallets/."${coind::-1}"/${coind::-1}.conf
 
-if [[ "$YIIMPCONF" == "true" ]]; then
-    sudo nano $STORAGE_ROOT/wallets/."${coind::-1}"/${coind::-1}.conf
-else
-    sudo nano ${absolutepath}/wallets/."${coind::-1}"/${coind::-1}.conf
-fi
+clear
+cd $STORAGE_ROOT/daemon_builder
 
 # If we made it this far everything built fine removing last coin.conf and build directory
 sudo rm -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/.lastcoin.conf
@@ -997,7 +1182,6 @@ if [[ -f "$ADDPORTCONF" ]]; then
     sudo rm -r $STORAGE_ROOT/daemon_builder/.addport.cnf
 fi
 
-clear
 figlet -f slant -w 100 "    DaemonBuilder" | lolcat
 
 echo -e "$CYAN --------------------------------------------------------------------------- 	$NC"
@@ -1016,5 +1200,4 @@ else
     "${coind}" -datadir=${absolutepath}/wallets/."${coind::-1}" -conf="${coind::-1}".conf -daemon -shrinkdebugfile
 fi
 echo -e "$NC"
-
 exit

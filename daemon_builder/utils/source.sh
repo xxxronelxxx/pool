@@ -22,6 +22,11 @@ source $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf
 source $STORAGE_ROOT/daemon_builder/conf/info.sh
 
 YIIMPOLL=/etc/yiimpool.conf
+if [[ -f "$YIIMPOLL" ]]; then
+    source /etc/yiimpool.conf
+    YIIMPCONF=true
+fi
+
 CREATECOIN=true
 
 # Set what we need
@@ -931,7 +936,7 @@ clear
 if [[ "$precompiled" == "true" ]]; then
 
     cd $WALLET_DIR
-
+    
     echo
 
     echo -e "$CYAN === List of files in $WALLET_DIR: $NC"
@@ -1075,7 +1080,6 @@ if [[ ("$precompiled" == "true") ]]; then
         
         sudo cp $COINDFIND /usr/bin
         sudo chmod +x /usr/bin/${coind}
-        sudo strip /usr/bin/${coind}
         coindmv=true
         
         echo
@@ -1092,7 +1096,6 @@ if [[ ("$precompiled" == "true") ]]; then
         
         sudo cp $COINCLIFIND /usr/bin
         sudo chmod +x /usr/bin/${coincli}
-        sudo strip /usr/bin/${coincli}
         coinclimv=true
         
         echo -e "$GREEN  Coin-cli moving to => /usr/bin/$NC$YELLOW${coincli} $NC"
@@ -1105,7 +1108,6 @@ if [[ ("$precompiled" == "true") ]]; then
         
         sudo cp $COINTXFIND /usr/bin
         sudo chmod +x /usr/bin/${cointx}
-        sudo strip /usr/bin/${cointx}
         cointxmv=true
         
         echo -e "$GREEN  Coin-tx moving to => /usr/bin/$NC$YELLOW${cointx} $NC"
@@ -1118,7 +1120,6 @@ if [[ ("$precompiled" == "true") ]]; then
         
         sudo cp $COINUTILFIND /usr/bin
         sudo chmod +x /usr/bin/${coinutil}
-        sudo strip /usr/bin/${coinutil}
         coinutilmv=true
         
         echo -e "$GREEN  Coin-tx moving to => /usr/bin/$NC$YELLOW${coinutil} $NC"
@@ -1131,7 +1132,6 @@ if [[ ("$precompiled" == "true") ]]; then
         
         sudo cp $COINHASHFIND /usr/bin
         sudo chmod +x /usr/bin/${coinhash}
-        sudo strip /usr/bin/${coinhash}
         coinhashmv=true
         
         echo -e "$GREEN  Coin-hash moving to => /usr/bin/$NC$YELLOW${coinwallet} $NC"
@@ -1156,85 +1156,67 @@ else
     echo
     echo -e "$CYAN --------------------------------------------------------------------------------------- $NC"
     echo
+    echo -e "$GREEN  Daemon moving to => /usr/bin/$NC$YELLOW${coind} $NC"
     
-    # Copy and strip daemon first
-    if [[ -f "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coind}" && ! -z "${coind}" ]]; then
-        echo -e "$GREEN  Daemon moving to => /usr/bin/${coind} $NC"
-        sudo cp "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coind}" "/usr/bin/${coind}"
-        sudo strip "/usr/bin/${coind}"
-        coindmv=true
+    sudo cp -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coind} /usr/bin
+    sudo strip /usr/bin/${coind}
+    coindmv=true
+    
+    if [[ ("$ifcoincli" == "y" || "$ifcoincli" == "Y") ]]; then
+        echo -e "$GREEN  CLI moving to => /usr/bin/$NC$YELLOW${coincli} $NC"
+        
+        sudo cp -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coincli} /usr/bin
+        sudo strip /usr/bin/${coincli}
+        coinclimv=true
     fi
     
-    # Copy and strip CLI if enabled
-    if [[ ("$ifcoincli" == "y" || "$ifcoincli" == "Y") && ! -z "${coincli}" ]]; then
-        if [[ -f "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coincli}" ]]; then
-            echo -e "$GREEN  CLI moving to => /usr/bin/${coincli} $NC"
-            sudo cp "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coincli}" "/usr/bin/${coincli}"
-            sudo strip "/usr/bin/${coincli}"
-            coinclimv=true
-        fi
+    if [[ ("$ifcointx" == "y" || "$ifcointx" == "Y") ]]; then
+        echo -e "$GREEN  TX moving to => /usr/bin/$NC$YELLOW${cointx} $NC"
+        
+        sudo cp -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${cointx} /usr/bin
+        sudo strip /usr/bin/${cointx}
+        cointxmv=true
     fi
     
-    # Copy and strip TX if enabled
-    if [[ ("$ifcointx" == "y" || "$ifcointx" == "Y") && ! -z "${cointx}" ]]; then
-        if [[ -f "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${cointx}" ]]; then
-            echo -e "$GREEN  TX moving to => /usr/bin/${cointx} $NC"
-            sudo cp "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${cointx}" "/usr/bin/${cointx}"
-            sudo strip "/usr/bin/${cointx}"
-            cointxmv=true
-        fi
+    if [[ ("$ifcoinutil" == "y" || "$ifcoinutil" == "Y") ]]; then
+        echo -e "$GREEN  UTIL moving to => /usr/bin/$NC$YELLOW${coinutil} $NC"
+        
+        sudo cp -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coinutil} /usr/bin
+        sudo strip /usr/bin/${coinutil}
+        coinutilmv=true
     fi
     
-    # Copy and strip UTIL if enabled
-    if [[ ("$ifcoinutil" == "y" || "$ifcoinutil" == "Y") && ! -z "${coinutil}" ]]; then
-        if [[ -f "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coinutil}" ]]; then
-            echo -e "$GREEN  UTIL moving to => /usr/bin/${coinutil} $NC"
-            sudo cp "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coinutil}" "/usr/bin/${coinutil}"
-            sudo strip "/usr/bin/${coinutil}"
-            coinutilmv=true
-        fi
+    if [[ ("$ifcoingtest" == "y" || "$ifcoingtest" == "Y") ]]; then
+        echo -e "$GREEN  GTEST moving to => /usr/bin/$NC$YELLOW${coingtest} $NC"
+        
+        sudo cp -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coingtest} /usr/bin
+        sudo strip /usr/bin/${coingtest}
+        coingtestmv=true
     fi
     
-    # Copy and strip GTEST if enabled
-    if [[ ("$ifcoingtest" == "y" || "$ifcoingtest" == "Y") && ! -z "${coingtest}" ]]; then
-        if [[ -f "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coingtest}" ]]; then
-            echo -e "$GREEN  GTEST moving to => /usr/bin/${coingtest} $NC"
-            sudo cp "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coingtest}" "/usr/bin/${coingtest}"
-            sudo strip "/usr/bin/${coingtest}"
-            coingtestmv=true
-        fi
+    if [[ ("$ifcointools" == "y" || "$ifcointools" == "Y") ]]; then
+        echo -e "$GREEN  TOOLS moving to => /usr/bin/$NC$YELLOW${cointools} $NC"
+        
+        sudo cp -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${cointools} /usr/bin
+        sudo strip /usr/bin/${cointools}
+        cointoolsmv=true
     fi
     
-    # Copy and strip TOOLS if enabled
-    if [[ ("$ifcointools" == "y" || "$ifcointools" == "Y") && ! -z "${cointools}" ]]; then
-        if [[ -f "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${cointools}" ]]; then
-            echo -e "$GREEN  TOOLS moving to => /usr/bin/${cointools} $NC"
-            sudo cp "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${cointools}" "/usr/bin/${cointools}"
-            sudo strip "/usr/bin/${cointools}"
-            cointoolsmv=true
-        fi
+    if [[ ("$ifcoinhash" == "y" || "$ifcoinhash" == "Y") ]]; then
+        echo -e "$GREEN  HASH moving to => /usr/bin/$NC$YELLOW${coinhash} $NC"
+        
+        sudo cp -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coinhash} /usr/bin
+        sudo strip /usr/bin/${coinhash}
+        coinhashmv=true
     fi
     
-    # Copy and strip HASH if enabled
-    if [[ ("$ifcoinhash" == "y" || "$ifcoinhash" == "Y") && ! -z "${coinhash}" ]]; then
-        if [[ -f "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coinhash}" ]]; then
-            echo -e "$GREEN  HASH moving to => /usr/bin/${coinhash} $NC"
-            sudo cp "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coinhash}" "/usr/bin/${coinhash}"
-            sudo strip "/usr/bin/${coinhash}"
-            coinhashmv=true
-        fi
+    if [[ ("$ifcoinwallet" == "y" || "$ifcoinwallet" == "Y") ]]; then
+        echo -e "$GREEN  WALLET moving to => /usr/bin/$NC$YELLOW${coinwallet} $NC"
+        
+        sudo cp -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coinwallet} /usr/bin
+        sudo strip /usr/bin/${coinwallet}
+        coinwalletmv=true
     fi
-    
-    # Copy and strip WALLET if enabled
-    if [[ ("$ifcoinwallet" == "y" || "$ifcoinwallet" == "Y") && ! -z "${coinwallet}" ]]; then
-        if [[ -f "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coinwallet}" ]]; then
-            echo -e "$GREEN  WALLET moving to => /usr/bin/${coinwallet} $NC"
-            sudo cp "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/${coinwallet}" "/usr/bin/${coinwallet}"
-            sudo strip "/usr/bin/${coinwallet}"
-            coinwalletmv=true
-        fi
-    fi
-    
     echo
     echo -e "$CYAN --------------------------------------------------------------------------------------- $NC"
     echo
@@ -1288,7 +1270,7 @@ if [[ ("$DAEMOND" != "true") ]]; then
 			# Your coin algo is = '""''"${COINALGO}"''""'
 			# Your dedicated port is = '""''"${COINPORT}"''""'
 			# Please adding dedicated port in line blocknotify= replace :XXXX to '""''"${COINPORT}"''""'
-            ' | sudo -E tee $STORAGE_ROOT/wallets/."${coind::-1}"/${coind::-1}.conf >/dev/null 2>&1;
+            ' | sudo -E tee ${absolutepath}/wallets/."${coind::-1}"/${coind::-1}.conf >/dev/null 2>&1;
         fi
     fi
     

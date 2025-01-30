@@ -234,16 +234,17 @@ echo
 echo -e "$YELLOW Starting your new stratum...${NC}"
 bash stratum.${coinsymbollower} start ${coinsymbollower}
 
-if [[ ("$CREATECOIN" == 'true') ]]; then
+if [[ ("$CREATECOIN" == "true") ]]; then
 	echo '
 	COINPORT='""''"${coinport}"''""'
 	COINALGO='""''"${coinalgo}"''""'
-	' | sudo -E tee $STORAGE_ROOT/daemon_builder/.addport.cnf >/dev/null 2>&1;
+	' | sudo -E tee $STORAGE_ROOT/daemon_builder/.addport.cnf >/dev/null 2>&1
 	echo -e "$CYAN --------------------------------------------------------------------------- 	${NC}"
 	echo -e "$GREEN    The assigned dedicated port for this coins stratum is :$YELLOW $coinport ${NC}"
 	echo -e "$GREEN    Addport finish return to config...										${NC}"
 	echo -e "$CYAN --------------------------------------------------------------------------- 	${NC}"
 	sleep 4
+	exit 0
 else
 	echo -e "$YELLOW Your new stratum is$GREEN started...$YELLOW Do NOT run the start command manually...${NC}"
 	echo
