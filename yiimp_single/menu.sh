@@ -5,7 +5,7 @@
 #
 # Author: Afiniel
 #
-# Updated: 2023-03-16
+# Updated: 2025-01-30
 #
 
 source /etc/yiimpooldonate.conf
@@ -20,19 +20,12 @@ RESULT=$(dialog --stdout --default-item 1 --title "YiimPool Yiimp Installer $VER
 case "$RESULT" in
     1)
         clear;
-        echo '
-        wireguard=true
-        ' | sudo -E tee "$HOME"/Yiimpoolv1/yiimp_single/.wireguard.install.cnf >/dev/null 2>&1;
+        echo 'wireguard=true' | sudo -E tee "$HOME"/Yiimpoolv1/yiimp_single/.wireguard.install.cnf >/dev/null 2>&1;
+        echo 'DBInternalIP=10.0.0.2' | sudo -E tee "$STORAGE_ROOT"/yiimp/.wireguard.conf >/dev/null 2>&1;
         ;;
     2)
         clear;
-        echo '
-        wireguard=true
-        DBInternalIP='10.0.0.2'
-        ' | sudo -E tee "$HOME"/Yiimpoolv1/yiimp_single/.wireguard.install.cnf >/dev/null 2>&1;
-        echo '
-        DBInternalIP='10.0.0.2'
-        ' | sudo -E tee "$HOME"/Yiimpoolv1/yiimp_single/.wireguard.conf >/dev/null 2>&1;
+        echo 'wireguard=false' | sudo -E tee "$HOME"/Yiimpoolv1/yiimp_single/.wireguard.install.cnf >/dev/null 2>&1;
         ;;
     3)
         clear;
