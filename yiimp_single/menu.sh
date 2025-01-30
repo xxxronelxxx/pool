@@ -27,8 +27,12 @@ case "$RESULT" in
     2)
         clear;
         echo '
-        wireguard=false
+        wireguard=true
+        DBInternalIP='10.0.0.2'
         ' | sudo -E tee "$HOME"/Yiimpoolv1/yiimp_single/.wireguard.install.cnf >/dev/null 2>&1;
+        echo '
+        DBInternalIP='10.0.0.2'
+        ' | sudo -E tee "$HOME"/Yiimpoolv1/yiimp_single/.wireguard.conf >/dev/null 2>&1;
         ;;
     3)
         clear;
