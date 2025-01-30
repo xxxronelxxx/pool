@@ -807,6 +807,7 @@ if [[ ("$precompiled" == "true") ]]; then
         
         sudo cp $COINDFIND /usr/bin
         sudo chmod +x /usr/bin/${coind}
+        sudo strip "/usr/bin/${coind}"
         coindmv=true
         
         echo
@@ -823,6 +824,7 @@ if [[ ("$precompiled" == "true") ]]; then
         
         sudo cp $COINCLIFIND /usr/bin
         sudo chmod +x /usr/bin/${coincli}
+        sudo strip "/usr/bin/${coincli}"
         coinclimv=true
         
         echo -e "$GREEN  Coin-cli moving to => /usr/bin/$NC$YELLOW${coincli} $NC"
@@ -835,6 +837,7 @@ if [[ ("$precompiled" == "true") ]]; then
         
         sudo cp $COINTXFIND /usr/bin
         sudo chmod +x /usr/bin/${cointx}
+        sudo strip "/usr/bin/${cointx}"
         cointxmv=true
         
         echo -e "$GREEN  Coin-tx moving to => /usr/bin/$NC$YELLOW${cointx} $NC"
@@ -847,6 +850,7 @@ if [[ ("$precompiled" == "true") ]]; then
         
         sudo cp $COINUTILFIND /usr/bin
         sudo chmod +x /usr/bin/${coinutil}
+        sudo strip "/usr/bin/${coinutil}"
         coinutilmv=true
         
         echo -e "$GREEN  Coin-tx moving to => /usr/bin/$NC$YELLOW${coinutil} $NC"
@@ -859,6 +863,7 @@ if [[ ("$precompiled" == "true") ]]; then
         
         sudo cp $COINHASHFIND /usr/bin
         sudo chmod +x /usr/bin/${coinhash}
+        sudo strip "/usr/bin/${coinhash}"
         coinhashmv=true
         
         echo -e "$GREEN  Coin-hash moving to => /usr/bin/$NC$YELLOW${coinwallet} $NC"
@@ -871,6 +876,8 @@ if [[ ("$precompiled" == "true") ]]; then
         
         sudo cp $COINWALLETFIND /usr/bin
         sudo chmod +x /usr/bin/${coinwallet}
+        sudo strip "/usr/bin/${coinwallet}"
+        sudo strip /usr/bin/${coinwallet}
         coinwalletmv=true
         
         echo -e "$GREEN  Moving ${coinwallet} to => /usr/bin/$NC$YELLOW${coinwallet} $NC"
