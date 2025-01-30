@@ -17,21 +17,21 @@ RESULT=$(dialog --stdout --default-item 1 --title "YiimPool Yiimp Installer $VER
     2 "No" \
     3 exit)
 
-if [ "$RESULT" = "1" ]; then
-    clear;
-    echo '
-    wireguard=true
-    ' | sudo -E tee "$HOME"/Yiimpoolv1/yiimp_single/.wireguard.install.cnf >/dev/null 2>&1;
-    
-
-elif [ "$RESULT" = "2" ]; then
-    clear;
-    echo '
-    wireguard=false
-    ' | sudo -E tee "$HOME"/Yiimpoolv1/yiimp_single/.wireguard.install.cnf >/dev/null 2>&1;
-    
-
-elif [ "$RESULT" = "3" ]; then
-    clear;
-    exit;
-fi
+case "$RESULT" in
+    1)
+        clear;
+        echo '
+        wireguard=true
+        ' | sudo -E tee "$HOME"/Yiimpoolv1/yiimp_single/.wireguard.install.cnf >/dev/null 2>&1;
+        ;;
+    2)
+        clear;
+        echo '
+        wireguard=false
+        ' | sudo -E tee "$HOME"/Yiimpoolv1/yiimp_single/.wireguard.install.cnf >/dev/null 2>&1;
+        ;;
+    3)
+        clear;
+        exit;
+        ;;
+esac

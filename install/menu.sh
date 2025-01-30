@@ -19,21 +19,21 @@ RESULT=$(dialog --stdout --nocancel --default-item 1 --title "YiimPool Menu $VER
     2 "Upgrade Yiimp Stratum Server" \
     3 "Exit")
 
-# Handle user selection
-if [ "$RESULT" = "1" ]; then
-    clear
-    echo "Preparing to install Yiimp Single Server..."
-    cd $HOME/Yiimpoolv1/yiimp_single
-    source start.sh
-
-elif [ "$RESULT" = "2" ]; then
-    clear
-    echo "Preparing to upgrade Yiimp Stratum Server..."
-    cd $HOME/Yiimpoolv1/yiimp_upgrade
-    source start.sh
-
-elif [ "$RESULT" = "3" ]; then
-    clear
-    echo "Exiting YiimPool Menu."
-    exit
-fi
+case "$RESULT" in
+    1)
+        clear
+        echo "Preparing to install Yiimp Single Server..."
+        cd $HOME/Yiimpoolv1/yiimp_single
+        source start.sh
+        ;;
+    2)
+        clear
+        echo "Preparing to upgrade Yiimp Stratum Server..."
+        cd $HOME/Yiimpoolv1/yiimp_upgrade
+        source start.sh
+        ;;
+    3)
+        clear
+        exit
+        ;;
+esac

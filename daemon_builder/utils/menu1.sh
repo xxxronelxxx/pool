@@ -1,7 +1,7 @@
 #!/bin/env bash
 
 #
-# This is the main menu For Daemon Builder
+# This is the build option menu
 #
 # Author: Afiniel
 #
@@ -24,71 +24,80 @@ RESULT=$(dialog --stdout --title "DaemonBuilder $VERSION" --menu "Choose an opti
     8 "Install precompiled coin. NEED TO BE LINUX Version!" \
     9 exit)
 
-if [ "$RESULT" = "1" ]; then
-    clear;
-    echo '
-    autogen=true
-    berkeley="4.8"
-    ' | sudo -E tee $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf >/dev/null 2>&1;
-    source source.sh;
+case "$RESULT" in
+    1)
+        clear;
+        echo '
+        autogen=true
+        berkeley="4.8"
+        ' | sudo -E tee $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf >/dev/null 2>&1;
+        source source.sh;
+        ;;
 
-elif [ "$RESULT" = "2" ]; then
-    clear;
-    echo '
-    autogen=true
-    berkeley="5.1"
-    ' | sudo -E tee $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf >/dev/null 2>&1;
-    source source.sh;
+    2)
+        clear;
+        echo '
+        autogen=true
+        berkeley="5.1"
+        ' | sudo -E tee $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf >/dev/null 2>&1;
+        source source.sh;
+        ;;
 
-elif [ "$RESULT" = "3" ]; then
-    clear;
-    echo '
-    autogen=true
-    berkeley="5.3"
-    ' | sudo -E tee $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf >/dev/null 2>&1;
-    source source.sh;
+    3)
+        clear;
+        echo '
+        autogen=true
+        berkeley="5.3"
+        ' | sudo -E tee $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf >/dev/null 2>&1;
+        source source.sh;
+        ;;
 
-elif [ "$RESULT" = "4" ]; then
-    clear;
-    echo '
-    autogen=true
-    berkeley="6.2"
-    ' | sudo -E tee $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf >/dev/null 2>&1;
-    source source.sh;
+    4)
+        clear;
+        echo '
+        autogen=true
+        berkeley="6.2"
+        ' | sudo -E tee $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf >/dev/null 2>&1;
+        source source.sh;
+        ;;
+    5)
+        clear;
+        echo '
+        autogen=false
+        unix=true
+        ' | sudo -E tee $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf >/dev/null 2>&1;
+        source source.sh;
+        ;;
 
-elif [ "$RESULT" = "5" ]; then
-    clear;
-    echo '
-    autogen=false
-    unix=true
-    ' | sudo -E tee $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf >/dev/null 2>&1;
-    source source.sh;
+    6)
+        clear;
+        echo '
+        autogen=false
+        cmake=true
+        ' | sudo -E tee $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf >/dev/null 2>&1;
+        source source.sh;
+        ;;
 
-elif [ "$RESULT" = "6" ]; then
-    clear;
-    echo '
-    autogen=false
-    cmake=true
-    ' | sudo -E tee $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf >/dev/null 2>&1;
-    source source.sh;
+    7)
+        clear;
+        echo '
+        buildutil=true
+        autogen=true
+        ' | sudo -E tee $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf >/dev/null 2>&1;
+        source source.sh;
+        ;;
 
-    elif [ "$RESULT" = "7" ]; then
-    clear;
-    echo '
-    buildutil=true
-    autogen=true
-    ' | sudo -E tee $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf >/dev/null 2>&1;
-    source source.sh;
+    8)
+        clear;
+        echo '
+        precompiled=true
+        ' | sudo -E tee $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf >/dev/null 2>&1;
+        source source.sh;
+        ;;
 
-elif [ "$RESULT" = "8" ]; then
-    clear;
-    echo '
-    precompiled=true
-    ' | sudo -E tee $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf >/dev/null 2>&1;
-    source source.sh;
-
-elif [ "$RESULT" = "9" ]; then
-    clear;
-    echo "You have chosen to exit the Daemon Builder. Type: daemonbuilder anytime to start the menu again.";
-    exit;
-fi
+    9)
+        clear;
+        echo "You have chosen to exit the Daemon Builder. Type: daemonbuilder anytime to start the menu again.";
+        exit;
+        ;;
+esac
