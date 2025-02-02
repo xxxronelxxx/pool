@@ -14,10 +14,11 @@
 ##########################################
 
 # Load configuration files
-source "$HOME/Yiimpoolv1/yiimp_single/.wireguard.install.cnf"
-source "$STORAGE_ROOT/yiimp/.wireguard.conf"
-source "/etc/functions.sh"
-source "/etc/yiimpool.conf"
+source $HOME/Yiimpoolv1/yiimp_single/.wireguard.install.cnf
+source $STORAGE_ROOT/yiimp/.wireguard.conf
+source $STORAGE_ROOT/yiimp/.wireguard_public.conf
+source /etc/functions.sh
+source /etc/yiimpool.conf
 
 # Display banner
 term_art
@@ -26,9 +27,15 @@ echo -e "$MAGENTA     <--$YELLOW Installing WireGuard$MAGENTA -->${NC}"
 echo -e "$MAGENTA    <-------------------------->${NC}"
 
 # Add WireGuard repository and install packages
-sudo add-apt-repository ppa:wireguard/wireguard -y
-sudo apt-get update -y
-sudo apt-get install wireguard-dkms wireguard-tools -y
+if [[ "$DISTRO" == "16" || "$DISTRO" == "18" || "$DISTRO" == "20" || "$DISTRO" == "22" || "$DISTRO" == "24" ]]; then
+    hide_output sudo add-apt-repository ppa:wireguard/wireguard -y
+    hide_output sudo apt-get update
+    hide_output sudo apt-get install wireguard-dkms wireguard-tools -y
+fi
+
+if [[ "$DISTRO" == "12" ]]; then
+    hide_output sudo apt-get install -y wireguard
+fi
 
 # Generate WireGuard keys
 wg_private_key=$(wg genkey)
@@ -59,4 +66,4 @@ echo -e "Public IP: ${dbpublic}\nPublic Key: ${mypublic}" | sudo -E tee "$STORAG
 echo
 echo -e "$GREEN WireGuard setup completed $NC"
 
-cd "$HOME/yiimpool/yiimp_single"
+cd $HOME/yiimpool/yiimp_single
