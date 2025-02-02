@@ -15,8 +15,8 @@
 source /etc/functions.sh
 source /etc/yiimpoolversion.conf
 source /etc/yiimpool.conf
-source "$STORAGE_ROOT/yiimp/.yiimp.conf"
-source "$HOME/Yiimpoolv1/yiimp_single/.wireguard.install.cnf"
+source $STORAGE_ROOT/yiimp/.yiimp.conf
+source $HOME/Yiimpoolv1/yiimp_single/.wireguard.install.cnf
 
 # Set error handling and log errors
 set -eu -o pipefail
@@ -34,7 +34,7 @@ term_art
 echo
 # Load WireGuard configuration if enabled
 if [[ ("$wireguard" == "true") ]]; then
-    source "$STORAGE_ROOT/yiimp/.wireguard_public.conf"
+    source $STORAGE_ROOT/yiimp/.wireguard.conf
 fi
 
 # Define MariaDB version
@@ -116,10 +116,8 @@ SQL_FILES=(
     2024-04-01-add_auto_exchange.sql
     2024-04-01-shares_blocknumber.sql
     2024-04-05-algos_port_color.sql
-    2024-04-22-add_equihash_algos.sql
     2024-04-23-add_pers_string.sql
     2024-04-29-add_sellthreshold.sql
-    2024-05-04-add_neoscrypt_xaya_algo.sql
 )
 
 for file in "${SQL_FILES[@]}"; do
