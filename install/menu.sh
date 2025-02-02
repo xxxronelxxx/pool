@@ -8,16 +8,17 @@
 #
 
 # Load configuration and functions
-source /etc/yiimpooldonate.conf
+source /etc/yiimpool.conf
+source /etc/yiimpoolversion.conf
 source /etc/functions.sh
 
 # Display menu and capture user selection
 RESULT=$(dialog --stdout --nocancel --default-item 1 --title "YiimPool Menu $VERSION" --menu "Choose an option" -1 55 7 \
     ' ' "- Install Yiimp -" \
     1 "Install Yiimp Single Server" \
-    ' ' "- Upgrade Yiimp Stratum -" \
     2 "Upgrade Yiimp Stratum Server" \
-    3 "Exit")
+    3 "Options" \
+    4 "Exit")
 
 case "$RESULT" in
     1)
@@ -33,6 +34,10 @@ case "$RESULT" in
         source start.sh
         ;;
     3)
+        clear
+        source options.sh
+        ;;
+    4)
         clear
         exit
         ;;

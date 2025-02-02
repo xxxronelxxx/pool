@@ -15,6 +15,8 @@
 # Date: 2024-07-15
 ##########################################
 
+export TERM=xterm
+
 # Load configuration files
 source /etc/functions.sh
 source /etc/yiimpool.conf
@@ -91,7 +93,6 @@ EOF
 
 sudo chmod +x $STORAGE_ROOT/yiimp/site/stratum/config/run.sh
 
-# Create main run.sh for stratum
 sudo tee $STORAGE_ROOT/yiimp/site/stratum/run.sh > /dev/null <<'EOF'
 #!/usr/bin/env bash
 source /etc/yiimpool.conf
@@ -120,8 +121,52 @@ sudo sed -i "s/password = patofpaq/password = $StratumUserDBPassword/g" *.conf
 sudo setfacl -m u:$USER:rwx $STORAGE_ROOT/yiimp/site/stratum/
 sudo setfacl -m u:$USER:rwx $STORAGE_ROOT/yiimp/site/stratum/config
 
-sleep 1.5
-term_art
-echo -e "$GREEN => Stratum build complete $NC"
+# copy blocknotify to daemon servers
+# set daemon user and password
+DaemonUser=${DaemonUser}
+DaemonPass="${DaemonPass}"
+DaemonServer=${DaemonInternalIP}
 
-cd $HOME/Yiimpoolv1/yiimp_single
+# set script paths
+script_blocknotify="${STORAGE_ROOT}/yiimp/site/stratum/blocknotify"
+
+# Desired location of the scripts on the remote server.
+remote_script_blocknotify_path="/tmp/blocknotify"
+
+# set ssh Stratum
+SSH_ASKPASS_SCRIPT=/tmp/ssh-askpass-script
+cat > ${SSH_ASKPASS_SCRIPT} <<EOL
+#!/usr/bin/env bash
+echo '${DaemonPass}'
+EOL
+chmod u+x ${SSH_ASKPASS_SCRIPT}
+
+# Set no display, necessary for ssh to play nice with setsid and SSH_ASKPASS.
+export DISPLAY=:0
+
+# Tell SSH to read in the output of the provided script as the password.
+# We still have to use setsid to eliminate access to a terminal and thus avoid
+# it ignoring this and asking for a password.
+export SSH_ASKPASS=${SSH_ASKPASS_SCRIPT}
+
+# LogLevel error is to suppress the hosts warning. The others are
+# necessary if working with development servers with self-signed
+# certificates.
+SSH_OPTIONS="-oLogLevel=error"
+SSH_OPTIONS="${SSH_OPTIONS} -oStrictHostKeyChecking=no"
+SSH_OPTIONS="${SSH_OPTIONS} -oUserKnownHostsFile=/dev/null"
+
+# Load in a base 64 encoded version of the script.
+B64_blocknotify=`base64 --wrap=0 ${script_blocknotify}`
+
+# The command that will run remotely. This unpacks the
+# base64-encoded script, makes it executable, and then
+# executes it as a background task.
+blocknotify="base64 -d - > ${remote_script_blocknotify_path} <<< ${B64_blocknotify};"
+blocknotify="${blocknotify} chmod +x ${remote_script_blocknotify_path}; > /dev/null 2>&1 &"
+
+# Execute scripts on remote server
+setsid ssh ${SSH_OPTIONS} ${DaemonUser}@${DaemonServer} "${blocknotify}"
+
+echo -e "$GREEN Stratum server build complete...$COL_RESET"
+exit 0

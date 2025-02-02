@@ -34,7 +34,7 @@ term_art
 echo
 # Load WireGuard configuration if enabled
 if [[ ("$wireguard" == "true") ]]; then
-    source "$STORAGE_ROOT/yiimp/.wireguard.conf"
+    source "$STORAGE_ROOT/yiimp/.wireguard_public.conf"
 fi
 
 # Define MariaDB version

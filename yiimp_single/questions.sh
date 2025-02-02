@@ -191,6 +191,23 @@ generate_random_password_yiimp_admin() {
     fi
 }
 
+# Function for secure password handling for blocknotify
+generate_random_password_blocknotify() {
+    local default_value=$1
+    local variable_name=$2
+    if [ -z "${!variable_name:-}" ]; then
+        local default_password=$(openssl rand -base64 29 | tr -d "=+/")
+        input_box "Blocknotify Password" \
+        "Enter your desired blocknotify password.\n\nYou may use the system generated password shown.\n\nThis will be used for coin blocknotify.\n\nDesired Blocknotify Password:" \
+        "${default_password}" \
+        "${variable_name}"
+
+        if [ -z "${!variable_name}" ]; then
+            exit
+        fi
+    fi
+}
+
 # Function for YiiMP admin username
 generate_yiimp_admin_user() {
     local default_value=$1
@@ -217,6 +234,9 @@ generate_random_password_database "${DEFAULT_StratumUserDBPassword}" "StratumUse
 generate_yiimp_admin_user "${DEFAULT_AdminUser}" "AdminUser"
 generate_random_password_yiimp_admin "${DEFAULT_AdminPassword}" "AdminPassword"
 
+# Generate blocknotify password
+generate_random_password_blocknotify "${DEFAULT_BlocknotifyPassword}" "BlocknotifyPassword"
+
 # Generate unique names for YiiMP DB and users for increased security
 YiiMPDBName=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13)
 YiiMPPanelName=Panel$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13)
@@ -230,7 +250,7 @@ dialog --title "Verify Your Responses" \
 Using Domain          : ${UsingDomain}
 Using Sub-Domain      : ${UsingSubDomain}
 Domain Name           : ${DomainName}
-Stratum URL           : ${StratumURL}
+Stratum URL          : ${StratumURL}
 Install SSL           : ${InstallSSL}
 System Email          : ${SupportEmail}
 Admin Panel Location  : ${AdminPanel}
@@ -264,6 +284,7 @@ case $response in
                   StratumUserDBPassword='${StratumUserDBPassword}'
                   AdminPassword='${AdminPassword}'
                   AdminUser='${AdminUser}'
+                  BlocknotifyPassword='${BlocknotifyPassword}'
                   YiiMPRepo='https://github.com/Kudaraidee/yiimp.git'" | sudo -E tee "$STORAGE_ROOT/yiimp/.yiimp.conf" >/dev/null 2>&1
         else
             echo "STORAGE_USER=${STORAGE_USER}
@@ -286,6 +307,7 @@ case $response in
                   StratumUserDBPassword='${StratumUserDBPassword}'
                   AdminPassword='${AdminPassword}'
                   AdminUser='${AdminUser}'
+                  BlocknotifyPassword='${BlocknotifyPassword}'
                   YiiMPRepo='https://github.com/Kudaraidee/yiimp.git'" | sudo -E tee "$STORAGE_ROOT/yiimp/.yiimp.conf" >/dev/null 2>&1
         fi
         ;;

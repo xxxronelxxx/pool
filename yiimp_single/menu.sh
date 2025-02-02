@@ -21,7 +21,7 @@ case "$RESULT" in
     1)
         clear;
         echo 'wireguard=true' | sudo -E tee "$HOME"/Yiimpoolv1/yiimp_single/.wireguard.install.cnf >/dev/null 2>&1;
-        echo 'DBInternalIP=10.0.0.2' | sudo -E tee "$STORAGE_ROOT"/yiimp/.wireguard.conf >/dev/null 2>&1;
+        echo 'DBInternalIP=10.0.0.2' | sudo -E tee "$STORAGE_ROOT"/yiimp/.wireguard_public.conf >/dev/null 2>&1;
         ;;
     2)
         clear;
