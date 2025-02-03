@@ -65,7 +65,7 @@ elif [[ "$DISTRO" == "20" || "$DISTRO" == "22" || "$DISTRO" == "23" || "$DISTRO"
     sudo ln -s /snap/bin/certbot /usr/bin/certbot
     echo -e "$GREEN => Complete${NC}"
 
-elif [[ "$DISTRO" == "12" ]]; then
+elif [[ "$DISTRO" == "12" || "$DISTRO" == "11" ]]; then
     echo -e "$MAGENTA => Installing CertBot PPA <= ${NC}"
     hide_output sudo apt install -y certbot
     echo -e "$GREEN => Complete${NC}"
@@ -104,6 +104,9 @@ case "$DISTRO" in
         ;;
     "12")   # Debian 12
         sudo add-apt-repository -y 'deb [arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/11.6/debian bookworm main' >/dev/null 2>&1
+        ;;
+    "11")   # Debian 11
+        sudo add-apt-repository -y 'deb [arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/10.6/debian bullseye main' >/dev/null 2>&1
         ;;
     *)
         echo "Unsupported Ubuntu version: $DISTRO"
@@ -203,7 +206,7 @@ if [[ "$DISTRO" == "16" || "$DISTRO" == "18" || "$DISTRO" == "20" || "$DISTRO" =
     if [ ! -f /etc/apt/sources.list.d/ondrej-php-bionic.list ]; then
         hide_output sudo add-apt-repository -y ppa:ondrej/php
     fi
-elif [[ "$DISTRO" == "12" ]]; then
+elif [[ "$DISTRO" == "12" || "$DISTRO" == "11" ]]; then
     if [ ! -f /etc/apt/sources.list.d/ondrej-php.list ]; then
         hide_output sudo apt-get install -y apt-transport-https lsb-release ca-certificates
         wget -qO - https://packages.sury.org/php/apt.gpg | sudo apt-key add -
@@ -232,7 +235,7 @@ if [[ "$DISTRO" == "16" || "$DISTRO" == "18" || "$DISTRO" == "20" || "$DISTRO" =
     apt_install php8.1-mysql
     apt_install libssh-dev libbrotli-dev php8.2-curl
 
-elif [[ "$DISTRO" == "12" ]]; then
+elif [[ "$DISTRO" == "12" || "$DISTRO" == "11" ]]; then
     # Install packages specific to Debian 12
     apt_install php7.3-fpm php7.3-opcache php7.3 php7.3-common php7.3-gd
     apt_install php7.3-mysql php7.3-imap php7.3-cli php7.3-cgi
@@ -263,7 +266,7 @@ if [[ ("$DISTRO" == "20" ) || "$DISTRO" == "22" || "$DISTRO" == "23" || "$DISTRO
 	sudo systemctl start php8.2-fpm
 	sudo systemctl status php8.2-fpm | sed -n "1,3p"
 
-    elif [[ "$DISTRO" == "12" ]]; then
+    elif [[ "$DISTRO" == "12" || "$DISTRO" == "11" ]]; then
     
     apt_install php8.2-fpm php8.2-opcache php8.2 php8.2-common php8.2-gd php8.2-mysql php8.2-imap php8.2-cli
     apt_install php8.2-cgi php8.2-curl php8.2-intl php8.2-pspell

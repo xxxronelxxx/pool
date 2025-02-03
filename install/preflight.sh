@@ -36,6 +36,8 @@ else
     DEBIAN_DESCRIPTION=$(cat /etc/debian_version | cut -d. -f1)
     if [[ "${DEBIAN_DESCRIPTION}" == "12" ]]; then
         DISTRO=12
+    elif [[ "${DEBIAN_DESCRIPTION}" == "11" ]]; then
+        DISTRO=11
     else
         echo "This script only supports Ubuntu 16.04, 18.04, 20.04, 23.04, and 24.04. Debian 12 is also supported."
         exit 1

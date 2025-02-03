@@ -36,6 +36,7 @@ This installer provides an automated way to set up a full Yiimp mining pool on U
 
 ## Supported Debian Version
 - Debian 12 Install Works But System not tested
+- Debian 11 Install Works But System not tested
 
 ## Quick Install
 

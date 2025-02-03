@@ -33,7 +33,7 @@ if [[ "$DISTRO" == "16" || "$DISTRO" == "18" || "$DISTRO" == "20" || "$DISTRO" =
     hide_output sudo apt-get install wireguard-dkms wireguard-tools -y
 fi
 
-if [[ "$DISTRO" == "12" ]]; then
+if [[ "$DISTRO" == "12" || "$DISTRO" == "11" ]]; then
     hide_output sudo apt-get install -y wireguard
 fi
 
