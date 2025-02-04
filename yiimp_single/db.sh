@@ -168,8 +168,9 @@ echo
 echo -e "$YELLOW => Creating Phpmyadmin User <= ${NC}"
 echo
 
-sudo mysql -u root -p"${DBRootPassword}" -e "CREATE USER '${PHPMyAdminUser}'@'localhost' IDENTIFIED BY '${PHPMyAdminPassword}';"
-sudo mysql -u root -p"${DBRootPassword}" -e "GRANT ALL PRIVILEGES ON *.* TO '${PHPMyAdminUser}'@'localhost' WITH GRANT OPTION;"
+# Create phpMyAdmin user
+sudo mysql -u root -p"${DBRootPassword}" -e "CREATE USER '${PHPMyAdminUser}'@'%' IDENTIFIED BY '${PHPMyAdminPassword}';"
+sudo mysql -u root -p"${DBRootPassword}" -e "GRANT ALL PRIVILEGES ON *.* TO '${PHPMyAdminUser}'@'%' WITH GRANT OPTION;"
 sudo mysql -u root -p"${DBRootPassword}" -e "FLUSH PRIVILEGES;"
 
 echo -e "$GREEN => Complete${NC}"
