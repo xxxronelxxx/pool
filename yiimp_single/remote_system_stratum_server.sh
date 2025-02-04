@@ -219,37 +219,37 @@ hide_output sudo apt-get update
 
 if [[ "$DISTRO" == "16" || "$DISTRO" == "18" || "$DISTRO" == "20" || "$DISTRO" == "22" || "$DISTRO" == "23" || "$DISTRO" == "24" ]]; then
 
-    apt_install php8.1-fpm php7.3-opcache php7.3 php7.3-common php7.3-gd
-    apt_install php7.3-mysql php7.3-imap php7.3-cli php7.3-cgi
+    apt_install php8.1-fpm php8.1-opcache php8.1 php8.1-common php8.1-gd
+    apt_install php8.1-mysql php8.1-imap php8.1-cli php8.1-cgi
     apt_install php-pear php-auth-sasl mcrypt imagemagick libruby
-    apt_install php7.3-curl php7.3-intl php7.3-pspell php7.3-recode php7.3-sqlite3
-    apt_install php7.3-tidy php7.3-xmlrpc php7.3-xsl memcached php-memcache
-    apt_install php-imagick php-gettext php7.3-zip php7.3-mbstring
+    apt_install php8.1-curl php8.1-intl php8.1-pspell php8.1-recode php8.1-sqlite3
+    apt_install php8.1-tidy php8.1-xmlrpc php8.1-xsl memcached php-memcache
+    apt_install php-imagick php-gettext php8.1-zip php8.1-mbstring
     apt_install fail2ban ntpdate python3 python3-dev python3-pip
     apt_install curl git sudo coreutils pollinate unzip unattended-upgrades cron
     apt_install pwgen libgmp3-dev libmysqlclient-dev libcurl4-gnutls-dev
     apt_install libkrb5-dev libldap2-dev libidn11-dev gnutls-dev librtmp-dev
     apt_install build-essential libtool autotools-dev automake pkg-config libevent-dev bsdmainutils libssl-dev
     apt_install automake cmake gnupg2 ca-certificates lsb-release nginx certbot libsodium-dev
-    apt_install libnghttp2-dev librtmp-dev libssh2-1 libssh2-1-dev libldap2-dev libidn11-dev libpsl-dev libkrb5-dev php7.3-memcache php7.3-memcached memcached
+    apt_install libnghttp2-dev librtmp-dev libssh2-1 libssh2-1-dev libldap2-dev libidn11-dev libpsl-dev libkrb5-dev php8.1-memcache php8.1-memcached memcached
     apt_install php8.1-mysql
     apt_install libssh-dev libbrotli-dev php8.1-curl
 
 elif [[ "$DISTRO" == "12" || "$DISTRO" == "11" ]]; then
     # Install packages specific to Debian 12
-    apt_install php8.1-fpm php7.3-opcache php7.3 php7.3-common php7.3-gd
-    apt_install php7.3-mysql php7.3-imap php7.3-cli php7.3-cgi
+    apt_install php8.1-fpm php8.1-opcache php8.1 php8.1-common php8.1-gd
+    apt_install php8.1-mysql php8.1-imap php8.1-cli php8.1-cgi
     apt_install php-pear php-auth-sasl mcrypt imagemagick libruby
-    apt_install php7.3-curl php7.3-intl php7.3-pspell php7.3-recode php7.3-sqlite3
-    apt_install php7.3-tidy php7.3-xmlrpc php7.3-xsl memcached php-memcache
-    apt_install php-imagick php-gettext php7.3-zip php7.3-mbstring
+    apt_install php8.1-curl php8.1-intl php8.1-pspell php8.1-recode php8.1-sqlite3
+    apt_install php8.1-tidy php8.1-xmlrpc php8.1-xsl memcached php-memcache
+    apt_install php-imagick php-gettext php8.1-zip php8.1-mbstring
     apt_install fail2ban ntpdate python3 python3-dev python3-pip
     apt_install curl git sudo coreutils pollinate unzip unattended-upgrades cron
     apt_install pwgen libgmp3-dev libmysqlclient-dev libcurl4-gnutls-dev
     apt_install libkrb5-dev libldap2-dev libidn11-dev gnutls-dev librtmp-dev
     apt_install build-essential libtool autotools-dev automake pkg-config libevent-dev bsdmainutils libssl-dev
     apt_install automake cmake gnupg2 ca-certificates lsb-release nginx certbot libsodium-dev
-    apt_install libnghttp2-dev librtmp-dev libssh2-1 libssh2-1-dev libldap2-dev libidn11-dev libpsl-dev libkrb5-dev php7.3-memcache php7.3-memcached memcached
+    apt_install libnghttp2-dev librtmp-dev libssh2-1 libssh2-1-dev libldap2-dev libidn11-dev libpsl-dev libkrb5-dev php8.1-memcache php8.1-memcached memcached
     apt_install php8.1-mysql
     apt_install libssh-dev libbrotli-dev php8.1-curl
 
@@ -279,7 +279,7 @@ if [[ ("$DISTRO" == "20" ) || "$DISTRO" == "22" || "$DISTRO" == "23" || "$DISTRO
 fi
 
 echo -e "$CYAN => Fixing DB connection issue... ${NC}"
-sudo update-alternatives --set php /usr/bin/php7.3
+sudo update-alternatives --set php /usr/bin/php8.1
 
 echo
 echo -e "$CYAN => Cloning Yiimp Repo <= ${NC}"
