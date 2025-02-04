@@ -198,67 +198,29 @@ fi
 
 hide_output sudo apt-get update
 
-if [[ "$DISTRO" == "16" || "$DISTRO" == "18" || "$DISTRO" == "20" || "$DISTRO" == "22" || "$DISTRO" == "23" || "$DISTRO" == "24" ]]; then
+# Common PHP packages for all distros
+hide_output sudo apt-get install -y php8.1-fpm php8.1-opcache php8.1 php8.1-common php8.1-gd \
+    php8.1-mysql php8.1-imap php8.1-cli php8.1-cgi php8.1-curl php8.1-intl php8.1-pspell \
+    php8.1-sqlite3 php8.1-tidy php8.1-xmlrpc php8.1-xsl php8.1-zip php8.1-mbstring \
+    php8.1-memcache php8.1-memcached memcached certbot libssh-dev libbrotli-dev \
+    php-pear php-auth-sasl mcrypt imagemagick libruby php-imagick php-gettext \
+    fail2ban ntpdate python3 python3-dev python3-pip curl git sudo coreutils \
+    pollinate unzip unattended-upgrades cron pwgen libgmp3-dev libmysqlclient-dev \
+    libcurl4-gnutls-dev libkrb5-dev libldap2-dev libidn11-dev gnutls-dev librtmp-dev \
+    build-essential libtool autotools-dev automake pkg-config libevent-dev bsdmainutils \
+    libssl-dev automake cmake gnupg2 ca-certificates lsb-release nginx certbot libsodium-dev \
+    libnghttp2-dev librtmp-dev libssh2-1 libssh2-1-dev libldap2-dev libidn11-dev libpsl-dev libkrb5-dev
 
-    apt_install php8.1-fpm php8.1-opcache php8.1 php8.1-common php8.1-gd
-    apt_install php8.1-mysql php8.1-imap php8.1-cli php8.1-cgi
-    apt_install php-pear php-auth-sasl mcrypt imagemagick libruby
-    apt_install php8.1-curl php8.1-intl php8.1-pspell php8.1-recode php8.1-sqlite3
-    apt_install php8.1-tidy php8.1-xmlrpc php8.1-xsl memcached php-memcache
-    apt_install php-imagick php-gettext php8.1-zip php8.1-mbstring
-    apt_install fail2ban ntpdate python3 python3-dev python3-pip
-    apt_install curl git sudo coreutils pollinate unzip unattended-upgrades cron
-    apt_install pwgen libgmp3-dev libmysqlclient-dev libcurl4-gnutls-dev
-    apt_install libkrb5-dev libldap2-dev libidn11-dev gnutls-dev librtmp-dev
-    apt_install build-essential libtool autotools-dev automake pkg-config libevent-dev bsdmainutils libssl-dev
-    apt_install automake cmake gnupg2 ca-certificates lsb-release nginx certbot libsodium-dev
-    apt_install libnghttp2-dev librtmp-dev libssh2-1 libssh2-1-dev libldap2-dev libidn11-dev libpsl-dev libkrb5-dev php8.1-memcache php8.1-memcached memcached
-    apt_install php8.1-mysql
-    apt_install libssh-dev libbrotli-dev php8.1-curl
+sleep 2
 
-elif [[ "$DISTRO" == "12" || "$DISTRO" == "11" ]]; then
-    # Install packages specific to Debian 12
-    apt_install php8.1-fpm php8.1-opcache php8.1 php8.1-common php8.1-gd
-    apt_install php8.1-mysql php8.1-imap php8.1-cli php8.1-cgi
-    apt_install php-pear php-auth-sasl mcrypt imagemagick libruby
-    apt_install php8.1-curl php8.1-intl php8.1-pspell php8.1-recode php8.1-sqlite3
-    apt_install php8.1-tidy php8.1-xmlrpc php8.1-xsl memcached php-memcache
-    apt_install php-imagick php-gettext php8.1-zip php8.1-mbstring
-    apt_install fail2ban ntpdate python3 python3-dev python3-pip
-    apt_install curl git sudo coreutils pollinate unzip unattended-upgrades cron
-    apt_install pwgen libgmp3-dev libmysqlclient-dev libcurl4-gnutls-dev
-    apt_install libkrb5-dev libldap2-dev libidn11-dev gnutls-dev librtmp-dev
-    apt_install build-essential libtool autotools-dev automake pkg-config libevent-dev bsdmainutils libssl-dev
-    apt_install automake cmake gnupg2 ca-certificates lsb-release nginx certbot libsodium-dev
-    apt_install libnghttp2-dev librtmp-dev libssh2-1 libssh2-1-dev libldap2-dev libidn11-dev libpsl-dev libkrb5-dev php8.1-memcache php8.1-memcached memcached
-    apt_install php8.1-mysql
-    apt_install libssh-dev libbrotli-dev php8.1-curl
-
-fi
-
-if [[ ("$DISTRO" == "20" ) || "$DISTRO" == "22" || "$DISTRO" == "23" || "$DISTRO" == "24" ]]; then
-
-	apt_install php8.1-fpm php8.1-opcache php8.1 php8.1-common php8.1-gd php8.1-mysql php8.1-imap php8.1-cli
-	apt_install php8.1-cgi php8.1-curl php8.1-intl php8.1-pspell
-	apt_install php8.1-sqlite3 php8.1-tidy php8.1-xmlrpc php8.1-xsl php8.1-zip
-	apt_install php8.1-mbstring php8.1-memcache php8.1-memcached certbot
-	apt_install libssh-dev libbrotli-dev
-	sleep 2
-	sudo systemctl start php8.1-fpm
-	sudo systemctl status php8.1-fpm | sed -n "1,3p"
-    echo -e "$GREEN => Complete${NC}"
-    elif [[ "$DISTRO" == "12" || "$DISTRO" == "11" ]]; then
-    
-    apt_install php8.1-fpm php8.1-opcache php8.1 php8.1-common php8.1-gd php8.1-mysql php8.1-imap php8.1-cli
-    apt_install php8.1-cgi php8.1-curl php8.1-intl php8.1-pspell
-    apt_install php8.1-sqlite3 php8.1-tidy php8.1-xmlrpc php8.1-xsl php8.1-zip
-    apt_install php8.1-mbstring php8.1-memcache php8.1-memcached certbot
-    apt_install libssh-dev libbrotli-dev
-    sleep 2
+# Check if php8.1-fpm service exists before trying to start it
+if systemctl list-unit-files | grep -q php8.1-fpm.service; then
     sudo systemctl start php8.1-fpm
     sudo systemctl status php8.1-fpm | sed -n "1,3p"
-    echo -e "$GREEN => Complete${NC}"
+else
+    echo "php8.1-fpm service not found. Please check PHP installation."
 fi
+echo -e "$GREEN => Complete${NC}"
 
 #phpMyAdmin
 echo -e "$CYAN => Installing phpMyAdmin <= ${NC}"
