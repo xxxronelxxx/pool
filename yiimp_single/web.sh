@@ -30,7 +30,7 @@ echo
 echo -e "$CYAN => Building web file structure and copying files <= $NC"
 
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
-sudo sed -i 's/myadmin/'${AdminPanel}'/' $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/web/yaamp/modules/site/SiteController.php
+#sudo sed -i 's/myadmin/'${AdminPanel}'/' $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/web/yaamp/modules/site/SiteController.php
 sudo cp -r $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/web $STORAGE_ROOT/yiimp/site/
 cd $STORAGE_ROOT/yiimp/yiimp_setup/
 sudo cp -r $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/bin/. /bin/
@@ -97,6 +97,8 @@ sudo sed -i "s|/etc/yiimp/serverconfig.php|${STORAGE_ROOT}/yiimp/site/configurat
 sudo sed -i "s|/root/backup|${STORAGE_ROOT}/yiimp/site/backup|g" $STORAGE_ROOT/yiimp/site/web/yaamp/core/backend/system.php
 sudo sed -i 's/service $webserver start/sudo service $webserver start/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/thread/CronjobController.php
 sudo sed -i 's/service nginx stop/sudo service nginx stop/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/thread/CronjobController.php
+
+sudo sed -i "s|require_once('serverconfig.php')|require_once('${STORAGE_ROOT}/yiimp/site/configuration/serverconfig.php')|g" $STORAGE_ROOT/yiimp/site/web/yaamp/yiic.php
 
 if [[ ("$wireguard" == "true") ]]; then
   #Set Insternal IP to .0/26

@@ -19,6 +19,7 @@ This installer provides an automated way to set up a full Yiimp mining pool on U
 - Web-based admin interface
 - Built-in upgrade tools
 - Comprehensive screen management for monitoring
+- PhpMyAdmin for database management
 
 ## Requirements
 
@@ -106,7 +107,7 @@ Donations appreciated:
 - SOLANA: 4Akj4XQXEKX4iPEd9A4ogXEPNrAsLm4wdATePz1XnyCu
 - BEP-20: 0xdA929d4f03e1009Fc031210DDE03bC40ea66D044
 - KASPA: kaspa:qrhfn2tl3ppc9qx448pgp6avv88gcav3dntw4p7h6v0ht3eac7pl6lkcjcy7r
-
 ## Security Notice
 
 Default permissions are configured for security - avoid modifying directory/file permissions as this may cause system instability.
+
