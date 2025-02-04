@@ -199,17 +199,17 @@ fi
 hide_output sudo apt-get update
 
 # Common PHP packages for all distros
-hide_output sudo apt-get install -y php8.1-fpm php8.1-opcache php8.1 php8.1-common php8.1-gd \
-    php8.1-mysql php8.1-imap php8.1-cli php8.1-cgi php8.1-curl php8.1-intl php8.1-pspell \
-    php8.1-sqlite3 php8.1-tidy php8.1-xmlrpc php8.1-xsl php8.1-zip php8.1-mbstring \
-    php8.1-memcache php8.1-memcached memcached certbot libssh-dev libbrotli-dev \
-    php-pear php-auth-sasl mcrypt imagemagick libruby php-imagick php-gettext \
-    fail2ban ntpdate python3 python3-dev python3-pip curl git sudo coreutils \
-    pollinate unzip unattended-upgrades cron pwgen libgmp3-dev libmysqlclient-dev \
-    libcurl4-gnutls-dev libkrb5-dev libldap2-dev libidn11-dev gnutls-dev librtmp-dev \
-    build-essential libtool autotools-dev automake pkg-config libevent-dev bsdmainutils \
-    libssl-dev automake cmake gnupg2 ca-certificates lsb-release nginx certbot libsodium-dev \
-    libnghttp2-dev librtmp-dev libssh2-1 libssh2-1-dev libldap2-dev libidn11-dev libpsl-dev libkrb5-dev
+hide_output sudo apt-get install -y php8.1-fpm php8.1-opcache php8.1 php8.1-common php8.1-gd
+hide_output sudo apt-get install -y php8.1-mysql php8.1-imap php8.1-cli php8.1-cgi php8.1-curl php8.1-intl php8.1-pspell 
+hide_output sudo apt-get install -y php8.1-sqlite3 php8.1-tidy php8.1-xmlrpc php8.1-xsl php8.1-zip php8.1-mbstring 
+hide_output sudo apt-get install -y php8.1-memcache php8.1-memcached memcached certbot libssh-dev libbrotli-dev 
+hide_output sudo apt-get install -y php-pear php-auth-sasl mcrypt imagemagick libruby php-imagick php-gettext 
+hide_output sudo apt-get install -y fail2ban ntpdate python3 python3-dev python3-pip curl git sudo coreutils 
+hide_output sudo apt-get install -y pollinate unzip unattended-upgrades cron pwgen libgmp3-dev libmysqlclient-dev 
+hide_output sudo apt-get install -y libcurl4-gnutls-dev libkrb5-dev libldap2-dev libidn11-dev gnutls-dev librtmp-dev 
+hide_output sudo apt-get install -y build-essential libtool autotools-dev automake pkg-config libevent-dev bsdmainutils 
+hide_output sudo apt-get install -y libssl-dev automake cmake gnupg2 ca-certificates lsb-release nginx certbot libsodium-dev 
+hide_output sudo apt-get install -y libnghttp2-dev librtmp-dev libssh2-1 libssh2-1-dev libldap2-dev libidn11-dev libpsl-dev libkrb5-dev
 
 sleep 2
 
