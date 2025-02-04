@@ -219,7 +219,7 @@ hide_output sudo apt-get update
 
 if [[ "$DISTRO" == "16" || "$DISTRO" == "18" || "$DISTRO" == "20" || "$DISTRO" == "22" || "$DISTRO" == "23" || "$DISTRO" == "24" ]]; then
 
-    apt_install php7.3-fpm php7.3-opcache php7.3 php7.3-common php7.3-gd
+    apt_install php8.1-fpm php7.3-opcache php7.3 php7.3-common php7.3-gd
     apt_install php7.3-mysql php7.3-imap php7.3-cli php7.3-cgi
     apt_install php-pear php-auth-sasl mcrypt imagemagick libruby
     apt_install php7.3-curl php7.3-intl php7.3-pspell php7.3-recode php7.3-sqlite3
@@ -233,11 +233,11 @@ if [[ "$DISTRO" == "16" || "$DISTRO" == "18" || "$DISTRO" == "20" || "$DISTRO" =
     apt_install automake cmake gnupg2 ca-certificates lsb-release nginx certbot libsodium-dev
     apt_install libnghttp2-dev librtmp-dev libssh2-1 libssh2-1-dev libldap2-dev libidn11-dev libpsl-dev libkrb5-dev php7.3-memcache php7.3-memcached memcached
     apt_install php8.1-mysql
-    apt_install libssh-dev libbrotli-dev php8.2-curl
+    apt_install libssh-dev libbrotli-dev php8.1-curl
 
 elif [[ "$DISTRO" == "12" || "$DISTRO" == "11" ]]; then
     # Install packages specific to Debian 12
-    apt_install php7.3-fpm php7.3-opcache php7.3 php7.3-common php7.3-gd
+    apt_install php8.1-fpm php7.3-opcache php7.3 php7.3-common php7.3-gd
     apt_install php7.3-mysql php7.3-imap php7.3-cli php7.3-cgi
     apt_install php-pear php-auth-sasl mcrypt imagemagick libruby
     apt_install php7.3-curl php7.3-intl php7.3-pspell php7.3-recode php7.3-sqlite3
@@ -251,31 +251,31 @@ elif [[ "$DISTRO" == "12" || "$DISTRO" == "11" ]]; then
     apt_install automake cmake gnupg2 ca-certificates lsb-release nginx certbot libsodium-dev
     apt_install libnghttp2-dev librtmp-dev libssh2-1 libssh2-1-dev libldap2-dev libidn11-dev libpsl-dev libkrb5-dev php7.3-memcache php7.3-memcached memcached
     apt_install php8.1-mysql
-    apt_install libssh-dev libbrotli-dev php8.2-curl
+    apt_install libssh-dev libbrotli-dev php8.1-curl
 
 fi
 
 if [[ ("$DISTRO" == "20" ) || "$DISTRO" == "22" || "$DISTRO" == "23" || "$DISTRO" == "24" ]]; then
 
-	apt_install php8.2-fpm php8.2-opcache php8.2 php8.2-common php8.2-gd php8.2-mysql php8.2-imap php8.2-cli
-	apt_install php8.2-cgi php8.2-curl php8.2-intl php8.2-pspell
-	apt_install php8.2-sqlite3 php8.2-tidy php8.2-xmlrpc php8.2-xsl php8.2-zip
-	apt_install php8.2-mbstring php8.2-memcache php8.2-memcached certbot
+	apt_install php8.1-fpm php8.1-opcache php8.1 php8.1-common php8.1-gd php8.1-mysql php8.1-imap php8.1-cli
+	apt_install php8.1-cgi php8.1-curl php8.1-intl php8.1-pspell
+	apt_install php8.1-sqlite3 php8.1-tidy php8.1-xmlrpc php8.1-xsl php8.1-zip
+	apt_install php8.1-mbstring php8.1-memcache php8.1-memcached certbot
 	apt_install libssh-dev libbrotli-dev
 	sleep 2
-	sudo systemctl start php8.2-fpm
-	sudo systemctl status php8.2-fpm | sed -n "1,3p"
+	sudo systemctl start php8.1-fpm
+	sudo systemctl status php8.1-fpm | sed -n "1,3p"
 
     elif [[ "$DISTRO" == "12" || "$DISTRO" == "11" ]]; then
     
-    apt_install php8.2-fpm php8.2-opcache php8.2 php8.2-common php8.2-gd php8.2-mysql php8.2-imap php8.2-cli
-    apt_install php8.2-cgi php8.2-curl php8.2-intl php8.2-pspell
-    apt_install php8.2-sqlite3 php8.2-tidy php8.2-xmlrpc php8.2-xsl php8.2-zip
-    apt_install php8.2-mbstring php8.2-memcache php8.2-memcached certbot
+    apt_install php8.1-fpm php8.1-opcache php8.1 php8.1-common php8.1-gd php8.1-mysql php8.1-imap php8.1-cli
+    apt_install php8.1-cgi php8.1-curl php8.1-intl php8.1-pspell
+    apt_install php8.1-sqlite3 php8.1-tidy php8.1-xmlrpc php8.1-xsl php8.1-zip
+    apt_install php8.1-mbstring php8.1-memcache php8.1-memcached certbot
     apt_install libssh-dev libbrotli-dev
     sleep 2
-    sudo systemctl start php8.2-fpm
-    sudo systemctl status php8.2-fpm | sed -n "1,3p"
+    sudo systemctl start php8.1-fpm
+    sudo systemctl status php8.1-fpm | sed -n "1,3p"
 fi
 
 echo -e "$CYAN => Fixing DB connection issue... ${NC}"

@@ -88,7 +88,7 @@ sudo ln -sf "$STORAGE_ROOT/yiimp/site/web" "/var/www/${DomainName}/html"
 
 # Restart NGINX and PHP-FPM services
 restart_service nginx
-restart_service php7.3-fpm
+restart_service php8.1-fpm
 
 # Disable strict mode to avoid unintended errors in subsequent commands
 set +euo pipefail

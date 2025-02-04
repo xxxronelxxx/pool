@@ -68,7 +68,7 @@ echo -e "$GREEN NGINX upgrade complete.${NC}"
 
 # Restart NGINX and PHP services
 restart_service nginx
-restart_service php7.3-fpm
+restart_service php8.1-fpm
 
 # Reset error handling
 set +eu +o pipefail

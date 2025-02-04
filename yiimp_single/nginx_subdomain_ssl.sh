@@ -95,7 +95,7 @@ server {
 
 	# Restart NGINX and PHP-FPM services
 	restart_service nginx >/dev/null 2>&1
-	restart_service php7.3-fpm >/dev/null 2>&1
+	restart_service php8.1-fpm >/dev/null 2>&1
 else
 	echo -e "Certbot generation failed, after the installer is finished check /var/log/letsencrypt (must be root to view) on why it failed."
 fi
