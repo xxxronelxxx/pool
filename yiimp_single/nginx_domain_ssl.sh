@@ -71,20 +71,9 @@ server {
 	location ~ \.php$ {
 		include yiimpool/php_fastcgi.conf;
 	}
-	location /phpmyadmin {
-		root /usr/share;
-		index index.php;
-		location ~ ^/phpmyadmin/(.*\.php)$ {
-			fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
-			fastcgi_param SCRIPT_FILENAME /usr/share/phpmyadmin/$1;
-			include fastcgi_params;
-		}
-		location ~ ^/phpmyadmin/(.*\.php)$ {
-			try_files $uri =404;
-		}
-	}
 	# additional config
 	include yiimpool/general.conf;
+	include phpmyadmin.conf;
 }
 # HTTP redirect
 server {
@@ -99,7 +88,7 @@ server {
 ' | sudo -E tee /etc/nginx/sites-available/${DomainName}.conf >/dev/null 2>&1
 
 	restart_service nginx >/dev/null 2>&1
-	restart_service php8.1-fpm >/dev/null 2>&1
+	restart_service php7.3-fpm >/dev/null 2>&1
 else
 	echo -e "$GREEN Certbot$RED generation failed, after the installer is finished check$MAGENTA /var/log/letsencrypt$YELLOW (must be root to view) on why it failed. $NC"
 fi

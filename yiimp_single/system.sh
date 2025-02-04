@@ -246,7 +246,7 @@ if [[ ("$DISTRO" == "20" ) || "$DISTRO" == "22" || "$DISTRO" == "23" || "$DISTRO
 	sleep 2
 	sudo systemctl start php8.1-fpm
 	sudo systemctl status php8.1-fpm | sed -n "1,3p"
-
+    echo -e "$GREEN => Complete${NC}"
     elif [[ "$DISTRO" == "12" || "$DISTRO" == "11" ]]; then
     
     apt_install php8.1-fpm php8.1-opcache php8.1 php8.1-common php8.1-gd php8.1-mysql php8.1-imap php8.1-cli
@@ -257,10 +257,24 @@ if [[ ("$DISTRO" == "20" ) || "$DISTRO" == "22" || "$DISTRO" == "23" || "$DISTRO
     sleep 2
     sudo systemctl start php8.1-fpm
     sudo systemctl status php8.1-fpm | sed -n "1,3p"
+    echo -e "$GREEN => Complete${NC}"
 fi
 
-#echo -e "$CYAN => Fixing DB connection issue... ${NC}"
+#phpMyAdmin
+echo -e "$CYAN => Installing phpMyAdmin <= ${NC}"
+
+hide_output sudo wget https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz
+hide_output sudo tar xzf phpMyAdmin-latest-all-languages.tar.gz
+hide_output sudo rm phpMyAdmin-latest-all-languages.tar.gz
+hide_output sudo mv phpMyAdmin-*-all-languages /usr/share/phpmyadmin
+hide_output sudo mkdir -p /usr/share/phpmyadmin/tmp
+hide_output sudo chmod 777 /usr/share/phpmyadmin/tmp
+echo -e "$GREEN => Complete${NC}"
+
+echo
+echo -e "$CYAN => Setting PHP to 8.1 ${NC}"
 sudo update-alternatives --set php /usr/bin/php8.1
+echo -e "$GREEN => Complete${NC}"
 
 echo
 echo -e "$CYAN => Cloning Yiimp Repo <= ${NC}"

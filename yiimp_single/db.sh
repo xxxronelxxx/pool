@@ -162,6 +162,20 @@ sudo bash -c "echo \"$config_string\" >> /etc/mysql/my.cnf"
 
 restart_service mysql
 
+echo -e "$GREEN => Complete${NC}"
+echo
+
+echo -e "$YELLOW => Creating Phpmyadmin User <= ${NC}"
+echo
+
+sudo mysql -u root -p"${DBRootPassword}" -e "CREATE USER '${PHPMyAdminUser}'@'localhost' IDENTIFIED BY '${PHPMyAdminPassword}';"
+sudo mysql -u root -p"${DBRootPassword}" -e "GRANT ALL PRIVILEGES ON *.* TO '${PHPMyAdminUser}'@'localhost' WITH GRANT OPTION;"
+sudo mysql -u root -p"${DBRootPassword}" -e "FLUSH PRIVILEGES;"
+
+echo -e "$GREEN => Complete${NC}"
+echo
+restart_service mysql
+
 set +eu +o pipefail
 
 cd $HOME/Yiimpoolv1/yiimp_single
