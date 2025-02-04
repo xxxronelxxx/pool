@@ -55,6 +55,7 @@ hide_output sudo apt-get install -y nginx
 sudo mkdir -p /etc/nginx/yiimpool
 sudo mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.old
 sudo cp nginx_confs/nginx.conf /etc/nginx/
+sudo cp nginx_confs/phpmyadmin.conf /etc/nginx/
 sudo cp nginx_confs/general.conf /etc/nginx/yiimpool
 sudo cp nginx_confs/php_fastcgi.conf /etc/nginx/yiimpool
 sudo cp nginx_confs/security.conf /etc/nginx/yiimpool
@@ -68,7 +69,7 @@ echo -e "$GREEN NGINX upgrade complete.${NC}"
 
 # Restart NGINX and PHP services
 restart_service nginx
-restart_service php7.3-fpm
+restart_service php8.1-fpm
 
 # Reset error handling
 set +eu +o pipefail

@@ -73,6 +73,7 @@ server {
 	}
 	# additional config
 	include yiimpool/general.conf;
+	include phpmyadmin.conf;
 }
 # HTTP redirect
 server {
