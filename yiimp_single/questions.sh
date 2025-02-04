@@ -225,6 +225,40 @@ generate_yiimp_admin_user() {
     fi
 }
 
+# Function for phpMyAdmin username
+generate_phpmyadmin_user() {
+    local default_value=$1
+    local variable_name=$2
+    if [ -z "${!variable_name:-}" ]; then
+        local default_username="phpmyadmin"
+        input_box "phpMyAdmin Username" \
+        "Enter your desired username for phpMyAdmin.\n\nThis will be used to login to phpMyAdmin.\n\nDefault username is 'phpmyadmin'.\n\nDesired phpMyAdmin Username:" \
+        "${default_username}" \
+        "${variable_name}"
+
+        if [ -z "${!variable_name}" ]; then
+            exit
+        fi
+    fi
+}
+
+# Function for phpMyAdmin password
+generate_random_password_phpmyadmin() {
+    local default_value=$1
+    local variable_name=$2
+    if [ -z "${!variable_name:-}" ]; then
+        local default_password=$(openssl rand -base64 29 | tr -d "=+/")
+        input_box "phpMyAdmin Password" \
+        "Enter your desired password for phpMyAdmin.\n\nYou may use the system generated password shown.\n\nThis will be used to login to phpMyAdmin.\n\nDesired phpMyAdmin Password:" \
+        "${default_password}" \
+        "${variable_name}"
+
+        if [ -z "${!variable_name}" ]; then
+            exit
+        fi
+    fi
+}
+
 # Generate database passwords
 generate_random_password_database "${DEFAULT_DBRootPassword}" "DBRootPassword"
 generate_random_password_database "${DEFAULT_PanelUserDBPassword}" "PanelUserDBPassword"
@@ -233,6 +267,10 @@ generate_random_password_database "${DEFAULT_StratumUserDBPassword}" "StratumUse
 # Generate YiiMP admin credentials
 generate_yiimp_admin_user "${DEFAULT_AdminUser}" "AdminUser"
 generate_random_password_yiimp_admin "${DEFAULT_AdminPassword}" "AdminPassword"
+
+# Generate phpMyAdmin credentials
+generate_phpmyadmin_user "${DEFAULT_PHPMyAdminUser}" "PHPMyAdminUser"
+generate_random_password_phpmyadmin "${DEFAULT_PHPMyAdminPassword}" "PHPMyAdminPassword"
 
 # Generate blocknotify password
 generate_random_password_blocknotify "${DEFAULT_BlocknotifyPassword}" "BlocknotifyPassword"
@@ -254,7 +292,8 @@ Stratum URL          : ${StratumURL}
 Install SSL           : ${InstallSSL}
 System Email          : ${SupportEmail}
 Admin Panel Location  : ${AdminPanel}
-Your Public IP        : ${PublicIP}" 16 60
+Your Public IP        : ${PublicIP}
+phpMyAdmin Username   : ${PHPMyAdminUser}" 17 60
 
 # Get exit status of confirmation dialog
 # 0 means user confirmed, 1 means user canceled
@@ -284,6 +323,8 @@ case $response in
                   StratumUserDBPassword='${StratumUserDBPassword}'
                   AdminPassword='${AdminPassword}'
                   AdminUser='${AdminUser}'
+                  PHPMyAdminUser='${PHPMyAdminUser}'
+                  PHPMyAdminPassword='${PHPMyAdminPassword}'
                   BlocknotifyPassword='${BlocknotifyPassword}'
                   YiiMPRepo='https://github.com/Kudaraidee/yiimp.git'" | sudo -E tee "$STORAGE_ROOT/yiimp/.yiimp.conf" >/dev/null 2>&1
         else
@@ -307,6 +348,8 @@ case $response in
                   StratumUserDBPassword='${StratumUserDBPassword}'
                   AdminPassword='${AdminPassword}'
                   AdminUser='${AdminUser}'
+                  PHPMyAdminUser='${PHPMyAdminUser}'
+                  PHPMyAdminPassword='${PHPMyAdminPassword}'
                   BlocknotifyPassword='${BlocknotifyPassword}'
                   YiiMPRepo='https://github.com/Kudaraidee/yiimp.git'" | sudo -E tee "$STORAGE_ROOT/yiimp/.yiimp.conf" >/dev/null 2>&1
         fi
