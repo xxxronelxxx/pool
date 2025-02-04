@@ -111,5 +111,13 @@ fi
 
 echo -e "$GREEN Web build complete$NC"
 
+echo
+echo -e "$YELLOW => Updating exchange API keys path <= $NC"
+
+sudo find $STORAGE_ROOT/yiimp/site/web/yaamp/core/exchange -type f -name "*.php" -exec sed -i 's|require_once('\''/etc/yiimp/keys.php'\'')|require_once('\'''"${STORAGE_ROOT}"'/yiimp/site/configuration/keys.php'\'')|g' {} \;
+sudo find $STORAGE_ROOT/yiimp/site/web/yaamp/core/trading -type f -name "*.php" -exec sed -i 's|require_once('\''/etc/yiimp/keys.php'\'')|require_once('\'''"${STORAGE_ROOT}"'/yiimp/site/configuration/keys.php'\'')|g' {} \;
+
+echo -e "$GREEN => Complete $NC"
+
 set +eu +o pipefail
 cd $HOME/Yiimpoolv1/yiimp_single

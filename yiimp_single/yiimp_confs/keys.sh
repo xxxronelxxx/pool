@@ -49,5 +49,5 @@ define('"'"'EXCH_YOBIT_SECRET'"'"', '"'"''"'"');
 define('"'"'EXCH_XEGGEX_KEY'"'"', '"'"''"'"');
 define('"'"'EXCH_XEGGEX_SECRET'"'"', '"'"''"'"');
 
-' | sudo -E tee /etc/yiimp/keys.php >/dev/null 2>&1
+' | sudo -E tee $STORAGE_ROOT/yiimp/site/configuration/keys.php >/dev/null 2>&1
 cd $HOME/Yiimpoolv1/yiimp_single
