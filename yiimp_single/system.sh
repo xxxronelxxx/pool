@@ -62,32 +62,47 @@ fi
 
 echo
 echo -e "$MAGENTA Installing MariaDB..${NC}"
-hide_output sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
+
+# Create directory for keys if it doesn't exist
+if [ ! -d /etc/apt/keyrings ]; then
+    sudo mkdir -p /etc/apt/keyrings
+fi
+
+# Download and add the MariaDB signing key
+sudo curl -fsSL https://mariadb.org/mariadb_release_signing_key.pgp | sudo gpg --dearmor -o /etc/apt/keyrings/mariadb.gpg
 
 case "$DISTRO" in
     "16")  # Ubuntu 16.04
-        sudo add-apt-repository -y 'deb [arch=amd64,arm64,i386,ppc64el] https://mirror.mariadb.org/repo/10.4/ubuntu xenial main' >/dev/null 2>&1
+        echo "deb [signed-by=/etc/apt/keyrings/mariadb.gpg arch=amd64,arm64,i386,ppc64el] https://mirror.mariadb.org/repo/10.4/ubuntu xenial main" \
+            | sudo tee /etc/apt/sources.list.d/mariadb.list >/dev/null
         ;;
     "18")  # Ubuntu 18.04
-        sudo add-apt-repository  -y 'deb [arch=amd64,arm64,ppc64el] https://mirror.mariadb.org/repo/10.6/ubuntu bionic main' >/dev/null 2>&1
+        echo "deb [signed-by=/etc/apt/keyrings/mariadb.gpg arch=amd64,arm64,ppc64el] https://mirror.mariadb.org/repo/10.6/ubuntu bionic main" \
+            | sudo tee /etc/apt/sources.list.d/mariadb.list >/dev/null
         ;;
-    "20")   # Ubuntu 20.04
-        sudo add-apt-repository -y 'deb [arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/10.6/ubuntu focal main' >/dev/null 2>&1
+    "20")  # Ubuntu 20.04
+        echo "deb [signed-by=/etc/apt/keyrings/mariadb.gpg arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/10.6/ubuntu focal main" \
+            | sudo tee /etc/apt/sources.list.d/mariadb.list >/dev/null
         ;;
-    "22")   # Ubuntu 22.04
-        sudo add-apt-repository -y 'deb [arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/10.6/ubuntu jammy main' >/dev/null 2>&1
+    "22")  # Ubuntu 22.04
+        echo "deb [signed-by=/etc/apt/keyrings/mariadb.gpg arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/10.6/ubuntu jammy main" \
+            | sudo tee /etc/apt/sources.list.d/mariadb.list >/dev/null
         ;;
-    "23")   # Ubuntu 23.04
-        sudo add-apt-repository -y 'deb [arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/11.6/ubuntu lunar main' >/dev/null 2>&1
+    "23")  # Ubuntu 23.04
+        echo "deb [signed-by=/etc/apt/keyrings/mariadb.gpg arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/11.6/ubuntu lunar main" \
+            | sudo tee /etc/apt/sources.list.d/mariadb.list >/dev/null
         ;;
-    "24")   # Ubuntu 24.04
-        sudo add-apt-repository -y 'deb [arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/11.6/ubuntu noble main' >/dev/null 2>&1
+    "24")  # Ubuntu 24.04
+        echo "deb [signed-by=/etc/apt/keyrings/mariadb.gpg arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/11.6/ubuntu noble main" \
+            | sudo tee /etc/apt/sources.list.d/mariadb.list >/dev/null
         ;;
-    "12")   # Debian 12
-        sudo add-apt-repository -y 'deb [arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/11.6/debian bookworm main' >/dev/null 2>&1
+    "12")  # Debian 12
+        echo "deb [signed-by=/etc/apt/keyrings/mariadb.gpg arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/11.6/debian bookworm main" \
+            | sudo tee /etc/apt/sources.list.d/mariadb.list >/dev/null
         ;;
-    "11")   # Debian 11
-        sudo add-apt-repository -y 'deb [arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/10.6/debian bullseye main' >/dev/null 2>&1
+    "11")  # Debian 11
+        echo "deb [signed-by=/etc/apt/keyrings/mariadb.gpg arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/10.6/debian bullseye main" \
+            | sudo tee /etc/apt/sources.list.d/mariadb.list >/dev/null
         ;;
     *)
         echo "Unsupported Ubuntu version: $DISTRO"

@@ -43,11 +43,21 @@ fi
 echo
 echo -e "$YELLOW => Upgrading NGINX  <= ${NC}"
 
-# Add NGINX repository and key, then update and install NGINX
-echo "deb http://nginx.org/packages/mainline/ubuntu $(lsb_release -cs) nginx" \
-    | sudo tee /etc/apt/sources.list.d/nginx.list >/dev/null 2>&1
+# Download and add the Nginx signing key
+sudo curl -fsSL https://nginx.org/keys/nginx_signing.key | sudo gpg --dearmor -o /etc/apt/keyrings/nginx.gpg
 
-sudo curl -fsSL https://nginx.org/keys/nginx_signing.key | sudo apt-key add - >/dev/null 2>&1
+# Add NGINX repository with signed-by option based on distribution
+if [[ "$DISTRO" == "12" || "$DISTRO" == "11" ]]; then
+    # Debian repository
+    echo "deb [signed-by=/etc/apt/keyrings/nginx.gpg] http://nginx.org/packages/mainline/debian $(lsb_release -cs) nginx" \
+        | sudo tee /etc/apt/sources.list.d/nginx.list >/dev/null 2>&1
+else
+    # Ubuntu repository
+    echo "deb [signed-by=/etc/apt/keyrings/nginx.gpg] http://nginx.org/packages/mainline/ubuntu $(lsb_release -cs) nginx" \
+        | sudo tee /etc/apt/sources.list.d/nginx.list >/dev/null 2>&1
+fi
+
+# Update and install NGINX
 hide_output sudo apt-get update
 hide_output sudo apt-get install -y nginx
 
