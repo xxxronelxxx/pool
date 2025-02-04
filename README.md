@@ -8,7 +8,7 @@
 
 ## Description
 
-This installer provides an automated way to set up a full Yiimp mining pool on Ubuntu 18.04/20.04. Key features include:
+This installer provides an automated way to set up a full Yiimp mining pool on Ubuntu and Debian systems. Key features include:
 
 - Automated installation and configuration of all required components
 - Built-in DaemonBuilder for compiling coin daemons
@@ -21,44 +21,48 @@ This installer provides an automated way to set up a full Yiimp mining pool on U
 - Comprehensive screen management for monitoring
 - PhpMyAdmin for database management
 
-## Requirements
+## System Requirements
 
-- Fresh Ubuntu 18.04 or 20.04 installation
-- Minimum 8GB RAM
+- Fresh Ubuntu/Debian installation
+- Minimum 8GB RAM (16GB recommended)
+- 2+ CPU cores
 - Clean domain or subdomain pointed to your VPS
 
-## Supported Ubuntu Version
-- Ubuntu 16.04 LTS
-- Ubuntu 18.04 LTS
+## Supported Operating Systems
+
+### Ubuntu
+⚠️ Installation Works (Limited Testing):
+- Ubuntu 24.04 LTS
+- Ubuntu 23.04
+- Ubuntu 22.04 LTS
 - Ubuntu 20.04 LTS
-- Ubuntu 22.04 LTS Install Works But system not tested
-- Ubuntu 23.04 LTS Install Works But System not tested
-- Ubuntu 24.04 LTS Install Works But system not tested
+- Ubuntu 18.04 LTS
 
-## Supported Debian Version
-- Debian 12 Install Works But System not tested
-- Debian 11 Install Works But System not tested
+### Debian
+⚠️ Installation Works (Limited Testing):
+- Debian 11
+- Debian 12 (Build Stratum not working)
 
-## Quick Install
+## Installation
 
+### Quick Install
 ```bash
 curl https://raw.githubusercontent.com/afiniel/Yiimpoolv1/master/install.sh | bash
 ```
 
-The installer will guide you through configuration options including:
-- Domain setup (main domain or subdomain)
-- SSL certificate installation
-- Database credentials
-- Admin portal location
-- Email settings
-- Stratum configuration
+### Configuration Steps
+The installer will guide you through:
+1. Domain setup (main domain or subdomain)
+2. SSL certificate installation
+3. Database credentials
+4. Admin portal location
+5. Email settings
+6. Stratum configuration
 
-## Post-Install
-
-1. After installation completes, a server reboot is **required**
-2. Upon first login after reboot, wait 1-2 minutes for services to start
-3. Use the `motd` command to view your pool status
-4. Access your admin panel at the configured URL
+## Post-Installation Steps
+1. **Required**: Reboot your server after installation
+2. Wait 1-2 minutes after first login for services to initialize
+3. Run `motd` to view pool status
 
 ## Directory Structure
 
@@ -75,28 +79,42 @@ The installer uses a secure directory structure:
 | /home/crypto-data/yiimp/site/log | Log files |
 | /home/crypto-data/yiimp/site/stratum | Stratum server files |
 
-## Usage Commands
+## Management Commands
 
-- View all screens: `screen -list`
-- Access specific screen: `screen -r main|loop2|blocks|debug` 
-- Detach from screen: `ctrl+a+d`
-- Start/stop/restart services: `screens start|stop|restart main|loop2|blocks|debug`
-- Pool overview: `yiimp`
-- System status: `motd`
+### Screen Management
+```bash
+screen -list         # View all screens
+screen -r [name]     # Access screen (main|loop2|blocks|debug)
+ctrl+a+d             # Detach from current screen
+```
+
+### Service Control
+```bash
+screens start|stop|restart [service]   # Control specific services
+yiimp                                  # View pool overview
+motd                                   # Check system status
+```
 
 ## DaemonBuilder
 
 Built-in coin daemon compiler accessible via the `daemonbuilder` command. Features:
 - Automated dependency handling
-- Support for multiple coins
-- Berkeley DB compilation
+- Support for multiple compile options
 - Custom port configuration
+
+## Security Best Practices
+1. Keep your system updated regularly
+2. Use strong passwords for all services
+3. Do not modify default file permissions
+4. Regularly backup your data
 
 ## Support
 
 For assistance:
 - Open an issue on GitHub
 - Join our Discord server
+
+## Donation wallets if you want to support me Thank you
 
 Donations appreciated:
 - BTC: bc1qc4qqz8eu5j7u8pxfrfvv8nmcka7whhm225a3f9
@@ -107,7 +125,4 @@ Donations appreciated:
 - SOLANA: 4Akj4XQXEKX4iPEd9A4ogXEPNrAsLm4wdATePz1XnyCu
 - BEP-20: 0xdA929d4f03e1009Fc031210DDE03bC40ea66D044
 - KASPA: kaspa:qrhfn2tl3ppc9qx448pgp6avv88gcav3dntw4p7h6v0ht3eac7pl6lkcjcy7r
-## Security Notice
-
-Default permissions are configured for security - avoid modifying directory/file permissions as this may cause system instability.
 
