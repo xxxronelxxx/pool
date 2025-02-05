@@ -89,16 +89,20 @@ echo -e "$YELLOW => Adding the yiimpool flare to YiiMP <= $NC"
 sudo sed -i 's/YII MINING POOLS/'${DomainName}' Mining Pool/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/index.php
 sudo sed -i 's/domain/'${DomainName}'/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/index.php
 sudo sed -i 's/Notes/AddNodes/g' $STORAGE_ROOT/yiimp/site/web/yaamp/models/db_coinsModel.php
-sudo sed -i "s|/etc/yiimp/serverconfig.php|${STORAGE_ROOT}/yiimp/site/configuration/serverconfig.php|g" $STORAGE_ROOT/yiimp/site/web/index.php
-sudo sed -i "s|/etc/yiimp/serverconfig.php|${STORAGE_ROOT}/yiimp/site/configuration/serverconfig.php|g" $STORAGE_ROOT/yiimp/site/web/runconsole.php
-sudo sed -i "s|/etc/yiimp/serverconfig.php|${STORAGE_ROOT}/yiimp/site/configuration/serverconfig.php|g" $STORAGE_ROOT/yiimp/site/web/run.php
-sudo sed -i "s|/etc/yiimp/serverconfig.php|${STORAGE_ROOT}/yiimp/site/configuration/serverconfig.php|g" $STORAGE_ROOT/yiimp/site/web/yaamp/yiic.php
-sudo sed -i "s|/etc/yiimp/serverconfig.php|${STORAGE_ROOT}/yiimp/site/configuration/serverconfig.php|g" $STORAGE_ROOT/yiimp/site/web/yaamp/modules/thread/CronjobController.php
+
+sudo ln -s ${STORAGE_ROOT}/yiimp/site/configuration/serverconfig.php /etc/yiimp/serverconfig.php
+
+sudo sed -i "s|${STORAGE_ROOT}/yiimp/site/configuration/serverconfig.php|/etc/yiimp/serverconfig.php|g" $STORAGE_ROOT/yiimp/site/web/index.php
+sudo sed -i "s|${STORAGE_ROOT}/yiimp/site/configuration/serverconfig.php|/etc/yiimp/serverconfig.php|g" $STORAGE_ROOT/yiimp/site/web/runconsole.php
+sudo sed -i "s|${STORAGE_ROOT}/yiimp/site/configuration/serverconfig.php|/etc/yiimp/serverconfig.php|g" $STORAGE_ROOT/yiimp/site/web/run.php
+sudo sed -i "s|${STORAGE_ROOT}/yiimp/site/configuration/serverconfig.php|/etc/yiimp/serverconfig.php|g" $STORAGE_ROOT/yiimp/site/web/yaamp/yiic.php
+sudo sed -i "s|${STORAGE_ROOT}/yiimp/site/configuration/serverconfig.php|/etc/yiimp/serverconfig.php|g" $STORAGE_ROOT/yiimp/site/web/yaamp/modules/thread/CronjobController.php
+
+sudo sed -i "s|require_once('serverconfig.php')|require_once('/etc/yiimp/serverconfig.php')|g" $STORAGE_ROOT/yiimp/site/web/yaamp/yiic.php
+
 sudo sed -i "s|/root/backup|${STORAGE_ROOT}/yiimp/site/backup|g" $STORAGE_ROOT/yiimp/site/web/yaamp/core/backend/system.php
 sudo sed -i 's/service $webserver start/sudo service $webserver start/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/thread/CronjobController.php
 sudo sed -i 's/service nginx stop/sudo service nginx stop/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/thread/CronjobController.php
-
-sudo sed -i "s|require_once('serverconfig.php')|require_once('${STORAGE_ROOT}/yiimp/site/configuration/serverconfig.php')|g" $STORAGE_ROOT/yiimp/site/web/yaamp/yiic.php
 
 if [[ ("$wireguard" == "true") ]]; then
   #Set Insternal IP to .0/26
@@ -109,15 +113,16 @@ if [[ ("$wireguard" == "true") ]]; then
   sudo sed -i '/# onlynet=ipv4/i\        echo "rpcallowip='${internalrpcip}'\\n";' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/coin_form.php
 fi
 
-echo -e "$GREEN Web build complete$NC"
-
 echo
-echo -e "$YELLOW => Updating exchange API keys path <= $NC"
+echo -e "$YELLOW => Creating unified configuration structure for keys.php <= $NC"
 
-sudo find $STORAGE_ROOT/yiimp/site/web/yaamp/core/exchange -type f -name "*.php" -exec sed -i 's|require_once('\''/etc/yiimp/keys.php'\'')|require_once('\'''"${STORAGE_ROOT}"'/yiimp/site/configuration/keys.php'\'')|g' {} \;
-sudo find $STORAGE_ROOT/yiimp/site/web/yaamp/core/trading -type f -name "*.php" -exec sed -i 's|require_once('\''/etc/yiimp/keys.php'\'')|require_once('\'''"${STORAGE_ROOT}"'/yiimp/site/configuration/keys.php'\'')|g' {} \;
+sudo ln -s /home/crypto-data/yiimp/site/configuration/keys.php /etc/yiimp/keys.php
 
-echo -e "$GREEN => Complete $NC"
+sudo find $STORAGE_ROOT/yiimp/site/web/yaamp/core/exchange/ -type f -name "*.php" -exec sed -i 's|require_once.*keys.php.*|if (!defined('\''EXCH_POLONIEX_KEY'\'')) {\n    require_once('\''/etc/yiimp/keys.php'\'');\n}|g' {} +
+
+sudo find $STORAGE_ROOT/yiimp/site/web/yaamp/core/trading/ -type f -name "*.php" -exec sed -i 's|require_once.*keys.php.*|if (!defined('\''EXCH_POLONIEX_KEY'\'')) {\n    require_once('\''/etc/yiimp/keys.php'\'');\n}|g' {} +
+
+echo -e "$GREEN Web build complete$NC"
 
 set +eu +o pipefail
 cd $HOME/Yiimpoolv1/yiimp_single
