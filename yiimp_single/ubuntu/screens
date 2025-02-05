@@ -6,8 +6,8 @@
 ############################################################################################################################
 
 # Source configuration files
-source /etc/yiimpool.conf
-source "$STORAGE_ROOT/yiimp/.prescreens.start.conf"
+. /etc/yiimpool.conf
+. "$STORAGE_ROOT/yiimp/.prescreens.start.conf"
 
 # Commands to start screen sessions
 main="screen -dmS main ${CRONS}/main.sh"
