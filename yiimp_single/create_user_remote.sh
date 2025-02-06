@@ -9,7 +9,7 @@
 export TERM=xterm
 
 if [ -z "${TAG}" ]; then
-TAG=v2.4.4
+TAG=v2.4.5
 fi
 echo 'VERSION='"${TAG}"'' | sudo -E tee /etc/yiimpoolversion.conf >/dev/null 2>&1
 
