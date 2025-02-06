@@ -550,7 +550,7 @@ display_version_info() {
         
         if [[ "$update_choice" =~ ^[Yy]$ ]]; then
             cd $HOME/Yiimpoolv1/yiimp_upgrade
-            source upgrade.sh
+            source upgrade.sh --full
         else
             echo -e "${YELLOW}Update skipped${NC}"
         fi
