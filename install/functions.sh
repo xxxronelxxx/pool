@@ -533,3 +533,29 @@ upgrade_stratum() {
     log_message "$GREEN" "Stratum upgrade completed successfully!"
     return 0
 }
+
+
+display_version_info() {
+    echo -e "${YELLOW}Current Version: ${GREEN}$VERSION${NC}"
+    echo -e "${YELLOW}Checking for updates...${NC}"
+
+    cd $HOME/Yiimpoolv1
+    sudo git fetch --tags
+    LATEST_TAG=$(sudo git describe --tags `sudo git rev-list --tags --max-count=1`)
+    
+    if [ "$VERSION" != "$LATEST_TAG" ]; then
+        echo -e "${GREEN}New version available: $LATEST_TAG${NC}"
+        echo -e "${YELLOW}Would you like to update? (y/n)${NC}"
+        read -r update_choice
+        
+        if [[ "$update_choice" =~ ^[Yy]$ ]]; then
+            cd $HOME/Yiimpoolv1/yiimp_upgrade
+            source upgrade.sh
+        else
+            echo -e "${YELLOW}Update skipped${NC}"
+        fi
+    else
+        echo -e "${GREEN}You are running the latest version${NC}"
+    fi
+    echo
+}
