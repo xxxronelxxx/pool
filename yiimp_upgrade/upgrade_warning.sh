@@ -4,12 +4,14 @@
 #####################################################
 
 message_box "Yiimpool Stratum upgrade" \
-"You have choosen to upgrade your YiiMP server(s)!
-\n\nWith so many custom YiiMP installations out there, this installer will ONLY upgrade the required stratum files.
+"You have chosen to upgrade your YiiMP server(s)!
+\n\nThis upgrade will only update the core stratum files while preserving your existing configuration.
+\n\nIMPORTANT NOTES:
+\n\n- Your existing stratum configuration files in /home/crypto-data/yiimp/site/stratum/config will NOT be modified
+\n\n- This ensures your custom port and algorithm settings remain intact
+\n\n- If you need configuration examples for new algorithms, please check our GitHub repository
 \n\n
-\n\nThis upgrade also will NOT copy any example.stratum.conf files to /home/crypto-data/yiimp/site/stratum/config.
-\n\nThis is done to prevent any overwrites of dedicated port configs you may have.
-\n\nIf you need a config file for a new Algo, please visit our github for the example.
-\n\n
-\n\nThis updater has two parts that needs to be ran, the first is on your stratum server(s) and the second on your web server.
-\n\nThe web server portion will only update the file web/yaamp/core/functions/yaamp.php."
+\n\nThe upgrade process has two parts:
+\n\n1. Stratum Server Update: Updates the core stratum functionality
+\n\n2. Web Server Update: Updates only the web/yaamp/core/functions/yaamp.php file
+\n\nPlease ensure you run both parts in the correct order for a complete upgrade."

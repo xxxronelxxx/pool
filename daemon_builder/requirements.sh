@@ -64,32 +64,6 @@ hide_output sudo apt -y install libdb5.3++ libdb5.3++-dev
 fi
 
 echo -e "$GREEN Additional System Files Completed...$NC"
-echo
-
-echo
-echo -e "$CYAN => Installing gcc & g++  $NC"
-hide_output sudo apt-get update
-hide_output sudo apt-get -y upgrade
-apt_dist_upgrade
-
-apt_install software-properties-common
-
-if [[ ("${DISTRO}" == "18" || "${DISTRO}" == "20" || "${DISTRO}" == "22" || "${DISTRO}" == "24") ]]; then
-    hide_output sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-fi
-hide_output sudo apt-get update
-
-apt_install gcc-9 g++-9 gcc-10 g++-10
-
-hide_output sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 50 --slave /usr/bin/g++ g++ /usr/bin/g++-9
-hide_output sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 60 --slave /usr/bin/g++ g++ /usr/bin/g++-10
-
-hide_output sudo update-alternatives --config gcc
-hide_output sudo apt update
-hide_output sudo apt upgrade -y
-hide_output sudo update-alternatives --set gcc /usr/bin/gcc-9
-echo -e "$GREEN gcc & g++ Updated to version 9...$NC"
-
 
 set +eu +o pipefail
 cd $HOME/Yiimpoolv1/daemon_builder

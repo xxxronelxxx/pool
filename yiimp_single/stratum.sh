@@ -31,6 +31,31 @@ echo
 # Navigate to the setup directory
 cd /home/crypto-data/yiimp/yiimp_setup
 
+echo -e "$CYAN => Installing gcc & g++  $NC"
+hide_output sudo apt-get update
+hide_output sudo apt-get -y upgrade
+apt_dist_upgrade
+
+apt_install software-properties-common
+
+if [[ ("${DISTRO}" == "18" || "${DISTRO}" == "20" || "${DISTRO}" == "22" || "${DISTRO}" == "24") ]]; then
+    hide_output sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+fi
+hide_output sudo apt-get update
+
+apt_install gcc-9 g++-9 gcc-10 g++-10
+
+hide_output sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 50 --slave /usr/bin/g++ g++ /usr/bin/g++-9
+hide_output sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 60 --slave /usr/bin/g++ g++ /usr/bin/g++-10
+
+hide_output sudo update-alternatives --config gcc
+hide_output sudo apt update
+hide_output sudo apt upgrade -y
+
+hide_output sudo update-alternatives --set gcc /usr/bin/gcc-9
+
+echo -e "$GREEN gcc & g++ Updated to version 9...$NC"
+
 #Install dependencies
 echo
 echo -e "$MAGENTA => Installing Package to compile cryptocurrency... <= $COL_RESET"
@@ -123,5 +148,5 @@ sudo setfacl -m u:$USER:rwx $STORAGE_ROOT/yiimp/site/stratum/config
 sleep 1.5
 term_art
 echo -e "$GREEN => Stratum build complete $NC"
-
+hide_output sudo update-alternatives --set gcc /usr/bin/gcc-9
 cd $HOME/Yiimpoolv1/yiimp_single
