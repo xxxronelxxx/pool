@@ -12,7 +12,8 @@ source /etc/yiimpool.conf
 source /etc/yiimpoolversion.conf
 source /etc/functions.sh
 
-# Display menu and capture user selection
+display_version_info
+
 RESULT=$(dialog --stdout --nocancel --default-item 1 --title "YiimPool Menu $VERSION" --menu "Choose an option" -1 55 7 \
     ' ' "- Install Yiimp -" \
     1 "Install Yiimp Single Server" \

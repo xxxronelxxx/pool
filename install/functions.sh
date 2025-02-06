@@ -10,13 +10,13 @@
 source /etc/yiimpoolversion.conf
 
 ESC_SEQ="\x1b["
-NC=${NC:-"\033[0m"} # No Color
-RED=$ESC_SEQ"31;01m"
-GREEN=$ESC_SEQ"32;01m"
-YELLOW=$ESC_SEQ"33;01m"
-BLUE=$ESC_SEQ"34;01m"
-MAGENTA=$ESC_SEQ"35;01m"
-CYAN=$ESC_SEQ"36;01m"
+YELLOW='\033[1;33m'
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+BLUE='\033[1;34m'
+MAGENTA='\033[1;35m'
+CYAN='\033[0;36m'
+NC='\033[0m'
 
 function spinner {
     local pid=$!
@@ -424,4 +424,112 @@ function get_default_privateip {
 
 	echo $address
 
+}
+
+
+# Yiimpool functions
+
+# Function to upgrade stratum
+upgrade_stratum() {
+    log_message "$YELLOW" "Upgrading stratum..."
+    
+    # Set up directory variables
+    YIIMP_DIR="$STORAGE_ROOT/yiimp/yiimp_setup/yiimp"
+    
+    # Remove existing directory if it exists
+    if [[ -d "$YIIMP_DIR" ]]; then
+        sudo rm -rf "$YIIMP_DIR"
+    fi
+    
+    # Clone fresh YiiMP repository
+    log_message "$GREEN" "Cloning fresh YiiMP repository..."
+    if ! sudo git clone "${YiiMPRepo}" "$YIIMP_DIR"; then
+        log_message "$RED" "Failed to clone YiiMP repository. Exiting..."
+        return 1
+    fi
+    
+    # Set gcc version
+    log_message "$GREEN" "Setting gcc to version 9..."
+    hide_output sudo update-alternatives --set gcc /usr/bin/gcc-9
+    
+    # Build stratum
+    cd $YIIMP_DIR/stratum
+    sudo git submodule init
+    sudo git submodule update
+    
+    # Build secp256k1
+    cd secp256k1 
+    sudo chmod +x autogen.sh
+    hide_output sudo ./autogen.sh
+    hide_output sudo ./configure --enable-experimental --enable-module-ecdh --with-bignum=no --enable-endomorphism
+    hide_output sudo make -j$((`nproc`+1))
+    
+    # Return to stratum directory
+    cd $YIIMP_DIR/stratum
+    
+    # Build components
+    log_message "$GREEN" "Building stratum components..."
+    
+    # Build algos
+    if ! sudo make -C algos -j$(($(nproc)+1)); then
+        log_message "$RED" "Failed to build algos. Please check the build output above for errors."
+        return 1
+    fi
+    log_message "$GREEN" "algos built successfully!"
+    
+    # Build sha3
+    if ! sudo make -C sha3 -j$(($(nproc)+1)); then
+        log_message "$RED" "Failed to build sha3. Please check the build output above for errors."
+        return 1
+    fi
+    log_message "$GREEN" "sha3 built successfully!"
+    
+    # Build iniparser
+    if ! sudo make -C iniparser -j$(($(nproc)+1)); then
+        log_message "$RED" "Failed to build iniparser. Please check the build output above for errors."
+        return 1
+    fi
+    log_message "$GREEN" "iniparser built successfully!"
+    
+    # Build main stratum
+    if ! sudo make -j$(($(nproc)+1)); then
+        log_message "$RED" "Failed to build stratum. Please check the build output above for errors."
+        return 1
+    fi
+    log_message "$GREEN" "stratum built successfully!"
+    
+    # Stop stratum service before installation
+    sudo systemctl stop yiimp_stratum
+    
+    # Backup existing stratum configuration
+    if [ -d "$STRATUM_DIR" ]; then
+        sudo cp -r "$STRATUM_DIR/config" "$STRATUM_DIR/config_backup"
+    fi
+    
+    # Install stratum
+    log_message "$GREEN" "Installing stratum..."
+    if ! sudo mv stratum "$STORAGE_ROOT/yiimp/site/stratum"; then
+        log_message "$RED" "Failed to install stratum."
+        return 1
+    fi
+    
+    # Restore configuration if backup exists
+    if [ -d "$STRATUM_DIR/config_backup" ]; then
+        sudo cp -r "$STRATUM_DIR/config_backup/"* "$STRATUM_DIR/config/"
+        sudo rm -r "$STRATUM_DIR/config_backup"
+    fi
+    
+    # Copy yaamp.php
+    log_message "$GREEN" "Copying yaamp.php to the site directory..."
+    cd $YIIMP_DIR/web/yaamp/core/functions/
+    sudo cp -r yaamp.php $STORAGE_ROOT/yiimp/site/web/yaamp/core/functions
+    
+    # Reset gcc version
+    hide_output sudo update-alternatives --set gcc /usr/bin/gcc-10
+    
+    # Start stratum service
+
+    
+    log_message "$GREEN" "Stratum upgrade completed successfully!"
+    return 0
 }
