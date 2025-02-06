@@ -16,7 +16,7 @@ source /etc/functions.sh
 RESULT=$(dialog --stdout --nocancel --default-item 1 --title "YiimPool Menu $VERSION" --menu "Choose an option" -1 55 7 \
     ' ' "- Install Yiimp -" \
     1 "Install Yiimp Single Server" \
-    2 "Upgrade Yiimp Stratum Server" \
+    2 "Upgrade Stratum" \
     3 "Options" \
     4 "Exit")
 

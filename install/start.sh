@@ -109,11 +109,9 @@ else
     export LC_TYPE=en_US.UTF-8
     echo -e "${GREEN}Set system locale to en_US.UTF-8.${NC}\n"
 
-    # Fix so line drawing characters are shown correctly in Putty on Windows. See #744.
     export NCURSES_NO_UTF8_ACS=1
     echo -e "${GREEN}Configured NCURSES for correct line drawing characters.${NC}\n"
 
-    # Load our functions and variables.
     echo -e "${YELLOW}Loading system functions and configuration...${NC}\n"
     source /etc/functions.sh
     source /etc/yiimpool.conf
@@ -124,5 +122,4 @@ else
     cd "$HOME/Yiimpoolv1/install"
     source menu.sh
     cd ~
-    echo -e "${GREEN}Yiimpool installation started.${NC}\n"
 fi

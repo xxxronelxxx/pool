@@ -87,8 +87,8 @@ hide_output sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 
 hide_output sudo update-alternatives --config gcc
 hide_output sudo apt update
 hide_output sudo apt upgrade -y
-
-echo -e "$GREEN gcc & g++ Updated to version 10...$NC"
+hide_output sudo update-alternatives --set gcc /usr/bin/gcc-9
+echo -e "$GREEN gcc & g++ Updated to version 9...$NC"
 
 
 set +eu +o pipefail
