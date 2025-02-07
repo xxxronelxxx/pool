@@ -14,10 +14,10 @@ source /etc/functions.sh
 source /etc/yiimpoolversion.conf
 
 show_menu() {  
-    RESULT=$(dialog --stdout --title "YiimPool Upgrade Menu $VERSION" --menu "Choose an option" -1 60 8 \
-        ' ' "═══════════ Upgrade Options ═══════════" \
-        1 "Full System Upgrade (Recommended)" \
-        2 "Upgrade Stratum Only" \
+    RESULT=$(dialog --stdout --title "YiimPool Menu $VERSION" --menu "Choose an option" -1 60 8 \
+        ' ' "═══════════  Options ═══════════" \
+        1 "Upgrade Stratum Only" \
+        2 "Add Stratum" \
         3 "Restore from Backup" \
         4 "System Health Check" \
         5 "View Update History" \
@@ -26,16 +26,15 @@ show_menu() {
     case "$RESULT" in
         1)
             clear
-            echo -e "${YELLOW}Starting full system upgrade...${NC}"
-            cd $HOME/Yiimpoolv1/yiimp_upgrade
-            source upgrade.sh
-            show_menu
-            ;;
-        2)
-            clear
             echo -e "${YELLOW}Starting stratum upgrade...${NC}"
             cd $HOME/Yiimpoolv1/yiimp_upgrade
             source upgrade.sh --stratum-only
+            exit 0
+            ;;
+        2)
+            clear
+            echo -e "${YELLOW}Adding new stratum...${NC}"
+            echo "Not completed yet, sorry."
             exit 0
             ;;
         3)
@@ -62,7 +61,8 @@ show_menu() {
             ;;
         6)
             clear
-            echo -e "${GREEN}Exiting YiimPool Upgrade Menu${NC}"
+            motd
+            echo -e "${GREEN}Exiting YiimPool Menu${NC}"
             echo -e "${YELLOW}Type 'yiimpool' anytime to return to the menu${NC}"
             exit 0
             ;;
