@@ -24,7 +24,9 @@ main() {
     case "$UPGRADE_TYPE" in
         "full")
             echo "VERSION=$LATEST_TAG" | sudo tee /etc/yiimpoolversion.conf >/dev/null
-            log_message "$GREEN" "Yiimpool upgrade completed successfully!"
+            log_message "$YELLOW" "Updating installation files..."
+            cd $HOME/Yiimpoolv1
+            sudo git pull
             ;;
         "stratum")
             upgrade_stratum
