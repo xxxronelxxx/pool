@@ -22,9 +22,9 @@ source /etc/yiimpool.conf
 
 # Display banner
 term_art
-echo -e "$MAGENTA    <-------------------------->${NC}"
-echo -e "$MAGENTA     <--$YELLOW Installing WireGuard$MAGENTA -->${NC}"
-echo -e "$MAGENTA    <-------------------------->${NC}"
+echo
+echo -e "$YELLOW => Installing WireGuard <=${NC}"
+echo
 
 # Add WireGuard repository and install packages
 if [[ "$DISTRO" == "16" || "$DISTRO" == "18" || "$DISTRO" == "20" || "$DISTRO" == "22" || "$DISTRO" == "24" ]]; then
