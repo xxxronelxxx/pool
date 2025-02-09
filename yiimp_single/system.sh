@@ -69,7 +69,9 @@ if [ ! -d /etc/apt/keyrings ]; then
 fi
 
 # Download and add the MariaDB signing key
-sudo curl -fsSL https://mariadb.org/mariadb_release_signing_key.pgp | sudo gpg --dearmor -o /etc/apt/keyrings/mariadb.gpg
+if [ ! -f /etc/apt/keyrings/mariadb.gpg ]; then
+    sudo curl -fsSL https://mariadb.org/mariadb_release_signing_key.pgp | sudo gpg --dearmor -o /etc/apt/keyrings/mariadb.gpg
+fi
 
 case "$DISTRO" in
     "16")  # Ubuntu 16.04
@@ -189,11 +191,15 @@ if [[ "$DISTRO" == "12" || "$DISTRO" == "11" ]]; then
     apt_install python3-launchpadlib
 fi
 
-if [[ "$DISTRO" == "16" || "$DISTRO" == "18" || "$DISTRO" == "20" || "$DISTRO" == "22" || "$DISTRO" == "23" || "$DISTRO" == "24" ]]; then
+# if Ubuntu 16 18 20 22 24 
+
+if [[ "$DISTRO" == "16" || "$DISTRO" == "18" || "$DISTRO" == "20" || "$DISTRO" == "22" || "$DISTRO" == "24" ]]; then
     if [ ! -f /etc/apt/sources.list.d/ondrej-php-bionic.list ]; then
         hide_output sudo add-apt-repository -y ppa:ondrej/php
     fi
-elif [[ "$DISTRO" == "12" || "$DISTRO" == "11" ]]; then
+fi 
+
+if [[ "$DISTRO" == "12" || "$DISTRO" == "11" ]]; then
     if [ ! -f /etc/apt/sources.list.d/ondrej-php.list ]; then
         hide_output sudo apt-get install -y apt-transport-https lsb-release ca-certificates
         wget -qO - https://packages.sury.org/php/apt.gpg | sudo apt-key add -
