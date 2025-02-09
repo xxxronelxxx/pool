@@ -99,7 +99,7 @@ case "$DISTRO" in
         echo "deb [signed-by=/etc/apt/keyrings/mariadb.gpg arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/10.6/debian bullseye main" \
         ;;
     *)
-        echo "Unsupported Ubuntu version: $DISTRO"
+        echo "Unsupported Ubuntu/Debian version: $DISTRO"
         exit 1
         ;;
 esac
@@ -107,21 +107,22 @@ echo -e "$GREEN Complete...${NC}"
 hide_output sudo apt-get update
 
 if [ ! -f /boot/grub/menu.lst ]; then
-    apt_get_quiet upgrade
+    hide_output sudo apt-get upgrade -y
 else
     sudo rm /boot/grub/menu.lst
     sudo update-grub-legacy-ec2 -y
-    apt_get_quiet upgrade
+    hide_output sudo apt-get upgrade -y
 fi
 
-apt_get_quiet dist-upgrade
-apt_get_quiet autoremove
+hide_output sudo apt-get dist-upgrade -y
+hide_output sudo apt-get autoremove -y
 
 echo
 echo -e "$MAGENTA => Installing Base system packages <= ${NC}"
-hide_output sudo apt-get install -y python3 python3-dev python3-pip
-hide_output sudo apt-get install -y wget curl git sudo coreutils bc haveged pollinate unzip unattended-upgrades 
-hide_output sudo apt-get install -y cron ntp fail2ban screen rsyslog lolcat nginx haproxy supervisor
+apt_install python3 python3-dev python3-pip \
+	wget curl git sudo coreutils bc \
+	haveged pollinate unzip \
+	unattended-upgrades cron ntp fail2ban screen rsyslog lolcat nginx haproxy supervisor
 
 echo -e "$GREEN => Complete${NC}"
 echo
