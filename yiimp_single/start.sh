@@ -6,9 +6,11 @@
 # Updated by Afiniel for yiimpool use...                                         #
 ##################################################################################
 
+source /etc/yiimpooldonate.conf
 source /etc/yiimpoolversion.conf
 source /etc/functions.sh
 source /etc/yiimpool.conf
+source $STORAGE_ROOT/yiimp/.yiimp.conf
 
 # Ensure Python reads/writes files in UTF-8. If the machine
 # triggers some other locale in Python, like ASCII encoding,
@@ -34,9 +36,7 @@ if [ ! -d $STORAGE_ROOT/yiimp/yiimp_setup ]; then
     sudo touch $STORAGE_ROOT/yiimp/yiimp_setup/log/installer.log
 fi
 
-
 sudo chmod 755 /home/crypto-data/
-
 
 # Start the installation.
 source menu.sh
@@ -70,46 +70,90 @@ source $STORAGE_ROOT/yiimp/.yiimp.conf
 
 clear
 
-# Color definitions (feel free to customize these for your liking)
-YIIMP_GREEN="\e[38;5;2m"     # Success Green
-YIIMP_BLUE="\e[38;5;4m"     # Dark Blue (info)
-YIIMP_YELLOW="\e[33m"       # Warning Yellow
-YIIMP_RED="\e[31m"        # Error Red
-YIIMP_WHITE="\e[37m"       # White (data)
+
+YIIMP_GREEN="\e[32m"
+YIIMP_BLUE="\e[36m"
+YIIMP_YELLOW="\e[33m"
+YIIMP_RED="\e[31m"
+YIIMP_WHITE="\e[97m"
+YIIMP_PURPLE="\e[35m"
+YIIMP_CYAN="\e[36m"
 YIIMP_RESET="\e[0m"
 
-# Header line
-YIIMP_HEADER="${YIIMP_GREEN}<--------------------------------------------------------------------------->${YIIMP_RESET}"
 
-# Function to display messages in a consistent format
-print_message() {
-  echo -e "${YIIMP_HEADER}"
-  echo -e "${YIIMP_GREEN}Thanks for using Yiimpool Installer ${YIIMP_BLUE}${VERSION}${YIIMP_GREEN} (by Afiniel!)!${YIIMP_RESET}"
-  echo
-  echo -e "${YIIMP_BLUE}To run this installer anytime, simply type: ${YIIMP_GREEN}yiimpool${YIIMP_RESET}"
-  echo -e "${YIIMP_HEADER}"
-  echo -e "${YIIMP_BLUE}Like the installer and want to support the project? Use these wallets:"
-  echo -e "${YIIMP_HEADER}"
-  echo -e "${YIIMP_WHITE}- BTC: ${BTCDON}"
-  echo -e "${YIIMP_WHITE}- BCH: ${BCHDON}"
-  echo -e "${YIIMP_WHITE}- ETH: ${ETHDON}"
-  echo -e "${YIIMP_WHITE}- DOGE: ${DOGEDON}"
-  echo -e "${YIIMP_WHITE}- LTC: ${LTCDON}"
-  echo -e "${YIIMP_HEADER}"
-  echo
-  echo -e "${YIIMP_GREEN}Yiimp installation is now ${YIIMP_GREEN}complete!${YIIMP_RESET}"
-  echo -e "${YIIMP_YELLOW}Please REBOOT your machine to finalize updates and set folder permissions.${YIIMP_YELLOW} YiiMP won't function until a reboot is performed.${YIIMP_RESET}"
-  echo
-  echo -e "${YIIMP_BLUE}After the first reboot, it may take up to 1 minute for the ${YIIMP_GREEN}main${YIIMP_BLUE}|${YIIMP_GREEN}loop2${YIIMP_BLUE}|${YIIMP_GREEN}blocks${YIIMP_BLUE}|${YIIMP_GREEN}debug${YIIMP_BLUE} screens to start."
-  echo -e "${YIIMP_BLUE}If they show ${YIIMP_RED}stopped${YIIMP_BLUE} after 1 minute, type ${YIIMP_GREEN}motd${YIIMP_BLUE} to refresh the screen.${YIIMP_RESET}"
-  echo
-  echo -e "${YIIMP_BLUE}Access your ${YIIMP_GREEN}${AdminPanel} at ${YIIMP_BLUE}http://${DomainName}/site/${AdminPanel}${YIIMP_RESET}"
-  echo
-  echo -e "${YIIMP_RED}By default, all stratum ports are blocked by the firewall.${YIIMP_YELLOW} To allow a port, use ${YIIMP_GREEN}sudo ufw allow <port number>${YIIMP_YELLOW} from the command line.${YIIMP_RESET}"
-  echo -e "${YIIMP_WHITE}Database usernames and passwords can be found in ${YIIMP_RED}$STORAGE_ROOT/yiimp/.my.cnf${YIIMP_RESET}"
+YIIMP_BOLD="\e[1m"
+YIIMP_DIM="\e[2m"
+YIIMP_ITALIC="\e[3m"
+YIIMP_UNDERLINE="\e[4m"
+
+
+YIIMP_HEADER="${YIIMP_BLUE}╔══════════════════════════════════════════════════════════════════════════╗${YIIMP_RESET}"
+YIIMP_FOOTER="${YIIMP_BLUE}╚══════════════════════════════════════════════════════════════════════════╝${YIIMP_RESET}"
+YIIMP_DIVIDER="${YIIMP_BLUE}║──────────────────────────────────────────────────────────────────────────${YIIMP_RESET}"
+
+
+center_text() {
+    local text="$1"
+    local width=74  # Adjusted for the new border width
+    local padding=$(( (width - ${#text}) / 2 ))
+    printf "%${padding}s%s%${padding}s\n" "" "$text" ""
 }
 
-term_yiimpool
+
+print_message() {
+    clear
+    echo -e "${YIIMP_HEADER}"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET}$(center_text "${YIIMP_GREEN}YiimPool Installer ${VERSION} by Afiniel${YIIMP_RESET}")"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET}$(center_text "${YIIMP_CYAN}Thank you for using the YiimPool Installer!${YIIMP_RESET}")"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET}"
+    
+    
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET}$(center_text "${YIIMP_RED}! ACTION REQUIRED !${YIIMP_RESET}")"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET}$(center_text "${YIIMP_YELLOW}System MUST be rebooted before YiiMP will function${YIIMP_RESET}")"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET}"
+    
+    
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET} ${YIIMP_CYAN}Required Steps:${YIIMP_RESET}"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET} 1. Reboot system: ${YIIMP_GREEN}sudo reboot${YIIMP_RESET}"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET} 2. After reboot, run:${YIIMP_GREEN}screen -r debug${YIIMP_WHITE} to check for any issues${YIIMP_RESET}"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET}"
+    
+    
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET} ${YIIMP_CYAN}Tools:${YIIMP_RESET}"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET} • ${YIIMP_GREEN}daemonbuilder${YIIMP_WHITE} - Build coin wallets${YIIMP_RESET}"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET} • ${YIIMP_GREEN}addport${YIIMP_WHITE} - Add new stratum ports${YIIMP_RESET}"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET} • ${YIIMP_GREEN}yiimpool${YIIMP_WHITE} - Access YiiMPool main menu${YIIMP_RESET}"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET}"
+    
+    
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET} ${YIIMP_CYAN}After Reboot:${YIIMP_RESET}"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET} • All services will start automatically${YIIMP_RESET}"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET} • Allow up to 1 minute for all services to initialize${YIIMP_RESET}"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET} • Admin panel will be available at: ${YIIMP_GREEN}http://${DomainName}/admin${YIIMP_RESET}"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET}"
+    
+    
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET} ${YIIMP_CYAN}Important Notes:${YIIMP_RESET}"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET} • All pool credentials and are stored in:${YIIMP_RESET}"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET}   ${YIIMP_GREEN}$STORAGE_ROOT/yiimp/.yiimp.conf${YIIMP_RESET}"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET} • This includes: Database credentials, Stratum passwords,${YIIMP_RESET}"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET}   phpMyAdmin users, and other important settings${YIIMP_RESET}"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET} • Stratum ports are blocked by default${YIIMP_RESET}"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET} • Use ${YIIMP_GREEN}ufw allow PORT , or use ${YIIMP_GREEN}addport${YIIMP_WHITE} to open ports${YIIMP_RESET}"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET}"
+    
+   
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET} ${YIIMP_CYAN}If you want Support:${YIIMP_RESET}"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET} • BTC:  ${YIIMP_GREEN}${BTCDON}${YIIMP_RESET}"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET} • ETH:  ${YIIMP_GREEN}${ETHDON}${YIIMP_RESET}"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET} • DOGE: ${YIIMP_GREEN}${DOGEDON}${YIIMP_RESET}"
+    echo -e "${YIIMP_BLUE}║${YIIMP_RESET} • LTC:  ${YIIMP_GREEN}${LTCDON}${YIIMP_RESET}"
+    echo -e "${YIIMP_FOOTER}"
+    echo
+    echo -e "${YIIMP_RED}IMPORTANT: System must be rebooted..!${YIIMP_RESET}"
+    echo -e "${YIIMP_GREEN}Run this command to reboot: ${YIIMP_WHITE}sudo reboot${YIIMP_RESET}"
+}
+
 print_message
 exit 0
 ask_reboot
