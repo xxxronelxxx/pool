@@ -156,7 +156,7 @@ cd $HOME/Yiimpoolv1/daemon_builder
 sudo mkdir -p conf
 sudo cp -r $HOME/Yiimpoolv1/daemon_builder/utils/* $STORAGE_ROOT/daemon_builder
 sudo cp -r $HOME/Yiimpoolv1/daemon_builder/conf/daemonbuilder.sh /etc/
-hide_output sudo cp -r $HOME/Yiimpoolv1/daemon_builder/utils/addport.sh /usr/bin/addport
+sudo cp -r $HOME/Yiimpoolv1/daemon_builder/utils/addport.sh /usr/bin/addport
 sudo chmod +x $STORAGE_ROOT/daemon_builder/*
 sudo chmod +x /usr/bin/addport
 
