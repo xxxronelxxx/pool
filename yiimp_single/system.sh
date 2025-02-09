@@ -117,10 +117,9 @@ apt_get_quiet autoremove
 
 echo
 echo -e "$MAGENTA => Installing Base system packages <= ${NC}"
-apt_install python3 python3-dev python3-pip \
-    wget curl git sudo coreutils bc \
-    haveged pollinate unzip \
-    unattended-upgrades cron ntp fail2ban screen rsyslog lolcat nginx haproxy supervisor
+hide_output sudo apt-get install -y python3 python3-dev python3-pip
+hide_output sudo apt-get install -y wget curl git sudo coreutils bc haveged pollinate unzip unattended-upgrades 
+hide_output sudo apt-get install -y cron ntp fail2ban screen rsyslog lolcat nginx haproxy supervisor
 
 echo -e "$GREEN => Complete${NC}"
 echo
