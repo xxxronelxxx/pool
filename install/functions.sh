@@ -560,6 +560,9 @@ display_version_info() {
     echo
 }
 
+BOLD='\033[1m'
+DIM='\033[2m'
+
 print_header() {
     echo -e "\n${BLUE}${BOLD}=== $1 ===${NC}\n"
 }
