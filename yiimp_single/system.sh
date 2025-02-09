@@ -73,36 +73,28 @@ sudo curl -fsSL https://mariadb.org/mariadb_release_signing_key.pgp | sudo gpg -
 
 case "$DISTRO" in
     "16")  # Ubuntu 16.04
-        echo "deb [signed-by=/etc/apt/keyrings/mariadb.gpg arch=amd64,arm64,i386,ppc64el] https://mirror.mariadb.org/repo/10.4/ubuntu xenial main" \
-            | sudo tee /etc/apt/sources.list.d/mariadb.list >/dev/null
+        echo "deb [signed-by=/etc/apt/keyrings/mariadb.gpg arch=amd64,arm64,i386,ppc64el] https://mirror.mariadb.org/repo/10.4/ubuntu xenial main" \ 
         ;;
     "18")  # Ubuntu 18.04
-        echo "deb [signed-by=/etc/apt/keyrings/mariadb.gpg arch=amd64,arm64,ppc64el] https://mirror.mariadb.org/repo/10.6/ubuntu bionic main" \
-            | sudo tee /etc/apt/sources.list.d/mariadb.list >/dev/null
+        echo "deb [signed-by=/etc/apt/keyrings/mariadb.gpg arch=amd64,arm64,ppc64el] https://mirror.mariadb.org/repo/10.6/ubuntu bionic main" \ 
         ;;
     "20")  # Ubuntu 20.04
         echo "deb [signed-by=/etc/apt/keyrings/mariadb.gpg arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/10.6/ubuntu focal main" \
-            | sudo tee /etc/apt/sources.list.d/mariadb.list >/dev/null
         ;;
     "22")  # Ubuntu 22.04
         echo "deb [signed-by=/etc/apt/keyrings/mariadb.gpg arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/10.6/ubuntu jammy main" \
-            | sudo tee /etc/apt/sources.list.d/mariadb.list >/dev/null
         ;;
     "23")  # Ubuntu 23.04
         echo "deb [signed-by=/etc/apt/keyrings/mariadb.gpg arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/11.6/ubuntu lunar main" \
-            | sudo tee /etc/apt/sources.list.d/mariadb.list >/dev/null
         ;;
     "24")  # Ubuntu 24.04
         echo "deb [signed-by=/etc/apt/keyrings/mariadb.gpg arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/11.6/ubuntu noble main" \
-            | sudo tee /etc/apt/sources.list.d/mariadb.list >/dev/null
         ;;
     "12")  # Debian 12
         echo "deb [signed-by=/etc/apt/keyrings/mariadb.gpg arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/11.6/debian bookworm main" \
-            | sudo tee /etc/apt/sources.list.d/mariadb.list >/dev/null
         ;;
     "11")  # Debian 11
         echo "deb [signed-by=/etc/apt/keyrings/mariadb.gpg arch=amd64,arm64,ppc64el,s390x] https://mirror.mariadb.org/repo/10.6/debian bullseye main" \
-            | sudo tee /etc/apt/sources.list.d/mariadb.list >/dev/null
         ;;
     *)
         echo "Unsupported Ubuntu version: $DISTRO"
