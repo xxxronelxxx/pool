@@ -28,10 +28,10 @@ print_info "Starting system configuration..."
 print_header "Setting TimeZone"
 if [ ! -f /etc/timezone ]; then
     print_status "Setting timezone to UTC"
-    sudo bash -c 'echo "Etc/UTC" > /etc/timezone'
+    sudo timedatectl set-timezone UTC
     restart_service rsyslog
 fi
-
+print_success "Timezone set to UTC"
 hide_output sudo apt-get install -y software-properties-common build-essential
 
 # CertBot
