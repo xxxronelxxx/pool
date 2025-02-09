@@ -14,7 +14,7 @@
 #  UTIL folder contains BUILD.sh file.
 #  precompiled coin. NEED TO BE LINUX Version!
 #
-# Updated: 2021-04-13
+# Updated: 2024-03-20
 
 source /etc/daemonbuilder.sh
 source /etc/functions.sh
@@ -28,15 +28,11 @@ if [[ -f "$YIIMPOLL" ]]; then
 fi
 
 CREATECOIN=true
-
-# Set what we need
 now=$(date +"%m_%d_%Y")
-
-# Sets the number of CPU cores to use for compiling.
 MIN_CPUS_FOR_COMPILATION=3
 
 if ! NPROC=$(nproc); then
-    echo -e "\e[31mError: \e[33mnproc command not found. Failed to run.\e[0m"
+    print_error "nproc command not found. Failed to run."
     exit 1
 fi
 
@@ -46,29 +42,24 @@ else
     NPROC=$((NPROC - 2))
 fi
 
-# Create the temporary installation directory if it doesn't already exist.
-echo
-echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
-echo -e "$CYAN Creating temporary installation directory if it doesn't already exist. 			$NC"
-echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
+print_header "Setting Up Build Environment"
+print_status "Creating temporary build directory..."
 
 source $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf
 
 if [[ ! -e "$STORAGE_ROOT/daemon_builder/temp_coin_builds" ]]; then
     sudo mkdir -p $STORAGE_ROOT/daemon_builder/temp_coin_builds
+    print_success "Created temp_coin_builds directory"
 else
     sudo rm -rf $STORAGE_ROOT/daemon_builder/temp_coin_builds/*
-    echo
-    echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
-    echo -e "$GREEN   temp_coin_builds already exists.... Skipping  								$NC"
-    echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
+    print_info "Cleaned existing temp_coin_builds directory"
 fi
 
-# Just double checking folder permissions
 sudo setfacl -m u:${USERSERVER}:rwx $STORAGE_ROOT/daemon_builder/temp_coin_builds
 cd $STORAGE_ROOT/daemon_builder/temp_coin_builds
 
-# Gitcoin coin information.
+print_header "Coin Configuration"
+
 input_box "Coin Information" \
 "Please enter the Coin Symbol. Example: BTC
 \n\n*Paste press CTRL+RIGHT mouse button.
@@ -83,48 +74,52 @@ DIALOGFORLISTALGOS=${DIALOGFORLISTALGOS=dialog}
 tempfile=$(tempfile 2>/dev/null) || tempfile=/tmp/test$$
 trap "rm -f $tempfile" 0 1 2 5 15
 
-$DIALOGFORLISTALGOS --colors --title "\Zb\Zr\Z7| Select the algorithm for coin: \Zn\ZR\ZB\Z0${coin^^}\Zn\Zb\Zr\Z7 |" --clear --colors --no-items --nocancel --shadow \
+$DIALOGFORLISTALGOS --colors --title "\Zb\Zr\Z7| Select Algorithm: ${coin^^} |" --clear --colors --no-items --nocancel --shadow \
 --radiolist "\n\
-	\ZB\Z1Choose the algorithm for your coin\n\
-	the list scrolls so you can use the \n\
-	UP/DOWN arrow keys, the first letter of the choice as \n\
-	hotkey or number keys 1-9 to choose an option. \n\
-	Press SPACE to select an option.\Zn\n\n\
-What is your algorithm? choose from the following..." \
+    Select the mining algorithm for your coin.\n\
+    Use UP/DOWN arrows or number keys 1-9 to navigate.\n\
+    Press SPACE to select an option.\n\n\
+Choose from available algorithms:" \
 55 60 47 $optionslistalgos 2> $tempfile
+
 retvalalgoselected=$?
 ALGOSELECTED=$(cat $tempfile)
 case $retvalalgoselected in
     0)
         coinalgo="${ALGOSELECTED}"
+        print_success "Selected algorithm: ${ALGOSELECTED}"
         ;;
     1)
-        echo
-        echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
-        echo -e "$GREEN   Cancel pressed STOP of installation! use daemonbuilder to new start!				$NC"
-        echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
+        print_error "Installation cancelled by user"
+        print_info "Use daemonbuilder to start a new installation"
         exit
         ;;
     255)
-        echo
-        echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
-        echo -e "$GREEN   ESC pressed STOP of installation! use daemonbuilder to new start!				$NC"
-        echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
+        print_error "Installation cancelled (ESC pressed)"
+        print_info "Use daemonbuilder to start a new installation"
         exit
         ;;
 esac
 
-if [[ ("${precompiled}" == "true") ]]; then
-    input_box "precompiled Coin Information" \
+print_divider
+
+print_header "Coin Binary Installation"
+
+if [[ ("$precompiled" == "true") ]]; then
+    print_status "Preparing to install precompiled binary..."
+    
+    input_box "Precompiled Binary Information" \
     "Please enter the precompiled file format compressed! 
     \n\nExample: bitcoin-0.16.3-x86_64-linux-gnu.tar.gz
     \n\n .zip format is also supported.
     \n\n*Paste press CTRL+RIGHT mouse button.
-    \n\nprecompiled Coin URL Link:" \
+    \n\nPrecompiled Binary URL:" \
     "" \
     coin_precompiled
 else
-    input_box "Github Repo link" \
+    print_header "Source Code"
+    
+    input_box "Github Repository" \
     "Please enter the Github Repo link.
     \n\nExample: https://github.com/example-repo-name/coin-wallet.git
     \n\n*Paste press CTRL+RIGHT mouse button.
@@ -132,230 +127,240 @@ else
     "" \
     git_hub
     
-    dialog --title " Switch To development " \
-    --yesno "Switch from main repo git in to develop?
-    Selecting Yes use Git developments." 6 50
+    dialog --title " Development Branch Selection " \
+    --yesno "Would you like to use the development branch instead of main?\nSelect Yes to use the development branch." 7 60
     response=$?
     case $response in
-        0) swithdevelop=yes;;
-        1) swithdevelop=no;;
-        255) echo "[ESC] key pressed.";;
+        0) 
+            swithdevelop=yes
+            print_info "Using development branch"
+            ;;
+        1) 
+            swithdevelop=no
+            print_info "Using main branch"
+            ;;
+        255) 
+            print_warning "ESC key pressed - defaulting to main branch"
+            swithdevelop=no
+            ;;
     esac
     
     if [[ ("${swithdevelop}" == "no") ]]; then
-        
-        dialog --title " Do you want to use a specific branch? " \
-        --yesno "Do you need to use a specific github branch of the coin?
-        Selecting Yes use a selected version Git." 7 60
+        dialog --title " Branch Selection " \
+        --yesno "Would you like to use a specific branch?\nSelect Yes to specify a version." 7 60
         response=$?
         case $response in
-            0) branch_git_hub=yes;;
-            1) branch_git_hub=no;;
-            255) echo "[ESC] key pressed.";;
+            0) 
+                branch_git_hub=yes
+                print_info "Will prompt for specific branch"
+                ;;
+            1) 
+                branch_git_hub=no
+                print_info "Using default branch"
+                ;;
+            255) 
+                print_warning "ESC key pressed - using default branch"
+                branch_git_hub=no
+                ;;
         esac
         
         if [[ ("${branch_git_hub}" == "yes") ]]; then
+            input_box "Branch Selection" \
+            "Please enter the branch name to use.
+            \n\nExample: v1.2.3 or feature/new-update
+            \n\n*Paste press CTRL+RIGHT mouse button.
+            \n\nBranch name:" \
+            "" \
+            branch_git_hub_ver
             
-            input_box "Github Repo link" \
-    		"Please enter the Github Repo link.
-			\n\nExample: https://github.com/example-repo-name/coin-wallet.git
-    		\n\n*Paste press CTRL+RIGHT mouse button.
-    		\n\nGithub Repo link:" \
-    		"" \
-    		git_hub
+            print_info "Selected branch: ${branch_git_hub_ver}"
         fi
     fi
 fi
+clear
+print_divider
 
 set -e
-clear
-echo
-echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
-echo -e "$GREEN   Starting installation coin : ${coin^^}							$NC"
-echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
+print_header "Starting Installation: ${coin^^}"
 
 coindir=$coin$now
 
-# save last coin information in case coin build fails
 echo '
 lastcoin='"${coindir}"'
 ' | sudo -E tee $STORAGE_ROOT/daemon_builder/temp_coin_builds/.lastcoin.conf >/dev/null 2>&1
 
-# Clone the coin
 if [[ ! -e $coindir ]]; then
     if [[ ("$precompiled" == "true") ]]; then
+        print_status "Downloading precompiled binary..."
         mkdir $coindir
         cd "${coindir}"
         sudo wget $coin_precompiled
+        print_success "Downloaded precompiled binary"
     else
+        print_status "Cloning repository..."
         git clone $git_hub $coindir
         cd "${coindir}"
-		clear;
-    fi
-    
-    if [[ ("${branch_git_hub}" == "yes") ]]; then
-        git fetch
-        git checkout "$branch_git_hub_ver"
-    fi
-    
-    if [[ ("${swithdevelop}" == "yes") ]]; then
-        git checkout develop
+        print_success "Repository cloned successfully"
+        
+        if [[ ("${branch_git_hub}" == "yes") ]]; then
+            print_status "Checking out branch: ${branch_git_hub_ver}..."
+            git fetch
+            git checkout "$branch_git_hub_ver"
+            print_success "Switched to branch: ${branch_git_hub_ver}"
+        fi
+        
+        if [[ ("${swithdevelop}" == "yes") ]]; then
+            print_status "Switching to development branch..."
+            git checkout develop
+            print_success "Switched to development branch"
+        fi
     fi
     errorexist="false"
 else
-    echo
-    message_box " Coin already exist temp folder " \
-    "${coindir} already exists.... in temp folder Skipping Installation!
-    \n\nIf there was an error in the build use the build error options on the installer."
-    
+    print_error "${coindir} already exists in temp folder"
+    print_info "If there was an error in the build use the build error options on the installer"
     errorexist="true"
     exit 0
 fi
 
 if [[ ("${errorexist}" == "false") ]]; then
+    print_status "Setting permissions for build directory..."
     sudo chmod -R 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}
     sudo find $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/ -type d -exec chmod 777 {} \;
     sudo find $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/ -type f -exec chmod 777 {} \;
+    print_success "Permissions set successfully"
 fi
 
-# Build the coin under the proper configuration
 if [[ ("$autogen" == "true") ]]; then
-    
-    # Build the coin under berkeley 4.8
     if [[ ("$berkeley" == "4.8") ]]; then
-        echo
-		clear;
-        echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
-        echo -e "$GREEN   Starting Building coin $MAGENTA ${coin^^} $MAGENTA using Berkeley 4.8	$NC"
-        echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
-        echo
+        print_header "Building ${coin^^} with Berkeley DB 4.8"
+        
         basedir=$(pwd)
         
         FILEAUTOGEN=$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/autogen.sh
         if [[ ! -f "$FILEAUTOGEN" ]]; then
-            echo -e "$YELLOW"
+            print_warning "autogen.sh not found in root directory"
+            print_info "Available directories:"
+            echo -e "${YELLOW}"
             find . -maxdepth 1 -type d \( -perm -1 -o \( -perm -10 -o -perm -100 \) \) -printf "%f\n"
-            echo -e "$NC$MAGENTA"
-            read -r -e -p "Where is the folder that contains the installation ${coin^^}, example bitcoin :" repotherinstall
-            echo -e "$NC"
-			clear;
-            echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
-            echo -e "$GREEN   Moving files and Starting Building coin $MAGENTA ${coin^^} 					$NC"
-            echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
-            echo
+            echo -e "${NC}"
             
+            read -r -e -p "Enter the installation folder name (e.g. bitcoin): " repotherinstall
+            
+            print_status "Moving files to build directory..."
             sudo mv $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/${repotherinstall}/* $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}
+            print_success "Files moved successfully"
         fi
         
+        print_status "Running autogen.sh..."
         sh autogen.sh
+        print_success "autogen.sh completed"
         
         if [[ ! -e "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/share/genbuild.sh" ]]; then
-            echo "genbuild.sh not found skipping"
+            print_info "genbuild.sh not found - skipping"
         else
             sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/share/genbuild.sh
         fi
+        
         if [[ ! -e "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/leveldb/build_detect_platform" ]]; then
-            echo "build_detect_platform not found skipping"
+            print_info "build_detect_platform not found - skipping"
         else
             sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/leveldb/build_detect_platform
         fi
-        echo
-		clear;
-        echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
-        echo -e "$GREEN   Starting configure coin...													$NC"
-        echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
-        echo
-        sudo find $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/ -type d -exec chmod 777 {} \;
-        sudo find $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/ -type f -exec chmod 777 {} \;
-        ./configure CPPFLAGS="-I$STORAGE_ROOT/daemon_builder/berkeley/db4/include -O2" LDFLAGS="-L$STORAGE_ROOT/daemon_builder/berkeley/db4/lib" --with-incompatible-bdb --without-gui --disable-tests
-        echo
-		clear;
-        echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
-        echo -e "$GREEN   Starting make coin...															$NC"
-        echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
-        echo
+        
+        print_status "Configuring build..."
         sudo find $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/ -type d -exec chmod 777 {} \;
         sudo find $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/ -type f -exec chmod 777 {} \;
         
-        # make install
+        ./configure CPPFLAGS="-I$STORAGE_ROOT/daemon_builder/berkeley/db4/include -O2" LDFLAGS="-L$STORAGE_ROOT/daemon_builder/berkeley/db4/lib" --with-incompatible-bdb --without-gui --disable-tests
+        print_success "Configuration completed"
+        
+        print_status "Building ${coin^^}..."
+        sudo find $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/ -type d -exec chmod 777 {} \;
+        sudo find $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/ -type f -exec chmod 777 {} \;
+        
         TMP=$(tempfile)
+        print_status "Running make with ${NPROC} cores..."
         make -j${NPROC} 2>&1 | tee $TMP
-        OUTPUT=$(cat $TMP)
-        echo $OUTPUT
+        
+        if [ ${PIPESTATUS[0]} -eq 0 ]; then
+            print_success "Build completed successfully"
+        else
+            print_error "Build failed - check the error log"
+            cat $TMP
+            rm $TMP
+            exit 1
+        fi
         rm $TMP
     fi
     
     # Build the coin under berkeley 5.1
     if [[ ("$berkeley" == "5.1") ]]; then
-        echo
-		clear;
-        echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
-        echo -e "$GREEN   Starting Building coin $MAGENTA ${coin^^} $NC using Berkeley 5.1	$NC"
-        echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
-        echo
+        print_header "Building ${coin^^} with Berkeley DB 5.1"
+        
         basedir=$(pwd)
         
         FILEAUTOGEN=$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/autogen.sh
         if [[ ! -f "$FILEAUTOGEN" ]]; then
-            echo -e "$YELLOW"
+            print_warning "autogen.sh not found in root directory"
+            print_info "Available directories:"
+            echo -e "${YELLOW}"
             find . -maxdepth 1 -type d \( -perm -1 -o \( -perm -10 -o -perm -100 \) \) -printf "%f\n"
-            echo -e "$NC$MAGENTA"
-            read -r -e -p "Where is the folder that contains the installation ${coin^^}, example bitcoin :" repotherinstall
-            echo -e "$NC"
-			clear;
-            echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
-            echo -e "$GREEN   Moving files and Starting Building coin $MAGENTA ${coin^^} 					$NC"
-            echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
-            echo
+            echo -e "${NC}"
             
+            read -r -e -p "Enter the installation folder name (e.g. bitcoin): " repotherinstall
+            
+            print_status "Moving files to build directory..."
             sudo mv $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/${repotherinstall}/* $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}
-            
+            print_success "Files moved successfully"
         fi
         
+        print_status "Running autogen.sh..."
         sh autogen.sh
+        print_success "autogen.sh completed"
         
         if [[ ! -e "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/share/genbuild.sh" ]]; then
-            echo "genbuild.sh not found skipping"
+            print_info "genbuild.sh not found - skipping"
         else
             sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/share/genbuild.sh
         fi
         
         if [[ ! -e "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/leveldb/build_detect_platform" ]]; then
-            echo "build_detect_platform not found skipping"
+            print_info "build_detect_platform not found - skipping"
         else
             sudo chmod 777 $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/src/leveldb/build_detect_platform
         fi
-        echo
-		clear;
-        echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
-        echo -e "$GREEN   Starting configure coin...													$NC"
-        echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
-        echo
+        
+        print_status "Configuring build..."
         sudo find $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/ -type d -exec chmod 777 {} \;
         sudo find $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/ -type f -exec chmod 777 {} \;
         
         ./configure CPPFLAGS="-I$STORAGE_ROOT/daemon_builder/berkeley/db5/include -O2" LDFLAGS="-L$STORAGE_ROOT/daemon_builder/berkeley/db5/lib" --with-incompatible-bdb --without-gui --disable-tests
-        echo
-		clear;
-        echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
-        echo -e "$GREEN   Starting make coin...															$NC"
-        echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
-        echo
+        print_success "Configuration completed"
+        
+        print_status "Building ${coin^^}..."
         sudo find $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/ -type d -exec chmod 777 {} \;
         sudo find $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}/ -type f -exec chmod 777 {} \;
         
-        # make install
         TMP=$(tempfile)
+        print_status "Running make with ${NPROC} cores..."
         make -j${NPROC} 2>&1 | tee $TMP
-        OUTPUT=$(cat $TMP)
-        echo $OUTPUT
+        
+        if [ ${PIPESTATUS[0]} -eq 0 ]; then
+            print_success "Build completed successfully"
+        else
+            print_error "Build failed - check the error log"
+            cat $TMP
+            rm $TMP
+            exit 1
+        fi
         rm $TMP
     fi
     
     # Build the coin under berkeley 5.3
     if [[ ("$berkeley" == "5.3") ]]; then
         echo
-		clear;
+		
         echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
         echo -e "$GREEN   Starting Building coin $MAGENTA ${coin^^} $NC using Berkeley 5.3	$NC"
         echo -e "$CYAN ------------------------------------------------------------------------------- 	$NC"
@@ -1146,8 +1151,9 @@ if [[ ("$precompiled" == "true") ]]; then
         sudo chmod +x /usr/bin/${coinwallet}
         coinwalletmv=true
         
-        echo -e "$GREEN  Moving ${coinwallet} to => /usr/bin/$NC$YELLOW${coinwallet} $NC"
-        
+        print_success "Installed ${coinwallet} binary to /usr/bin/${coinwallet}"
+    else
+        print_error "Precompiled binary not found"
     fi
     echo
     echo -e "$CYAN --------------------------------------------------------------------------------------- $NC"
@@ -1383,12 +1389,102 @@ if [[ -f "$ADDPORTCONF" ]]; then
     sudo rm -r $STORAGE_ROOT/daemon_builder/.addport.cnf
 fi
 
-echo -e "$CYAN"
+print_header "Installation Summary"
+
+if [[ "$coindmv" == "true" ]]; then
+    print_success "Daemon Installation"
+    print_info "Binary: ${coind}"
+    print_info "Location: /usr/bin/${coind}"
+    print_divider
+fi
+
+if [[ "$coinclimv" == "true" ]]; then
+    print_success "CLI Tool Installation"
+    print_info "Binary: ${coincli}"
+    print_info "Location: /usr/bin/${coincli}"
+    print_divider
+fi
+
+if [[ "$cointxmv" == "true" ]]; then
+    print_success "Transaction Tool Installation"
+    print_info "Binary: ${cointx}"
+    print_info "Location: /usr/bin/${cointx}"
+    print_divider
+fi
+
+if [[ "$coinutilmv" == "true" ]]; then
+    print_success "Utility Tool Installation"
+    print_info "Binary: ${coinutil}"
+    print_info "Location: /usr/bin/${coinutil}"
+    print_divider
+fi
+
+if [[ "$coinhashmv" == "true" ]]; then
+    print_success "Hash Tool Installation"
+    print_info "Binary: ${coinhash}"
+    print_info "Location: /usr/bin/${coinhash}"
+    print_divider
+fi
+
+if [[ "$coinwalletmv" == "true" ]]; then
+    print_success "Wallet Tool Installation"
+    print_info "Binary: ${coinwallet}"
+    print_info "Location: /usr/bin/${coinwallet}"
+    print_divider
+fi
+
+print_divider
+
+print_header "Coin Configuration"
+print_info "Symbol: ${coin^^}"
+
+if [[ -f "$ADDPORTCONF" ]]; then
+    print_info "Algorithm: ${COINALGO}"
+    print_info "Dedicated Port: ${COINPORT}"
+fi
+
+print_divider
+
+print_header "Stratum Management"
+print_info "Start/Stop/Restart Command:"
+echo -e "  ${BLUE}${BOLD}stratum.${coin,,} start|stop|restart ${coin,,}${NC}"
+print_info "View Stratum Screen:"
+echo -e "  ${BLUE}${BOLD}screen -r ${coin,,}${NC}"
+
+print_divider
+
+print_header "Additional Tools"
+print_info "Install Another Coin:"
+echo -e "  ${BLUE}${BOLD}daemonbuilder${NC}"
+
+print_divider
+
+print_header "Cleanup"
+print_status "Removing temporary files..."
+sudo rm -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/.lastcoin.conf
+sudo rm -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}
+sudo rm -r $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf
+
+if [[ -f "$ADDPORTCONF" ]]; then
+    sudo rm -r $STORAGE_ROOT/daemon_builder/.addport.cnf
+fi
+print_success "Temporary files removed"
+
+print_divider
+
+print_header "Starting Daemon"
+print_status "Initializing ${coin^^} daemon..."
 if [[ "$YIIMPCONF" == "true" ]]; then
     "${coind}" -datadir=$STORAGE_ROOT/wallets/."${coind::-1}" -conf="${coind::-1}".conf -daemon -shrinkdebugfile
 else
     "${coind}" -datadir=${absolutepath}/wallets/."${coind::-1}" -conf="${coind::-1}".conf -daemon -shrinkdebugfile
 fi
-echo -e "$NC"
+print_success "Daemon started successfully"
+
+print_divider
+
+print_header "Installation Complete"
+print_success "${coin^^} node is now running"
+print_info "All components have been installed and configured"
 
 exit

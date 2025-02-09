@@ -11,11 +11,9 @@ source /etc/yiimpooldonate.conf
 cd $HOME/Yiimpoolv1/yiimp_single
 
 term_art
-echo -e "$MAGENTA    <----------------------------->${NC}"
-echo -e "$MAGENTA     <--$YELLOW Starting Server Cleanup$MAGENTA -->${NC}"
-echo -e "$MAGENTA    <----------------------------->${NC}"
-echo
-echo -e "$YELLOW => Installing cron screens to crontab <= ${NC}"
+print_header "Server Cleanup and Configuration"
+
+print_status "Installing cron screens to crontab"
 
 (
     crontab -l 2>/dev/null
@@ -42,9 +40,9 @@ fi
 ) | crontab -
 sudo cp -r first_boot.sh /home/crypto-data/yiimp
 
-echo -e "$GREEN Crontab system complete${NC}"
-echo
-echo -e "$MAGENTA => Creating YiiMP Screens startup script <= ${NC}"
+print_success "Crontab system configuration complete"
+
+print_header "Creating YiiMP Screens Startup Script"
 
 echo '#!/usr/bin/env bash
 source /etc/yiimpool.conf
@@ -77,8 +75,9 @@ screen -dmS debug tail -f $LOG_DIR/debug.log
 ' | sudo -E tee $STORAGE_ROOT/yiimp/starts/screens.start.sh >/dev/null 2>&1
 sudo chmod +x $STORAGE_ROOT/yiimp/starts/screens.start.sh
 
-echo
-echo -e "$MAGENTA => Creating Stratum screens start script <= ${NC}"
+print_success "YiiMP screens startup script created"
+
+print_header "Creating Stratum Screens Start Script"
 
 echo '#!/usr/bin/env bash
 source /etc/yiimpool.conf
@@ -219,18 +218,15 @@ screen -dmS yespowerURX bash $STRATUM_DIR/run.sh yespowerURX
 ' | sudo -E tee $STORAGE_ROOT/yiimp/starts/stratum.start.sh >/dev/null 2>&1
 sudo chmod +x $STORAGE_ROOT/yiimp/starts/stratum.start.sh
 
-echo '
-source /etc/yiimpool.conf
-source $STORAGE_ROOT/yiimp/.yiimp.conf
-LOG_DIR=$STORAGE_ROOT/yiimp/site/log
-CRONS=$STORAGE_ROOT/yiimp/site/crons
-STRATUM_DIR=$STORAGE_ROOT/yiimp/site/stratum
-' | sudo -E tee $STORAGE_ROOT/yiimp/.prescreens.start.conf >/dev/null 2>&1
+print_success "Stratum screens start script created"
+
+print_header "Updating System Configuration"
 
 echo "source /etc/yiimpool.conf" | hide_output tee -a ~/.bashrc
 echo "source $STORAGE_ROOT/yiimp/.prescreens.start.conf" | hide_output tee -a ~/.bashrc
-echo -e "$YELLOW YiiMP Screens$GREEN Added${NC}"
+print_success "YiiMP Screens configuration added"
 
+print_status "Cleaning up installation files"
 sudo rm -r $STORAGE_ROOT/yiimp/yiimp_setup
 
 # Fixing exbitron that make white screen and update main.php
@@ -240,5 +236,7 @@ sudo rm -r /home/crypto-data/yiimp/site/web/yaamp/modules/admin/coin_form.php
 
 sudo cp -r main.php /home/crypto-data/yiimp/site/web/yaamp/ui
 sudo cp -r coin_form.php /home/crypto-data/yiimp/site/web/yaamp/modules/admin
+
+print_success "Server cleanup and configuration completed successfully"
 
 cd $HOME/Yiimpoolv1/yiimp_single

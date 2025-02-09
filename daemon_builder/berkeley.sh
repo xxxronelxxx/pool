@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 
-##################################################################################
-# This is the entry point for configuring the system.                            #
+#####################################################
+# Created by Afiniel for Yiimpool use
 #
-# Updated by Afiniel for Yiimpool use...                                         #
-##################################################################################
-
-# Update configuration file with dependencies
-
-
-sleep 1
-sudo sed -i 's#absolutepathserver#'"$absolutepath"'#' conf/daemonbuilder.sh
+# This script builds and installs various versions of
+# Berkeley DB and related components required for
+# cryptocurrency daemon compilation. It includes
+# BDB 4.8, 5.1, 5.3, 6.2, 18, OpenSSL, and
+# bls-signatures.
+#
+# Author: Afiniel
+# Date: 2024-07-15
+#####################################################
 
 # Source configuration files
 source /etc/yiimpoolversion.conf
@@ -22,14 +23,22 @@ STRATUM_DIR="$STORAGE_ROOT/yiimp/site/stratum"
 FUNCTIONFILE="daemonbuilder.sh"
 TAG="$VERSION"
 
-# Create temporary directory
+# Display banner
+term_art
+
+print_header "Berkeley DB Build Environment Setup"
+
+print_status "Initializing build environment..."
 sudo mkdir -p $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 
-echo -e "\n$GREEN => Additional System Files Completed <= ${NC}"
+print_status "Updating configuration files..."
+sleep 1
+sudo sed -i 's#absolutepathserver#'"$absolutepath"'#' conf/daemonbuilder.sh
+print_success "Configuration updated successfully"
 
-# Build BerkeleyDB 4.8
-echo -e "\n$MAGENTA => Building Berkeley 4.8 <= ${NC}"
+print_header "Berkeley DB 4.8 Installation"
+print_status "Building Berkeley DB 4.8..."
 sudo mkdir -p $STORAGE_ROOT/berkeley/db4/
 hide_output sudo wget 'http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz'
 hide_output sudo tar -xzvf db-4.8.30.NC.tar.gz
@@ -40,10 +49,10 @@ hide_output sudo make -j$((`nproc`+1))
 hide_output sudo make install -j$((`nproc`+1))
 cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 sudo rm -r db-4.8.30.NC.tar.gz db-4.8.30.NC
-echo -e "$GREEN => Berkeley 4.8 Completed <= ${NC}"
+print_success "Berkeley DB 4.8 installed successfully"
 
-# Build BerkeleyDB 5.1
-echo -e "\n$MAGENTA => Building Berkeley 5.1 <= ${NC}"
+print_header "Berkeley DB 5.1 Installation"
+print_status "Building Berkeley DB 5.1..."
 sudo mkdir -p $STORAGE_ROOT/berkeley/db5.1/
 hide_output sudo wget 'http://download.oracle.com/berkeley-db/db-5.1.29.tar.gz'
 hide_output sudo tar -xzvf db-5.1.29.tar.gz
@@ -54,10 +63,10 @@ hide_output sudo make -j$((`nproc`+1))
 hide_output sudo make install -j$((`nproc`+1))
 cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 sudo rm -r db-5.1.29.tar.gz db-5.1.29
-echo -e "$GREEN => Berkeley 5.1 Completed <= ${NC}"
+print_success "Berkeley DB 5.1 installed successfully"
 
-# Build BerkeleyDB 5.3
-echo -e "\n$MAGENTA => Building Berkeley 5.3 <= ${NC}"
+print_header "Berkeley DB 5.3 Installation"
+print_status "Building Berkeley DB 5.3..."
 sudo mkdir -p $STORAGE_ROOT/berkeley/db5.3/
 hide_output sudo wget 'http://anduin.linuxfromscratch.org/BLFS/bdb/db-5.3.28.tar.gz'
 hide_output sudo tar -xzvf db-5.3.28.tar.gz
@@ -68,10 +77,10 @@ hide_output sudo make -j$((`nproc`+1))
 hide_output sudo make install -j$((`nproc`+1))
 cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 sudo rm -r db-5.3.28.tar.gz db-5.3.28
-echo -e "$GREEN => Berkeley 5.3 Completed <= ${NC}"
+print_success "Berkeley DB 5.3 installed successfully"
 
-# Build BerkeleyDB 6.2
-echo -e "\n$MAGENTA => Building Berkeley 6.2 <= ${NC}"
+print_header "Berkeley DB 6.2 Installation"
+print_status "Building Berkeley DB 6.2..."
 sudo mkdir -p $STORAGE_ROOT/berkeley/db6.2/
 hide_output sudo wget 'http://download.oracle.com/berkeley-db/db-6.2.32.tar.gz'
 hide_output sudo tar -xzvf db-6.2.32.tar.gz
@@ -82,10 +91,10 @@ hide_output sudo make -j$((`nproc`+1))
 hide_output sudo make install -j$((`nproc`+1))
 cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 sudo rm -r db-6.2.32.tar.gz db-6.2.32
-echo -e "$GREEN => Berkeley 6.2 Completed <= ${NC}"
+print_success "Berkeley DB 6.2 installed successfully"
 
-# Build BerkeleyDB 18
-echo -e "\n$MAGENTA => Building Berkeley 18 <= ${NC}"
+print_header "Berkeley DB 18 Installation"
+print_status "Building Berkeley DB 18..."
 sudo mkdir -p $STORAGE_ROOT/berkeley/db18/
 hide_output sudo wget 'https://download.oracle.com/berkeley-db/db-18.1.40.tar.gz'
 hide_output sudo tar -xzvf db-18.1.40.tar.gz
@@ -95,10 +104,10 @@ hide_output sudo make -j$((`nproc`+1))
 hide_output sudo make install -j$((`nproc`+1))
 cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 sudo rm -r db-18.1.40.tar.gz db-18.1.40
-echo -e "$GREEN => Berkeley 18 Completed <= ${NC}"
+print_success "Berkeley DB 18 installed successfully"
 
-# Build OpenSSL 1.0.2g
-echo -e "\n$MAGENTA => Building OpenSSL 1.0.2g <= ${NC}"
+print_header "OpenSSL 1.0.2g Installation"
+print_status "Building OpenSSL 1.0.2g..."
 cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 hide_output sudo wget https://www.openssl.org/source/old/1.0.2/openssl-1.0.2g.tar.gz --no-check-certificate
 hide_output sudo tar -xf openssl-1.0.2g.tar.gz
@@ -108,10 +117,10 @@ hide_output sudo make -j$((`nproc`+1))
 hide_output sudo make install -j$((`nproc`+1))
 cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 sudo rm -r openssl-1.0.2g.tar.gz openssl-1.0.2g
-echo -e "$GREEN => OpenSSL 1.0.2g Completed <= ${NC}"
+print_success "OpenSSL 1.0.2g installed successfully"
 
-# Build bls-signatures
-echo -e "\n$MAGENTA => Building bls-signatures <= ${NC}"
+print_header "BLS Signatures Installation"
+print_status "Building bls-signatures..."
 cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 hide_output sudo wget 'https://github.com/codablock/bls-signatures/archive/v20181101.zip'
 hide_output sudo unzip v20181101.zip
@@ -120,29 +129,29 @@ hide_output sudo cmake .
 hide_output sudo make install -j$((`nproc`+1))
 cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 sudo rm -r v20181101.zip bls-signatures-20181101
-echo -e "$GREEN => bls-signatures Completed <= ${NC}"
+print_success "BLS signatures installed successfully"
 
-# Build blocknotify.sh
-echo -e "\n$YELLOW => Building blocknotify.sh <= ${NC}"
+print_header "Blocknotify Setup"
+print_status "Configuring blocknotify script..."
 if [[ ("$wireguard" == "true") ]]; then
     source $STORAGE_ROOT/yiimp/.wireguard.conf
-    echo '#####################################
-    # Created by Afiniel for Yiimpool use...  #
-    ###########################################
-    #!/bin/bash
-    blocknotify '""''"${DBInternalIP}"''""':$1 $2 $3' | sudo -E tee /usr/bin/blocknotify.sh >/dev/null 2>&1
+    echo '#####################################################
+# Created by Afiniel for Yiimpool use
+#####################################################
+#!/bin/bash
+blocknotify '""''"${DBInternalIP}"''""':$1 $2 $3' | sudo -E tee /usr/bin/blocknotify.sh >/dev/null 2>&1
 else
-    echo '#####################################
-    # Created by Afiniel for Yiimpool use...  #
-    ###########################################
-    #!/bin/bash
-    blocknotify 127.0.0.1:$1 $2 $3' | sudo -E tee /usr/bin/blocknotify.sh >/dev/null 2>&1
+    echo '#####################################################
+# Created by Afiniel for Yiimpool use
+#####################################################
+#!/bin/bash
+blocknotify 127.0.0.1:$1 $2 $3' | sudo -E tee /usr/bin/blocknotify.sh >/dev/null 2>&1
 fi
 sudo chmod +x /usr/bin/blocknotify.sh
-echo -e "$GREEN => blocknotify.sh Completed <= ${NC}"
+print_success "Blocknotify script configured successfully"
 
-# Install daemonbuilder
-echo -e "\n$MAGENTA => Installing daemonbuilder <= ${NC}"
+print_header "DaemonBuilder Installation"
+print_status "Setting up DaemonBuilder..."
 cd $HOME/Yiimpoolv1/daemon_builder
 sudo mkdir -p conf
 sudo cp -r $HOME/Yiimpoolv1/daemon_builder/utils/* $STORAGE_ROOT/daemon_builder
@@ -151,25 +160,22 @@ hide_output sudo cp -r $HOME/Yiimpoolv1/daemon_builder/utils/addport.sh /usr/bin
 sudo chmod +x $STORAGE_ROOT/daemon_builder/*
 sudo chmod +x /usr/bin/addport
 
-# Set up daemonbuilder command
-echo '
-#!/usr/bin/env bash
+print_status "Creating DaemonBuilder command..."
+echo '#!/usr/bin/env bash
 source /etc/yiimpooldonate.conf
 source /etc/yiimpool.conf
 source /etc/functions.sh
 cd $STORAGE_ROOT/daemon_builder
 bash start.sh
-cd ~
-' | sudo -E tee /usr/bin/daemonbuilder >/dev/null 2>&1
+cd ~' | sudo -E tee /usr/bin/daemonbuilder >/dev/null 2>&1
 sudo chmod +x /usr/bin/daemonbuilder
-echo -e "$GREEN => daemonbuilder Command Set Up <= ${NC}"
 
-# Check and create conf directory
+print_status "Setting up configuration directory..."
 if [ ! -d "$STORAGE_ROOT/daemon_builder/conf" ]; then
-  sudo mkdir -p $STORAGE_ROOT/daemon_builder/conf
+    sudo mkdir -p $STORAGE_ROOT/daemon_builder/conf
 fi
 
-# Create info.sh
+print_status "Creating info.sh configuration..."
 echo '#!/bin/sh
 USERSERVER='"${whoami}"'
 VERSION='"${TAG}"'
@@ -182,5 +188,15 @@ LTCDON='"${LTCDON}"'
 ETHDON='"${ETHDON}"'
 DOGEDON='"${DOGEDON}"'' | sudo -E tee $STORAGE_ROOT/daemon_builder/conf/info.sh >/dev/null 2>&1
 sudo chmod +x $STORAGE_ROOT/daemon_builder/conf/info.sh
+
+print_header "Installation Summary"
+print_info "Berkeley DB Versions: 4.8, 5.1, 5.3, 6.2, 18"
+print_info "OpenSSL Version: 1.0.2g"
+print_info "BLS Signatures: v20181101"
+print_info "DaemonBuilder: Configured"
+print_info "Blocknotify: Installed"
+print_success "Berkeley DB and components installation completed successfully"
+
+print_divider
 
 cd $HOME/Yiimpoolv1/yiimp_single

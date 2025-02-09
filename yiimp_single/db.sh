@@ -11,14 +11,12 @@
 # Date: 2024-07-15
 #####################################################
 
-# Load configuration files
 source /etc/functions.sh
 source /etc/yiimpoolversion.conf
 source /etc/yiimpool.conf
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 source $HOME/Yiimpoolv1/yiimp_single/.wireguard.install.cnf
 
-# Set error handling and log errors
 set -eu -o pipefail
 
 function print_error {
@@ -28,62 +26,47 @@ function print_error {
 }
 trap print_error ERR
 
-# Display banner
 term_art
 
-echo
-# Load WireGuard configuration if enabled
 if [[ ("$wireguard" == "true") ]]; then
     source $STORAGE_ROOT/yiimp/.wireguard.conf
 fi
 
-# Define MariaDB version
 MARIADB_VERSION='10.4'
 
-echo
-echo -e "$MAGENTA     <--$YELLOW Installing MariaDB$MAGENTA $MARIADB_VERSION -->${NC}"
-echo 
+print_header "MariaDB Installation"
+print_info "Installing MariaDB version $MARIADB_VERSION"
 
-# Set MariaDB root password for installation
 sudo debconf-set-selections <<< "maria-db-$MARIADB_VERSION mysql-server/root_password password $DBRootPassword"
 sudo debconf-set-selections <<< "maria-db-$MARIADB_VERSION mysql-server/root_password_again password $DBRootPassword"
 
-# Install MariaDB
+print_status "Installing MariaDB packages..."
 apt_install mariadb-server mariadb-client
+print_success "MariaDB installation completed"
 
-# Display completion message
-echo -e "$GREEN => MariaDB build complete <= ${NC}"
-echo
+print_header "Database Configuration"
+print_status "Creating database users for YiiMP..."
 
-# Display message for creating DB users
-echo -e "$MAGENTA => Creating DB users for YiiMP <= ${NC}"
-echo
-
-# Define SQL statements based on WireGuard setting
 if [[ "$wireguard" == "false" ]]; then
     DB_HOST="localhost"
+    print_info "Using localhost for database connections"
 else
     DB_HOST="$DBInternalIP"
+    print_info "Using WireGuard IP ($DBInternalIP) for database connections"
 fi
 
+print_status "Setting up database and user permissions..."
 Q1="CREATE DATABASE IF NOT EXISTS ${YiiMPDBName};"
 Q2="GRANT ALL ON ${YiiMPDBName}.* TO '${YiiMPPanelName}'@'${DB_HOST}' IDENTIFIED BY '$PanelUserDBPassword';"
 Q3="GRANT ALL ON ${YiiMPDBName}.* TO '${StratumDBUser}'@'${DB_HOST}' IDENTIFIED BY '$StratumUserDBPassword';"
 Q4="FLUSH PRIVILEGES;"
 SQL="${Q1}${Q2}${Q3}${Q4}"
 
-# Run SQL statements
 sudo mysql -u root -p"${DBRootPassword}" -e "$SQL"
+print_success "Database users created successfully"
 
-echo
-echo -e "$MAGENTA => Creating my.cnf <= ${NC}"
-
-# Create my.cnf based on WireGuard setting
-if [[ "$wireguard" == "false" ]]; then
-    DB_HOST="localhost"
-else
-    DB_HOST="$DBInternalIP"
-fi
+print_header "Database Configuration Files"
+print_status "Creating my.cnf configuration..."
 
 echo "[clienthost1]
 user=${YiiMPPanelName}
@@ -101,14 +84,15 @@ password=${DBRootPassword}
 " | sudo -E tee "$STORAGE_ROOT/yiimp/.my.cnf" >/dev/null 2>&1
 
 sudo chmod 0600 "$STORAGE_ROOT/yiimp/.my.cnf"
+print_success "Database configuration file created"
 
-echo
-echo -e "$YELLOW => Importing YiiMP Default database values <= ${NC}"
+print_header "Database Import"
+print_status "Importing YiiMP default database values..."
 cd "$STORAGE_ROOT/yiimp/yiimp_setup/yiimp/sql"
 
+print_status "Importing main database dump..."
 sudo zcat 2024-03-06-complete_export.sql.gz | sudo mysql -u root -p"${DBRootPassword}" "${YiiMPDBName}"
 
-# SQL files
 SQL_FILES=(
     2024-03-18-add_aurum_algo.sql
     2024-03-29-add_github_version.sql
@@ -121,24 +105,22 @@ SQL_FILES=(
 )
 
 for file in "${SQL_FILES[@]}"; do
+    print_status "Importing $file..."
     if [[ "$file" == *.gz ]]; then
-        # Handle gzipped files
         sudo zcat "$file" | sudo mysql -u root -p"${DBRootPassword}" "${YiiMPDBName}" --force --binary-mode
     else
-        # Handle regular SQL files
         sudo mysql -u root -p"${DBRootPassword}" "${YiiMPDBName}" --force < "$file"
     fi
 done
 
 cd $HOME/Yiimpoolv1/yiimp_single/yiimp_confs
+print_status "Enabling algorithms..."
 sudo mysql -u root -p"${DBRootPassword}" "${YiiMPDBName}" --force < "2025-01-29-enable-all-algos.sql"
+print_success "Database import completed successfully"
 
-echo
-echo -e "$YELLOW <-- Database import $GREEN complete -->${NC}"
-echo
-echo -e "$YELLOW => Tweaking MariaDB for better performance <= ${NC}"
+print_header "MariaDB Optimization"
+print_status "Applying performance tweaks..."
 
-# Define MariaDB configuration changes
 config_changes=(
     '[mysqld]'
     'max_connections=800'
@@ -149,34 +131,40 @@ config_changes=(
     'max_allowed_packet=64M'
 )
 
-# Add bind-address if WireGuard is true
 if [[ ("$wireguard" == "true") ]]; then
     config_changes+=("bind-address=$DBInternalIP")
+    print_info "Setting bind address to $DBInternalIP for WireGuard"
 fi
 
-# Prepare the configuration changes as a string with each option on a separate line
+print_status "Updating MariaDB configuration..."
 config_string=$(printf "%s\n" "${config_changes[@]}")
-
-# Apply changes to MariaDB configuration
 sudo bash -c "echo \"$config_string\" >> /etc/mysql/my.cnf"
 
+print_status "Restarting MariaDB service..."
 restart_service mysql
+print_success "Performance optimizations applied"
 
-echo -e "$GREEN => Complete${NC}"
-echo
+print_header "phpMyAdmin Setup"
+print_status "Creating phpMyAdmin user..."
 
-echo -e "$YELLOW => Creating Phpmyadmin User <= ${NC}"
-echo
-
-# Create phpMyAdmin user
 sudo mysql -u root -p"${DBRootPassword}" -e "CREATE USER '${PHPMyAdminUser}'@'%' IDENTIFIED BY '${PHPMyAdminPassword}';"
 sudo mysql -u root -p"${DBRootPassword}" -e "GRANT ALL PRIVILEGES ON *.* TO '${PHPMyAdminUser}'@'%' WITH GRANT OPTION;"
 sudo mysql -u root -p"${DBRootPassword}" -e "FLUSH PRIVILEGES;"
 
-echo -e "$GREEN => Complete${NC}"
-echo
+print_status "Restarting MariaDB service..."
 restart_service mysql
+print_success "phpMyAdmin user created successfully"
+
+print_divider
+
+print_warning "Please save these credentials in a secure location:"
+print_header "Database Setup Summary"
+print_info "MariaDB Version: $MARIADB_VERSION"
+print_info "Configuration: /etc/mysql/my.cnf"
+print_info "Credentials File: $STORAGE_ROOT/yiimp/.my.cnf"
+print_warning "Please save these credentials in a secure location:"
+
+print_divider
 
 set +eu +o pipefail
-
 cd $HOME/Yiimpoolv1/yiimp_single

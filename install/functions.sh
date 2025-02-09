@@ -559,3 +559,31 @@ display_version_info() {
     fi
     echo
 }
+
+print_header() {
+    echo -e "\n${BLUE}${BOLD}=== $1 ===${NC}\n"
+}
+
+print_status() {
+    echo -e "${DIM}[${NC}${GREEN}●${NC}${DIM}]${NC} $1"
+}
+
+print_error() {
+    echo -e "${RED}${BOLD}ERROR:${NC} $1"
+}
+
+print_warning() {
+    echo -e "${YELLOW}${BOLD}WARNING:${NC} $1"
+}
+
+print_success() {
+    echo -e "${GREEN}${BOLD}SUCCESS:${NC} $1"
+}
+
+print_info() {
+    echo -e "${BLUE}${BOLD}INFO:${NC} $1"
+}
+
+print_divider() {
+    echo -e "\n${DIM}────────────────────────────────────────────────────────${NC}\n"
+}

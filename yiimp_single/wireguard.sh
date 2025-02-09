@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-##########################################
+#####################################################
 # Created by Afiniel for Yiimpool use
 #
 # This script installs and configures WireGuard
@@ -11,7 +11,7 @@
 #
 # Author: Afiniel
 # Date: 2024-07-15
-##########################################
+#####################################################
 
 # Load configuration files
 source $HOME/Yiimpoolv1/yiimp_single/.wireguard.install.cnf
@@ -22,26 +22,31 @@ source /etc/yiimpool.conf
 
 # Display banner
 term_art
-echo
-echo -e "$YELLOW => Installing WireGuard <=${NC}"
-echo
 
-# Add WireGuard repository and install packages
+print_header "WireGuard Installation"
+
+
 if [[ "$DISTRO" == "16" || "$DISTRO" == "18" || "$DISTRO" == "20" || "$DISTRO" == "22" || "$DISTRO" == "24" ]]; then
     hide_output sudo add-apt-repository ppa:wireguard/wireguard -y
     hide_output sudo apt-get update
+    
+    print_status "Installing WireGuard packages..."
     hide_output sudo apt-get install wireguard-dkms wireguard-tools -y
-fi
-
-if [[ "$DISTRO" == "12" || "$DISTRO" == "11" ]]; then
+    print_success "WireGuard packages installed successfully"
+elif [[ "$DISTRO" == "12" || "$DISTRO" == "11" ]]; then
+    print_status "Installing WireGuard for Debian..."
     hide_output sudo apt-get install -y wireguard
+    print_success "WireGuard installed successfully"
 fi
 
-# Generate WireGuard keys
+print_header "WireGuard Key Generation"
+print_status "Generating WireGuard keys..."
 wg_private_key=$(wg genkey)
 wg_public_key=$(echo "$wg_private_key" | wg pubkey)
+print_success "WireGuard keys generated successfully"
 
-# Create WireGuard configuration file
+print_header "WireGuard Configuration"
+print_status "Creating WireGuard configuration file..."
 wg_config="/etc/wireguard/wg0.conf"
 sudo tee "$wg_config" >/dev/null <<EOL
 [Interface]
@@ -50,20 +55,32 @@ ListenPort = 6121
 SaveConfig = true
 Address = ${DBInternalIP}/24
 EOL
+print_success "WireGuard configuration file created"
 
-# Start WireGuard and enable at boot
+print_header "Service Configuration"
+print_status "Starting WireGuard service..."
 sudo systemctl start wg-quick@wg0
+print_status "Enabling WireGuard service at boot..."
 sudo systemctl enable wg-quick@wg0
 
-# Allow incoming connections on WireGuard port
+print_status "Configuring firewall..."
 ufw_allow 6121
+print_success "Firewall configured for WireGuard"
 
-# Display WireGuard public key and IP
+print_header "WireGuard Summary"
+print_status "Saving WireGuard public information..."
 dbpublic="${PUBLIC_IP}"
 mypublic="${wg_public_key}"
 echo -e "Public IP: ${dbpublic}\nPublic Key: ${mypublic}" | sudo -E tee "$STORAGE_ROOT/yiimp/.wireguard_public.conf" >/dev/null 2>&1
 
-echo
-echo -e "$GREEN WireGuard setup completed $NC"
+print_info "WireGuard Configuration Details:"
+print_info "Public IP: ${dbpublic}"
+print_info "Public Key: ${mypublic}"
+print_info "Listen Port: 6121"
+print_info "Configuration: ${wg_config}"
+
+print_success "WireGuard setup completed successfully"
+
+print_divider
 
 cd $HOME/yiimpool/yiimp_single
