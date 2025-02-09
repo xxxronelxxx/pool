@@ -127,18 +127,6 @@ if [ -z "${SupportEmail:-}" ]; then
     fi
 fi
 
-if [ -z "${AdminPanel:-}" ]; then
-    DEFAULT_AdminPanel=AdminPortal
-    input_box "Admin Panel Location" \
-    "Enter your desired location name for admin access.\n\nOnce set, you will access the YiiMP admin at ${DomainName}/site/AdminPortal.\n\nDesired Admin Panel Location:" \
-    "${DEFAULT_AdminPanel}" \
-    AdminPanel
-
-    if [ -z "${AdminPanel}" ]; then
-        exit
-    fi
-fi
-
 # Automatically set PublicIP based on SSH client IP or default private IP
 if [ -z "${PublicIP:-}" ]; then
     if pstree -p | egrep --quiet --extended-regexp ".*sshd.*\($$\)"; then
@@ -291,7 +279,6 @@ Domain Name           : ${DomainName}
 Stratum URL          : ${StratumURL}
 Install SSL           : ${InstallSSL}
 System Email          : ${SupportEmail}
-Admin Panel Location  : ${AdminPanel}
 Your Public IP        : ${PublicIP}
 phpMyAdmin Username   : ${PHPMyAdminUser}" 17 60
 
@@ -311,7 +298,6 @@ case $response in
                   StratumURL=${StratumURL}
                   InstallSSL=${InstallSSL}
                   SupportEmail=${SupportEmail}
-                  AdminPanel=${AdminPanel}
                   PublicIP=${PublicIP}
                   AutoExchange=${AutoExchange}
                   DBInternalIP=${DBInternalIP}
@@ -337,7 +323,6 @@ case $response in
                   StratumURL=${StratumURL}
                   InstallSSL=${InstallSSL}
                   SupportEmail=${SupportEmail}
-                  AdminPanel=${AdminPanel}
                   PublicIP=${PublicIP}
                   AutoExchange=${AutoExchange}
                   YiiMPDBName=${YiiMPDBName}
