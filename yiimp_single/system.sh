@@ -32,7 +32,8 @@ if [ ! -f /etc/timezone ]; then
     restart_service rsyslog
 fi
 print_success "Timezone set to UTC"
-hide_output sudo apt-get install -y software-properties-common build-essential
+
+apt_install software-properties-common build-essential
 
 # CertBot
 print_header "Installing CertBot"
@@ -187,17 +188,17 @@ hide_output sudo apt-get update
 
 print_status "Installing PHP packages..."
 # Common PHP packages for all distros
-hide_output sudo apt-get install -y php8.1-fpm php8.1-opcache php8.1 php8.1-common php8.1-gd
-hide_output sudo apt-get install -y php8.1-mysql php8.1-imap php8.1-cli php8.1-cgi php8.1-curl php8.1-intl php8.1-pspell 
-hide_output sudo apt-get install -y php8.1-sqlite3 php8.1-tidy php8.1-xmlrpc php8.1-xsl php8.1-zip php8.1-mbstring 
-hide_output sudo apt-get install -y php8.1-memcache php8.1-memcached memcached certbot libssh-dev libbrotli-dev 
-hide_output sudo apt-get install -y php-pear php-auth-sasl mcrypt imagemagick libruby php-imagick php-gettext 
-hide_output sudo apt-get install -y fail2ban ntpdate python3 python3-dev python3-pip curl git sudo coreutils 
-hide_output sudo apt-get install -y pollinate unzip unattended-upgrades cron pwgen libgmp3-dev libmysqlclient-dev 
-hide_output sudo apt-get install -y libcurl4-gnutls-dev libkrb5-dev libldap2-dev libidn11-dev gnutls-dev librtmp-dev 
-hide_output sudo apt-get install -y build-essential libtool autotools-dev automake pkg-config libevent-dev bsdmainutils 
-hide_output sudo apt-get install -y libssl-dev automake cmake gnupg2 ca-certificates lsb-release nginx certbot libsodium-dev 
-hide_output sudo apt-get install -y libnghttp2-dev librtmp-dev libssh2-1 libssh2-1-dev libldap2-dev libidn11-dev libpsl-dev libkrb5-dev
+apt_install php8.1-fpm php8.1-opcache php8.1 php8.1-common php8.1-gd
+apt_install php8.1-mysql php8.1-imap php8.1-cli php8.1-cgi php8.1-curl php8.1-intl php8.1-pspell
+apt_install php8.1-sqlite3 php8.1-tidy php8.1-xmlrpc php8.1-xsl php8.1-zip php8.1-mbstring
+apt_install php8.1-memcache php8.1-memcached memcached certbot libssh-dev libbrotli-dev
+apt_install php-pear php-auth-sasl mcrypt imagemagick libruby php-imagick php-gettext
+apt_install fail2ban ntpdate python3 python3-dev python3-pip curl git sudo coreutils
+apt_install pollinate unzip unattended-upgrades cron pwgen libgmp3-dev libmysqlclient-dev
+apt_install libcurl4-gnutls-dev libkrb5-dev libldap2-dev libidn11-dev gnutls-dev librtmp-dev
+apt_install build-essential libtool autotools-dev automake pkg-config libevent-dev bsdmainutils
+apt_install libssl-dev automake cmake gnupg2 ca-certificates lsb-release nginx certbot libsodium-dev
+apt_install libnghttp2-dev librtmp-dev libssh2-1 libssh2-1-dev libldap2-dev libidn11-dev libpsl-dev libkrb5-dev
 
 if systemctl list-unit-files | grep -q php8.1-fpm.service; then
     sudo systemctl start php8.1-fpm
@@ -210,10 +211,10 @@ print_success "PHP installation complete"
 print_header "Installing phpMyAdmin"
 hide_output sudo wget https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz
 hide_output sudo tar xzf phpMyAdmin-latest-all-languages.tar.gz
-hide_output sudo rm phpMyAdmin-latest-all-languages.tar.gz
-hide_output sudo mv phpMyAdmin-*-all-languages /usr/share/phpmyadmin
-hide_output sudo mkdir -p /usr/share/phpmyadmin/tmp
-hide_output sudo chmod 777 /usr/share/phpmyadmin/tmp
+sudo rm phpMyAdmin-latest-all-languages.tar.gz
+sudo mv phpMyAdmin-*-all-languages /usr/share/phpmyadmin
+sudo mkdir -p /usr/share/phpmyadmin/tmp
+sudo chmod 777 /usr/share/phpmyadmin/tmp
 print_success "phpMyAdmin installation complete"
 
 print_header "Setting PHP Version"

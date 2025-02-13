@@ -34,7 +34,7 @@ cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 
 print_status "Updating configuration files..."
 sleep 1
-sudo sed -i 's#absolutepathserver#'"$absolutepath"'#' conf/daemonbuilder.sh
+#sudo sed -i 's#absolutepathserver#'"$absolutepath"'#' conf/daemonbuilder.sh
 print_success "Configuration updated successfully"
 
 print_header "Berkeley DB 4.8 Installation"
