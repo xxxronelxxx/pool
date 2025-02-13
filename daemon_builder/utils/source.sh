@@ -1467,110 +1467,112 @@ echo -e "$CYAN -----------------------------------------------------------------
 echo
 
 # If we made it this far everything built fine removing last coin.conf and build directory
-sudo rm -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/.lastcoin.conf
-sudo rm -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}
-sudo rm -r $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf
+if [[ -f "$STORAGE_ROOT/daemon_builder/temp_coin_builds/.lastcoin.conf" ]]; then
+    sudo rm -f $STORAGE_ROOT/daemon_builder/temp_coin_builds/.lastcoin.conf
+fi
+
+if [[ -d "$STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}" ]]; then
+    sudo rm -rf $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}
+fi
+
+if [[ -f "$STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf" ]]; then
+    sudo rm -f $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf
+fi
 
 if [[ -f "$ADDPORTCONF" ]]; then
-    sudo rm -r $STORAGE_ROOT/daemon_builder/.addport.cnf
+    sudo rm -f $STORAGE_ROOT/daemon_builder/.addport.cnf
 fi
+
+clear
+echo
+figlet -f slant -w 100 "    DaemonBuilder" | lolcat
+echo
 
 print_header "Installation Summary"
 
+# Display daemon status
+if [[ ("$DAEMOND" == "true") ]]; then
+    print_success "UPDATE of ${coind::-1} completed"
+else
+    print_success "Installation of ${coind::-1} completed"
+fi
+
+print_divider
+
+# Display installed components
+print_header "Installed Components"
+
 if [[ "$coindmv" == "true" ]]; then
-    print_success "Daemon Installation"
-    print_info "Binary: ${coind}"
-    print_info "Location: /usr/bin/${coind}"
-    print_divider
+    print_info "Daemon       : ${MAGENTA}${coind}${NC}"
+    print_info "Location     : ${YELLOW}/usr/bin/${coind}${NC}"
 fi
 
 if [[ "$coinclimv" == "true" ]]; then
-    print_success "CLI Tool Installation"
-    print_info "Binary: ${coincli}"
-    print_info "Location: /usr/bin/${coincli}"
-    print_divider
+    print_info "CLI Tool     : ${MAGENTA}${coincli}${NC}"
+    print_info "Location     : ${YELLOW}/usr/bin/${coincli}${NC}"
 fi
 
 if [[ "$cointxmv" == "true" ]]; then
-    print_success "Transaction Tool Installation"
-    print_info "Binary: ${cointx}"
-    print_info "Location: /usr/bin/${cointx}"
-    print_divider
+    print_info "TX Tool      : ${MAGENTA}${cointx}${NC}"
+    print_info "Location     : ${YELLOW}/usr/bin/${cointx}${NC}"
 fi
 
 if [[ "$coinutilmv" == "true" ]]; then
-    print_success "Utility Tool Installation"
-    print_info "Binary: ${coinutil}"
-    print_info "Location: /usr/bin/${coinutil}"
-    print_divider
+    print_info "Utility Tool : ${MAGENTA}${coinutil}${NC}"
+    print_info "Location     : ${YELLOW}/usr/bin/${coinutil}${NC}"
 fi
 
 if [[ "$coinhashmv" == "true" ]]; then
-    print_success "Hash Tool Installation"
-    print_info "Binary: ${coinhash}"
-    print_info "Location: /usr/bin/${coinhash}"
-    print_divider
+    print_info "Hash Tool    : ${MAGENTA}${coinhash}${NC}"
+    print_info "Location     : ${YELLOW}/usr/bin/${coinhash}${NC}"
 fi
 
 if [[ "$coinwalletmv" == "true" ]]; then
-    print_success "Wallet Tool Installation"
-    print_info "Binary: ${coinwallet}"
-    print_info "Location: /usr/bin/${coinwallet}"
-    print_divider
+    print_info "Wallet Tool  : ${MAGENTA}${coinwallet}${NC}"
+    print_info "Location     : ${YELLOW}/usr/bin/${coinwallet}${NC}"
 fi
 
 print_divider
 
+# Display coin configuration
 print_header "Coin Configuration"
-print_info "Symbol: ${coin^^}"
+print_info "Symbol       : ${MAGENTA}${coin^^}${NC}"
 
 if [[ -f "$ADDPORTCONF" ]]; then
-    print_info "Algorithm: ${COINALGO}"
-    print_info "Dedicated Port: ${COINPORT}"
+    print_info "Algorithm    : ${MAGENTA}${COINALGO}${NC}"
+    print_info "Port         : ${MAGENTA}${COINPORT}${NC}"
 fi
 
 print_divider
 
+# Display stratum management commands
 print_header "Stratum Management"
-print_info "Start/Stop/Restart Command:"
-echo -e "  ${BLUE}${BOLD}stratum.${coin,,} start|stop|restart ${coin,,}${NC}"
-print_info "View Stratum Screen:"
-echo -e "  ${BLUE}${BOLD}screen -r ${coin,,}${NC}"
+print_info "Start/Stop/Restart:"
+echo -e "  ${BLUE}stratum.${coin,,} start|stop|restart ${coin,,}${NC}"
+print_info "View Screen:"
+echo -e "  ${BLUE}screen -r ${coin,,}${NC}"
 
 print_divider
 
-print_header "Additional Tools"
-print_info "Install Another Coin:"
-echo -e "  ${BLUE}${BOLD}daemonbuilder${NC}"
-
-print_divider
-
-print_header "Cleanup"
-print_status "Removing temporary files..."
-sudo rm -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/.lastcoin.conf
-sudo rm -r $STORAGE_ROOT/daemon_builder/temp_coin_builds/${coindir}
-sudo rm -r $STORAGE_ROOT/daemon_builder/.daemon_builder.my.cnf
-
-if [[ -f "$ADDPORTCONF" ]]; then
-    sudo rm -r $STORAGE_ROOT/daemon_builder/.addport.cnf
-fi
-print_success "Temporary files removed"
-
-print_divider
-
+# Start the daemon
 print_header "Starting Daemon"
 print_status "Initializing ${coin^^} daemon..."
+
 if [[ "$YIIMPCONF" == "true" ]]; then
+
     "${coind}" -datadir=$STORAGE_ROOT/wallets/."${coind::-1}" -conf="${coind::-1}".conf -daemon -shrinkdebugfile
-else
-    "${coind}" -datadir=${absolutepath}/wallets/."${coind::-1}" -conf="${coind::-1}".conf -daemon -shrinkdebugfile
+
 fi
+
 print_success "Daemon started successfully"
 
 print_divider
 
-print_header "Installation Complete"
-print_success "${coin^^} node is now running"
-print_info "All components have been installed and configured"
+# Final message
+echo -e "$CYAN =========================================================================== $NC"
+echo -e "$GREEN Installation process completed successfully! $NC"
+echo -e "$RED Type ${MAGENTA}daemonbuilder${NC}${RED} at any time to install another coin! $NC"
+echo -e "$CYAN =========================================================================== $NC"
+echo
 
 exit

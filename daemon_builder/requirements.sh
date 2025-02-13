@@ -42,7 +42,7 @@ print_status "Installing core development libraries..."
 apt_install build-essential libzmq5 libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils \
 cmake libboost-all-dev zlib1g-dev libseccomp-dev libcap-dev libminiupnpc-dev gettext libcanberra-gtk-module \
 libqrencode-dev libzmq3-dev libqt5gui5 libqt5core5a libqt5webkit5-dev libqt5dbus5 qttools5-dev qttools5-dev-tools \
-libprotobuf-dev protobuf-compiler
+libprotobuf-dev protobuf-compiler libleveldb-dev bison
 print_success "Core development packages installed"
 
 print_header "Database Dependencies"
