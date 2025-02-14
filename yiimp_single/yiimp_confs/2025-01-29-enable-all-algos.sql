@@ -86,7 +86,7 @@ INSERT INTO `algos` (`name`, `color`, `speedfactor`, `port`, `visible`, `powlimi
 ('x22i', '#f0f0a0', 1, 4200, 1, NULL),
 ('x25x', '#f0f0a0', 1, 4210, 1, NULL),
 ('xevan', '#f0b0a0', 1, 3739, 1, NULL),
-('xelisv2-pepew', '#e2d0d2', 1, 7092, 1, NULL);
+('xelisv2-pepew', '#e2d0d2', 1, 7092, 1, NULL),
 ('yescryptR16', '#e0d0e0', 1, 6333, 1, NULL),
 ('yescryptR32', '#e0d0e0', 1, 6343, 1, NULL),
 ('yescryptR8', '#e0d0e0', 1, 6353, 1, NULL),
