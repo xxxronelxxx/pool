@@ -837,6 +837,7 @@ fi
 if [[ "$precompiled" == "true" ]]; then
 
     COINTARGZ=$(find . -type f -name "*.tar.gz")
+    COINTGZ=$(find . -type f -name "*.tgz")
     COINZIP=$(find . -type f -name "*.zip")
     COIN7Z=$(find . -type f -name "*.7z")
 
@@ -844,10 +845,12 @@ if [[ "$precompiled" == "true" ]]; then
         hide_output sudo unzip -q "$COINZIP"
     elif [[ -f "$COINTARGZ" ]]; then
         hide_output sudo tar xzvf "$COINTARGZ"
+    elif [[ -f "$COINTGZ" ]]; then
+        hide_output sudo tar xzvf "$COINTGZ"
     elif [[ -f "$COIN7Z" ]]; then
         hide_output sudo 7z x "$COIN7Z"
     else
-        echo -e "$RED => No valid compressed files found (.zip, .tar.gz, or .7z).$NC"
+        echo -e "$RED => No valid compressed files found (.zip, .tar.gz, .tgz, or .7z).$NC"
         exit 1
     fi
 
