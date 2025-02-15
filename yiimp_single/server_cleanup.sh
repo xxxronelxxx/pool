@@ -34,10 +34,6 @@ print_status "Installing cron screens to crontab"
 ) | crontab -
 (
     crontab -l 2>/dev/null
-    echo "@reboot source /etc/yiimpserverconfig.sh"
-) | crontab -
-(
-    crontab -l 2>/dev/null
     echo "*/5 * * * * source /etc/yiimpool.conf && cd $STORAGE_ROOT/yiimp/site/web && php runconsole.php cronjob/GithubScan"
 ) | crontab -
 
