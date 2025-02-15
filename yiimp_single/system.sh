@@ -201,7 +201,7 @@ apt_install libkrb5-dev libldap2-dev libidn11-dev gnutls-dev librtmp-dev
 apt_install build-essential libtool autotools-dev automake pkg-config libevent-dev bsdmainutils libssl-dev
 apt_install automake cmake gnupg2 ca-certificates lsb-release nginx certbot libsodium-dev
 apt_install libnghttp2-dev librtmp-dev libssh2-1 libssh2-1-dev libldap2-dev libidn11-dev libpsl-dev libkrb5-dev php8.1-memcache php8.1-memcached memcached
-apt_install php8.1-mysql
+apt_install php8.1-mysql php8.1-mbstring
 apt_install libssh-dev libbrotli-dev php8.1-curl
 
 print_success "PHP installation complete"
