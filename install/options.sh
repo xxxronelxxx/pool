@@ -3,10 +3,10 @@
 #####################################################
 # Created by Afiniel for Yiimpool use
 #
-# This is the main upgrade menu for Yiimpool
+# This is the main Options menu for Yiimpool
 #
 # Author: Afiniel
-# Updated: 2024-07-15
+# Updated: 2025-02-16
 #####################################################
 
 source /etc/yiimpooldonate.conf
@@ -21,7 +21,8 @@ show_menu() {
         3 "Restore from Backup" \
         4 "System Health Check" \
         5 "View Update History" \
-        6 "Exit")
+        6 "Database Tool Menu" \
+        7 "Exit")
     
     case "$RESULT" in
         1)
@@ -50,6 +51,7 @@ show_menu() {
             echo -e "${YELLOW}Running system health check...${NC}"
             cd $HOME/Yiimpoolv1/yiimp_upgrade
             source health_check.sh
+            echo -e "${GREEN}Health check complete!${NC}"
             exit 0
             ;;
         5)
@@ -60,6 +62,12 @@ show_menu() {
             exit 0
             ;;
         6)
+            clear
+            echo -e "${GREEN}Entering Database Import menu${NC}"
+            cd $HOME/Yiimpoolv1/yiimp_upgrade
+            source dbtoolmenu.sh
+            ;;
+        7)
             clear
             motd
             echo -e "${GREEN}Exiting YiimPool Menu${NC}"
