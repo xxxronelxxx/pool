@@ -102,6 +102,7 @@ SQL_FILES=(
     2024-04-05-algos_port_color.sql
     2024-04-23-add_pers_string.sql
     2024-04-29-add_sellthreshold.sql
+    2025-02-06-add_usemweb.sql
 )
 
 for file in "${SQL_FILES[@]}"; do
