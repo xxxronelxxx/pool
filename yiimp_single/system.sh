@@ -165,22 +165,23 @@ hide_output sudo apt-get update
 
 print_header "Installing PHP"
 
-if [[ "$DISTRO" == "12" || "$DISTRO" == "11" ]]; then
-    apt_install python3-launchpadlib
+
+if [[ "$DISTRO" == "11" || "$DISTRO" == "12" ]]; then
+    if [ ! -f /etc/apt/sources.list.d/ondrej-php.list ]; then
+        print_status "Adding PHP repository for Debian"
+        apt_install python3-launchpadlib apt-transport-https lsb-release ca-certificates
+        curl -fsSL https://packages.sury.org/php/apt.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/php.gpg
+        echo "deb [signed-by=/etc/apt/keyrings/php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" | \
+            sudo tee /etc/apt/sources.list.d/php.list
+        hide_output sudo apt-get update
+    fi
 fi
+
 
 if [[ "$DISTRO" == "16" || "$DISTRO" == "18" || "$DISTRO" == "20" || "$DISTRO" == "22" || "$DISTRO" == "24" ]]; then
     if [ ! -f /etc/apt/sources.list.d/ondrej-php-bionic.list ]; then
+        print_status "Adding PHP repository for Ubuntu"
         hide_output sudo add-apt-repository -y ppa:ondrej/php
-    fi
-fi 
-
-if [[ "$DISTRO" == "12" || "$DISTRO" == "11" ]]; then
-    if [ ! -f /etc/apt/sources.list.d/ondrej-php.list ]; then
-        hide_output sudo apt-get install -y apt-transport-https lsb-release ca-certificates
-        wget -qO - https://packages.sury.org/php/apt.gpg | sudo apt-key add -
-        echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/php.list
-        hide_output sudo apt-get update
     fi
 fi
 
