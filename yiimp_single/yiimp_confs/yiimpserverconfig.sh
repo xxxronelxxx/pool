@@ -62,17 +62,8 @@ define('"'"'YAAMP_NOTIFY_NEW_COINS'"'"', false);
 define('"'"'YAAMP_DEFAULT_ALGO'"'"', '"'"'x11'"'"');
 define('"'"'YAAMP_USE_NGINX'"'"', true);
 
-/* Github access token used to scan coin repos for new releases */
-define('GITHUB_ACCESSTOKEN', '<username>:<api-secret>');
+// Exchange public keys (private keys are in a separate config file)
 
-/* mail server access data to send mails using external mailserver */
-define('SMTP_HOST', 'mail.example.com');
-define('SMTP_PORT', 25);
-define('SMTP_USEAUTH', true);
-define('SMTP_USERNAME', 'mailuser');
-define('SMTP_PASSWORD', 'mailpassword');
-define('SMTP_DEFAULT_FROM', 'mailuser@example.com');
-define('SMTP_DEFAULT_HELO', 'mypool-server.example.com');
 
 // Automatic withdraw to Yaamp btc wallet if btc balance > 0.3
 define('"'"'EXCH_AUTO_WITHDRAW'"'"', 0.3);
@@ -159,16 +150,7 @@ define('"'"'YAAMP_NOTIFY_NEW_COINS'"'"', false);
 define('"'"'YAAMP_DEFAULT_ALGO'"'"', '"'"'x11'"'"');
 define('"'"'YAAMP_USE_NGINX'"'"', true);
 
-/* Github access token used to scan coin repos for new releases */
-
-/* mail server access data to send mails using external mailserver */
-define('SMTP_HOST', 'mail.example.com');
-define('SMTP_PORT', 25);
-define('SMTP_USEAUTH', true);
-define('SMTP_USERNAME', 'mailuser');
-define('SMTP_PASSWORD', 'mailpassword');
-define('SMTP_DEFAULT_FROM', 'mailuser@example.com');
-define('SMTP_DEFAULT_HELO', 'mypool-server.example.com');
+// Exchange public keys (private keys are in a separate config file)
 
 
 // Automatic withdraw to Yaamp btc wallet if btc balance > 0.3
