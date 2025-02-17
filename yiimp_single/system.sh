@@ -165,7 +165,6 @@ hide_output sudo apt-get update
 
 print_header "Installing PHP"
 
-
 if [[ "$DISTRO" == "11" || "$DISTRO" == "12" ]]; then
     if [ ! -f /etc/apt/sources.list.d/ondrej-php.list ]; then
         print_status "Adding PHP repository for Debian"
@@ -175,14 +174,12 @@ if [[ "$DISTRO" == "11" || "$DISTRO" == "12" ]]; then
             sudo tee /etc/apt/sources.list.d/php.list
         hide_output sudo apt-get update
     fi
-    else
-        if [ ! -f /etc/apt/sources.list.d/ondrej-php-bionic.list ]; then
-            print_status "Adding PHP repository for Ubuntu"
-            hide_output sudo add-apt-repository -y ppa:ondrej/php
-        fi
+else
+    if [ ! -f /etc/apt/sources.list.d/ondrej-php-bionic.list ]; then
+        print_status "Adding PHP repository for Ubuntu"
+        hide_output sudo add-apt-repository -y ppa:ondrej/php
     fi
 fi
-
 
 hide_output sudo apt-get update
 
