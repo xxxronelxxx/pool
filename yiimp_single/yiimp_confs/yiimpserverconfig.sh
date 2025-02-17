@@ -160,7 +160,6 @@ define('"'"'YAAMP_DEFAULT_ALGO'"'"', '"'"'x11'"'"');
 define('"'"'YAAMP_USE_NGINX'"'"', true);
 
 /* Github access token used to scan coin repos for new releases */
-define('GITHUB_ACCESSTOKEN', '<username>:<api-secret>');
 
 /* mail server access data to send mails using external mailserver */
 define('SMTP_HOST', 'mail.example.com');
