@@ -175,15 +175,14 @@ if [[ "$DISTRO" == "11" || "$DISTRO" == "12" ]]; then
             sudo tee /etc/apt/sources.list.d/php.list
         hide_output sudo apt-get update
     fi
-fi
-
-
-if [[ "$DISTRO" == "16" || "$DISTRO" == "18" || "$DISTRO" == "20" || "$DISTRO" == "22" || "$DISTRO" == "24" ]]; then
-    if [ ! -f /etc/apt/sources.list.d/ondrej-php-bionic.list ]; then
-        print_status "Adding PHP repository for Ubuntu"
-        hide_output sudo add-apt-repository -y ppa:ondrej/php
+    else
+        if [ ! -f /etc/apt/sources.list.d/ondrej-php-bionic.list ]; then
+            print_status "Adding PHP repository for Ubuntu"
+            hide_output sudo add-apt-repository -y ppa:ondrej/php
+        fi
     fi
 fi
+
 
 hide_output sudo apt-get update
 
