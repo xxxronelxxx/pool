@@ -95,7 +95,7 @@ backup_system() {
     log_message "$GREEN" "Backup completed: ${backup_name}.tar.gz"
 }
 
-() {
+upgrade_stratum() {
     log_message "$YELLOW" "Upgrading stratum..."
     
     if [ -f "$STORAGE_ROOT/yiimp/.yiimp.conf" ]; then
