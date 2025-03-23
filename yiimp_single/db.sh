@@ -100,9 +100,13 @@ SQL_FILES=(
     2024-04-01-add_auto_exchange.sql
     2024-04-01-shares_blocknumber.sql
     2024-04-05-algos_port_color.sql
+    2024-04-22-add_equihash_algos.sql
     2024-04-23-add_pers_string.sql
     2024-04-29-add_sellthreshold.sql
+    2024-05-04-add_neoscrypt_xaya_algo.sql
     2025-02-06-add_usemweb.sql
+    2025-02-13-add_xelisv2-pepew.sql
+    2025-02-23-add_algo_kawpow.sql
 )
 
 for file in "${SQL_FILES[@]}"; do
@@ -114,9 +118,9 @@ for file in "${SQL_FILES[@]}"; do
     fi
 done
 
-cd $HOME/Yiimpoolv1/yiimp_single/yiimp_confs
-print_status "Enabling algorithms..."
-sudo mysql -u root -p"${DBRootPassword}" "${YiiMPDBName}" --force < "2025-01-29-enable-all-algos.sql"
+#cd $HOME/Yiimpoolv1/yiimp_single/yiimp_confs
+#print_status "Enabling algorithms..."
+# sudo mysql -u root -p"${DBRootPassword}" "${YiiMPDBName}" --force < "2025-01-29-enable-all-algos.sql"
 print_success "Database import completed successfully"
 
 print_header "MariaDB Optimization"
