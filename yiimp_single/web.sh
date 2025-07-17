@@ -47,11 +47,11 @@ print_status "Updating YiiMP configuration..."
 sudo sed -i "s|ROOTDIR=/data/yiimp|ROOTDIR=${STORAGE_ROOT}/yiimp/site|g" /bin/yiimp
 
 print_header "NGINX Configuration"
-if [[ ("$UsingSubDomain" == "y" || "$UsingSubDomain" == "Y" || "$UsingSubDomain" == "yes" || "$UsingSubDomain" == "Yes" || "$UsingSubDomain" == "YES") ]]; then
+if [[ "${UsingSubDomain,,}" == "yes" ]]; then
     print_status "Configuring subdomain setup..."
     cd $HOME/Yiimpoolv1/yiimp_single
     source nginx_subdomain_nonssl.sh
-    if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
+    if [[ "${InstallSSL,,}" == "yes" ]]; then
         print_status "Configuring SSL for subdomain..."
         cd $HOME/Yiimpoolv1/yiimp_single
         source nginx_subdomain_ssl.sh
@@ -60,7 +60,7 @@ else
     print_status "Configuring main domain setup..."
     cd $HOME/Yiimpoolv1/yiimp_single
     source nginx_domain_nonssl.sh
-    if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
+    if [[ "${InstallSSL,,}" == "yes" ]]; then
         print_status "Configuring SSL for main domain..."
         cd $HOME/Yiimpoolv1/yiimp_single
         source nginx_domain_ssl.sh
