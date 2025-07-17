@@ -17,8 +17,8 @@ print_status "Configuring MOTD for your system"
 if [[ $DISTRO = "16" || $DISTRO = "17" || $DISTRO = "18" || $DISTRO = "19" || $DISTRO = "20" || $DISTRO = "21" || $DISTRO = "22" || $DISTRO = "23" || $DISTRO = "24" ]]; then
     print_info "Setting up MOTD for Ubuntu"
     cd $HOME/Yiimpoolv1/yiimp_single/ubuntu/etc/update-motd.d
-    sudo rm -rf /etc/update-motd.d/
-    sudo mkdir /etc/update-motd.d/
+    sudo rm -f /etc/update-motd.d/00-header /etc/update-motd.d/10-sysinfo /etc/update-motd.d/90-footer
+    sudo mkdir -p /etc/update-motd.d/
     sudo cp -r {00-header,10-sysinfo,90-footer} /etc/update-motd.d/
     sudo chmod +x /etc/update-motd.d/*
     print_success "Ubuntu MOTD configuration completed"
@@ -26,8 +26,8 @@ if [[ $DISTRO = "16" || $DISTRO = "17" || $DISTRO = "18" || $DISTRO = "19" || $D
 elif [[ $DISTRO = "12" || $DISTRO = "11" ]]; then
     print_info "Setting up MOTD for Debian"
     cd $HOME/Yiimpoolv1/yiimp_single/debian/etc/update-motd.d
-    sudo rm -rf /etc/update-motd.d/
-    sudo mkdir /etc/update-motd.d/
+    sudo rm -f /etc/update-motd.d/00-header /etc/update-motd.d/10-sysinfo /etc/update-motd.d/90-footer
+    sudo mkdir -p /etc/update-motd.d/
     sudo cp -r {00-header,10-sysinfo,90-footer} /etc/update-motd.d/
     sudo chmod +x /etc/update-motd.d/*
     print_success "Debian MOTD configuration completed"

@@ -240,3 +240,6 @@ sudo cp -r coin_form.php /home/crypto-data/yiimp/site/web/yaamp/modules/admin
 print_success "Server cleanup and configuration completed successfully"
 
 cd $HOME/Yiimpoolv1/yiimp_single
+sudo chmod 755 $STORAGE_ROOT/yiimp/site/log
+sudo chmod 644 $STORAGE_ROOT/yiimp/site/log/debug.log
+sudo chown -R www-data:www-data $STORAGE_ROOT/yiimp/site/log
