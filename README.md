@@ -117,12 +117,16 @@ For assistance:
 ## Donation wallets if you want to support me Thank you
 
 Donations appreciated:
-- BTC: bc1qc4qqz8eu5j7u8pxfrfvv8nmcka7whhm225a3f9
-- BCH: qpse55j0kg0txz0zyx8nsrv3pvd039c09ypplsfn87
-- ETH: 0xdA929d4f03e1009Fc031210DDE03bC40ea66D044
-- LTC: MC9xjhE7kmeBFMs4UmfAQyWuP99M49sCQp
+
+- BTC: 3ELCjkScgaJbnqQiQvXb7Mwos1Y2x7hBFK
+
+- LTC: M8uerJZUgBn9KbTn8ng9MasM9nWFgsGftW
+
 - DOGE: DHNhm8FqNAQ1VTNwmCHAp3wfQ6PcfzN1nu
+
 - SOLANA: 4Akj4XQXEKX4iPEd9A4ogXEPNrAsLm4wdATePz1XnyCu
-- BEP-20: 0xdA929d4f03e1009Fc031210DDE03bC40ea66D044
-- KASPA: kaspa:qrhfn2tl3ppc9qx448pgp6avv88gcav3dntw4p7h6v0ht3eac7pl6lkcjcy7r
+
+- BEP20: 0xdA929d4f03e1009Fc031210DDE03bC40ea66D044
+
+- TON: UQBzBvFrVjfo444hGHY2HBPNzL8nEIEzuQBF99PFh1UvyH7w
 

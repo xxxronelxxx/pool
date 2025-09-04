@@ -107,6 +107,7 @@ SQL_FILES=(
     2025-02-06-add_usemweb.sql
     2025-02-13-add_xelisv2-pepew.sql
     2025-02-23-add_algo_kawpow.sql
+    2025-03-31-rename_table_exchange.sql
 )
 
 for file in "${SQL_FILES[@]}"; do
