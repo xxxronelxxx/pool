@@ -33,8 +33,18 @@ if [ -z "$DISTRIB_DESCRIPTION" ] && [ -x /usr/bin/lsb_release ]; then
         DISTRIB_DESCRIPTION=$(lsb_release -s -d)
 fi
 
-figlet -f slant -w 100 "YiimpooL" | lolcat -f
+figlet -f slant -w 100 "Yiimpool" | lolcat -f
 printf "\n"
 
-printf "Welcome to %s (%s).\n" "$DISTRIB_DESCRIPTION" "YiimPool Version"
+VERSION="$(grep -E '^VERSION=' /etc/yiimpoolversion.conf 2>/dev/null | cut -d= -f2 | tr -d '"' || echo "")"
+if [ -n "$VERSION" ]; then
+    SHOWVER="${VERSION}"
+    case "$SHOWVER" in
+        v*) ;; # already has leading v
+        *) SHOWVER="v${SHOWVER}" ;;
+    esac
+    printf "Welcome to %s (Yiimpool %s).\n" "$DISTRIB_DESCRIPTION" "$SHOWVER"
+else
+    printf "Welcome to %s (Yiimpool).\n" "$DISTRIB_DESCRIPTION"
+fi
 printf "\n"

@@ -66,7 +66,7 @@ function install_end_message() {
 
   echo -e "${BOLD_CYAN}Access URLs:${NC}"
   echo "  - Pool:        ${proto}://${host}"
-  echo "  - Admin Panel: ${proto}://${host}/site/AdminPanel"
+  echo "  - Admin:       ${proto}://${host}/admin/login"
   echo "  - phpMyAdmin:  ${proto}://${host}/phpmyadmin"
   echo
 

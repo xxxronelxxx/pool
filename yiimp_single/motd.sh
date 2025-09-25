@@ -21,6 +21,16 @@ if [[ $DISTRO = "16" || $DISTRO = "17" || $DISTRO = "18" || $DISTRO = "19" || $D
     sudo mkdir -p /etc/update-motd.d/
     sudo cp -r {00-header,10-sysinfo,90-footer} /etc/update-motd.d/
     sudo chmod +x /etc/update-motd.d/*
+    # Disable all other default MOTD snippets so only our MOTD is shown
+    OUR_SNIPPETS="00-header 10-sysinfo 90-footer"
+    sudo mkdir -p /etc/update-motd.d.disabled
+    for f in /etc/update-motd.d/*; do
+        base=$(basename "$f")
+        case " $OUR_SNIPPETS " in
+            *" $base "*) ;; # keep ours
+            *) sudo mv -f "$f" "/etc/update-motd.d.disabled/$base" 2>/dev/null || true ;;
+        esac
+    done
     print_success "Ubuntu MOTD configuration completed"
 
 elif [[ $DISTRO = "12" || $DISTRO = "11" ]]; then
@@ -30,6 +40,15 @@ elif [[ $DISTRO = "12" || $DISTRO = "11" ]]; then
     sudo mkdir -p /etc/update-motd.d/
     sudo cp -r {00-header,10-sysinfo,90-footer} /etc/update-motd.d/
     sudo chmod +x /etc/update-motd.d/*
+    OUR_SNIPPETS="00-header 10-sysinfo 90-footer"
+    sudo mkdir -p /etc/update-motd.d.disabled
+    for f in /etc/update-motd.d/*; do
+        base=$(basename "$f")
+        case " $OUR_SNIPPETS " in
+            *" $base "*) ;; # keep ours
+            *) sudo mv -f "$f" "/etc/update-motd.d.disabled/$base" 2>/dev/null || true ;;
+        esac
+    done
     print_success "Debian MOTD configuration completed"
 fi
 
