@@ -16,10 +16,17 @@ This installer provides an automated way to set up a full Yiimp mining pool on U
 - Support for both domain and subdomain setups
 - Enhanced security features and server hardening
 - Automatic stratum setup with autoexchange capability
-- Web-based admin interface
+- Web-based admin interface (default: /admin/login)
 - Built-in upgrade tools
 - Comprehensive screen management for monitoring
 - PhpMyAdmin for database management
+
+### What’s new
+- Hardened installer (strict mode, unified error handling, resilient preflight)
+- Correct MariaDB repository configuration
+- Admin URL standardized to `/admin/login`
+- Branded MOTD with version; default Ubuntu MOTD snippets disabled
+- Post-install verification script
 
 ## System Requirements
 
@@ -62,7 +69,15 @@ The installer will guide you through:
 ## Post-Installation Steps
 1. **Required**: Reboot your server after installation
 2. Wait 1-2 minutes after first login for services to initialize
-3. Run `motd` to view pool status
+3. Run `motd` to view pool status (custom Yiimpool MOTD)
+4. Verify installation health:
+```bash
+bash install/post_install_check.sh
+```
+5. Open the site (replace with your domain):
+   - Pool: `http(s)://your-domain/`
+   - Admin: `http(s)://your-domain/admin/login`
+   - phpMyAdmin: `http(s)://your-domain/phpmyadmin`
 
 ## Directory Structure
 
@@ -93,6 +108,8 @@ ctrl+a+d             # Detach from current screen
 screens start|stop|restart [service]   # Control specific services
 yiimp                                  # View pool overview
 motd                                   # Check system status
+# Post-install verification
+bash install/post_install_check.sh
 ```
 
 ## DaemonBuilder
