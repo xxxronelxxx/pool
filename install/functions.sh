@@ -47,39 +47,40 @@ function install_end_message() {
   BOLD_CYAN='\033[1;36m'
   NC='\033[0m'  # Reset color
 
-  echo "Yiimp Installation Complete!"
+  echo "YiiMP installation complete!"
   echo
 
   figlet -f slant -w 100 "Success"
 
-  echo -e "${BOLD_GREEN}**Yiimp Version:**${NC} $VERSION"
+  echo -e "${GREEN}Yiimp Version:${NC} $VERSION"
   echo
 
-  echo -e "${BOLD_CYAN}**Database Information:**${NC}"
-  echo "  - Login credentials are saved securely in ~/.my.cnf"
+  echo -e "${BOLD_CYAN}Database Information:${NC}"
+  echo "  - MariaDB client credentials saved in ~/.my.cnf"
   echo
 
-  echo -e "${BOLD_CYAN}**Pool and Admin Panel Access:**${NC}"
-  echo "  - Pool: http://$server_name"
+  echo -e "${BOLD_CYAN}Access URLs:${NC}"
+  echo "  - Pool:        http://$server_name"
   echo "  - Admin Panel: http://$server_name/site/AdminPanel"
-  echo "  - phpMyAdmin: http://$server_name/phpmyadmin"
+  echo "  - phpMyAdmin:  http://$server_name/phpmyadmin"
   echo
 
-  echo -e "${BOLD_CYAN}**Customization:**${NC}"
-  echo "  - To modify the admin panel URL (currently set to '$admin_panel'):"
+  echo -e "${BOLD_CYAN}Customization:${NC}"
+  echo "  - To change the admin panel URL (currently '$admin_panel'):"
   echo "    - Edit ${BOLD_YELLOW}/var/web/yaamp/modules/site/SiteController.php${NC}"
   echo "    - Update line 11 with your desired URL"
   echo
 
-  echo -e "${BOLD_CYAN}**Security Reminders:**${NC}"
+  echo -e "${BOLD_CYAN}Security Reminders:${NC}"
   echo "  - Update public keys and wallet addresses in ${BOLD_YELLOW}/var/web/serverconfig.php${NC}"
   echo "  - Replace placeholder private keys in ${BOLD_YELLOW}/etc/yiimp/keys.php${NC} with your actual keys"
   echo "    - ${RED}Never share your private keys with anyone!${NC}"
   echo
 
-  echo -e "${BOLD_YELLOW}**Next Steps:**${NC}"
-  echo "  1. Reboot your server to finalize the installation process. ( ${RED}reboot${NC} )"
-  echo "  2. Secure your installation by following best practices for server security."
+  echo -e "${BOLD_YELLOW}Next Steps:${NC}"
+  echo "  1. Reboot your server to finalize the installation: ${RED}reboot${NC}"
+  echo "  2. After reboot, run: ${BOLD_YELLOW}screen -r debug${NC} to view startup logs"
+  echo "  3. Secure your installation following server hardening best practices"
   echo
 
   echo "Thank you for using the Yiimp Installer Script Fork by Afiniel!"
@@ -229,23 +230,17 @@ function hide_output {
 function last_words {
 	echo "<-------------------------------------|---------------------------------------->"
 	echo
-	echo -e "$YELLOW Thank you for using the Yiimpool Installer $GREEN $VERSION             ${NC}"
+	echo -e "$YELLOW Thank you for using the Yiimpool Installer $GREEN $VERSION ${NC}"
 	echo
-	echo -e "$YELLOW To run this installer anytime simply type: $GREEN yiimpool            ${NC}"
-	echo -e "$YELLOW Donations for continued support of this script are welcomed at:       ${NC}"
-	echo "<-------------------------------------|--------------------------------------->"
-	echo -e "$YELLOW                     Donate Wallets:                                   ${NC}"
-	echo "<-------------------------------------|--------------------------------------->"
-	echo -e "$YELLOW Thank you for using Yiimpool Installer $VERSION fork by Afiniel!      ${NC}"
+	echo -e "$YELLOW To open the installer menu anytime run: $GREEN yiimpool ${NC}"
 	echo
-	echo -e "$YELLOW =>  To run this installer anytime simply type:$GREEN yiimpool         ${NC}"
-	echo -e "$YELLOW =>  Do you want to support me? Feel free to use wallets below:        ${NC}"
+	echo -e "$YELLOW If you'd like to support development, donations are appreciated:${NC}"
 	echo "<-------------------------------------|--------------------------------------->"
-	echo -e "$YELLOW =>  BTC:$GREEN $BTCDON                                   		 ${NC}"
-	echo -e "$YELLOW =>  BCH:$GREEN $BCHDON                                   		 ${NC}"
-	echo -e "$YELLOW =>  ETH:$GREEN $ETHDON                                   		 ${NC}"
-	echo -e "$YELLOW =>  DOGE:$GREEN $DOGEDON                                 		 ${NC}"
-	echo -e "$YELLOW =>  LTC:$GREEN $LTCDON                                   		 ${NC}"
+	echo -e "$YELLOW BTC :$GREEN $BTCDON ${NC}"
+	echo -e "$YELLOW LTC :$GREEN $LTCDON ${NC}"
+	echo -e "$YELLOW DOGE:$GREEN $DOGEDON ${NC}"
+	echo -e "$YELLOW BCH :$GREEN $BCHDON ${NC}"
+	echo -e "$YELLOW ETH :$GREEN $ETHDON ${NC}"
 	echo "<-------------------------------------|-------------------------------------->"
 	exit 0
 }
