@@ -128,7 +128,7 @@ if [[ ("$UsingSSH" == "yes") ]]; then
     sudo cp -r ~/Yiimpoolv1 /home/${yiimpadmin}/
     cd ~
     sudo setfacl -m u:${yiimpadmin}:rwx /home/${yiimpadmin}/Yiimpoolv1
-    sudo rm -r $HOME/yiimpool
+    sudo rm -rf "$HOME/Yiimpoolv1"
     clear
     term_art
     echo
@@ -244,7 +244,7 @@ case $response in
     sudo cp -r ~/Yiimpoolv1 /home/${yiimpadmin}/
     cd ~
     sudo setfacl -m u:${yiimpadmin}:rwx /home/${yiimpadmin}/Yiimpoolv1
-    sudo rm -r $HOME/Yiimpoolv1
+    sudo rm -rf "$HOME/Yiimpoolv1"
     clear
     term_art
     echo
