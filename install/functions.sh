@@ -59,10 +59,15 @@ function install_end_message() {
   echo "  - MariaDB client credentials saved in ~/.my.cnf"
   echo
 
+  # Determine protocol and hostname for links
+  local proto="http"
+  if [[ "${InstallSSL,,}" == "yes" ]]; then proto="https"; fi
+  local host="${DomainName:-${PRIMARY_HOSTNAME:-$server_name}}"
+
   echo -e "${BOLD_CYAN}Access URLs:${NC}"
-  echo "  - Pool:        http://$server_name"
-  echo "  - Admin Panel: http://$server_name/site/AdminPanel"
-  echo "  - phpMyAdmin:  http://$server_name/phpmyadmin"
+  echo "  - Pool:        ${proto}://${host}"
+  echo "  - Admin Panel: ${proto}://${host}/site/AdminPanel"
+  echo "  - phpMyAdmin:  ${proto}://${host}/phpmyadmin"
   echo
 
   echo -e "${BOLD_CYAN}Customization:${NC}"
