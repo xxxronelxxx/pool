@@ -47,10 +47,21 @@ fi
 # Recall the last settings used if we're running this a second time.
 if [ -f /etc/yiimpool.conf ]; then
     echo -e "${YELLOW}Loading previous configuration settings...${NC}\n"
-    # Load the old .conf file to get existing configuration options loaded
-    # into variables with a DEFAULT_ prefix.
-    cat /etc/yiimpool.conf | sed s/^/DEFAULT_/ >/tmp/yiimpool.prev.conf
+    # Load existing config options into variables with DEFAULT_ prefix,
+    # only for valid VAR=... lines (skip blanks/comments), and normalize spacing
+    awk -F= '
+      /^[[:space:]]*[A-Za-z_][A-Za-z0-9_]*[[:space:]]*=/ {
+        name=$1;
+        sub(/^[[:space:]]*/, "", name);
+        sub(/[[:space:]]*$/, "", name);
+        # get value including any = in it
+        val=substr($0, index($0, "=")+1);
+        print "DEFAULT_" name "=" val;
+      }
+    ' /etc/yiimpool.conf > /tmp/yiimpool.prev.conf
+    set +u
     source /tmp/yiimpool.prev.conf
+    set -u
     echo -e "${GREEN}Loaded previous configuration settings.${NC}\n"
     echo -e "${YELLOW}Loading donation settings and version information...${NC}\n"
     if [ -f /etc/yiimpooldonate.conf ]; then

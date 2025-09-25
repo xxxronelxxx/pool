@@ -10,7 +10,24 @@ source /etc/yiimpooldonate.conf
 source /etc/yiimpoolversion.conf
 source /etc/functions.sh
 source /etc/yiimpool.conf
-source $STORAGE_ROOT/yiimp/.yiimp.conf
+
+# Load yiimp instance config if readable; otherwise continue (questions.sh will create it)
+if [ -r "$STORAGE_ROOT/yiimp/.yiimp.conf" ]; then
+    source $STORAGE_ROOT/yiimp/.yiimp.conf
+else
+    
+    if [ -f "$STORAGE_ROOT/yiimp/.yiimp.conf" ]; then
+        sudo chgrp "$(id -gn)" "$STORAGE_ROOT/yiimp/.yiimp.conf" 2>/dev/null || true
+        sudo chmod 640 "$STORAGE_ROOT/yiimp/.yiimp.conf" 2>/dev/null || true
+        if [ -r "$STORAGE_ROOT/yiimp/.yiimp.conf" ]; then
+            source $STORAGE_ROOT/yiimp/.yiimp.conf
+        else
+            print_warning "Unable to read $STORAGE_ROOT/yiimp/.yiimp.conf; proceeding to questions"
+        fi
+    else
+        print_warning "Config $STORAGE_ROOT/yiimp/.yiimp.conf not found; proceeding to questions"
+    fi
+fi
 
 # Ensure Python reads/writes files in UTF-8. If the machine
 # triggers some other locale in Python, like ASCII encoding,
