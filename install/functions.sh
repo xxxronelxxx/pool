@@ -564,27 +564,44 @@ BOLD='\033[1m'
 DIM='\033[2m'
 
 print_header() {
-    echo -e "\n${BLUE}${BOLD}=== $1 ===${NC}\n"
+	local msg="${1-}"
+	echo -e "\n${BLUE}${BOLD}=== ${msg} ===${NC}\n"
 }
 
 print_status() {
-    echo -e "${DIM}[${NC}${GREEN}●${NC}${DIM}]${NC} $1"
+	local msg="${1-}"
+	echo -e "${DIM}[${NC}${GREEN}●${NC}${DIM}]${NC} ${msg}"
 }
 
 print_error() {
-    echo -e "${RED}${BOLD}ERROR:${NC} $1"
+	# Be tolerant of zero arguments under set -u (ERR traps may invoke without a message)
+	local msg="${1-}"
+	if [ -z "$msg" ]; then
+		read line file <<<$(caller 0 2>/dev/null || true)
+		if [ -n "${line-}" ] && [ -n "${file-}" ]; then
+			echo "An error occurred in line $line of file $file:" >&2
+			sed "${line}q;d" "$file" >&2 || true
+		else
+			echo -e "${RED}${BOLD}ERROR:${NC} (no message)" >&2
+		fi
+	else
+		echo -e "${RED}${BOLD}ERROR:${NC} $msg"
+	fi
 }
 
 print_warning() {
-    echo -e "${YELLOW}${BOLD}WARNING:${NC} $1"
+	local msg="${1-}"
+	echo -e "${YELLOW}${BOLD}WARNING:${NC} ${msg}"
 }
 
 print_success() {
-    echo -e "${GREEN}${BOLD}SUCCESS:${NC} $1"
+	local msg="${1-}"
+	echo -e "${GREEN}${BOLD}SUCCESS:${NC} ${msg}"
 }
 
 print_info() {
-    echo -e "${BLUE}${BOLD}INFO:${NC} $1"
+	local msg="${1-}"
+	echo -e "${BLUE}${BOLD}INFO:${NC} ${msg}"
 }
 
 print_divider() {

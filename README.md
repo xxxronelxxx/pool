@@ -122,7 +122,7 @@ Donations appreciated:
 
 - LTC: M8uerJZUgBn9KbTn8ng9MasM9nWFgsGftW
 
-- DOGE: DHNhm8FqNAQ1VTNwmCHAp3wfQ6PcfzN1nu
+- DOGE: DKBddo8Qoh19PCFtopBkwTpcEU1aAqdM7S
 
 - SOLANA: 4Akj4XQXEKX4iPEd9A4ogXEPNrAsLm4wdATePz1XnyCu
 

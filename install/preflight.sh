@@ -6,10 +6,21 @@
 # Updated by Afiniel for yiimpool use...                                         #
 ##################################################################################
 
-# Source functions and definitions
-source /etc/functions.sh
+# Source functions and definitions (prefer local copy to avoid stale /etc version)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+set +u
+if [ -f "$SCRIPT_DIR/functions.sh" ]; then
+    source "$SCRIPT_DIR/functions.sh"
+else
+    source /etc/functions.sh
+fi
+set -u
 
-echo -e "${YELLOW}Running pre-flight checks...${NC}\n"
+# Enable strict mode and add informative ERR trap for debugging
+set -euo pipefail
+trap 'status=$?; cmd=$BASH_COMMAND; print_error "status=$status cmd=$cmd"' ERR
+
+print_header "Pre-flight checks"
 
 # Identify OS
 if [[ -f /etc/lsb-release ]]; then
@@ -47,15 +58,21 @@ fi
 # Set permissions
 sudo chmod g-w /etc /etc/default /usr
 
-# Check if swap is needed and allocate if necessary
+# Check if swap is needed and allocate if necessary (robust under strict mode)
 SWAP_MOUNTED=$(cat /proc/swaps | tail -n+2)
-SWAP_IN_FSTAB=$(grep "swap" /etc/fstab)
-ROOT_IS_BTRFS=$(grep "\/ .*btrfs" /proc/mounts)
+SWAP_IN_FSTAB=""
+if grep -q "swap" /etc/fstab 2>/dev/null; then
+    SWAP_IN_FSTAB="yes"
+fi
+ROOT_IS_BTRFS=""
+if grep -q "\/ .*btrfs" /proc/mounts 2>/dev/null; then
+    ROOT_IS_BTRFS="yes"
+fi
 TOTAL_PHYSICAL_MEM=$(head -n 1 /proc/meminfo | awk '{print $2}')
 AVAILABLE_DISK_SPACE=$(df / --output=avail | tail -n 1)
 
 if [ -z "$SWAP_MOUNTED" ] && [ -z "$SWAP_IN_FSTAB" ] && [ ! -e /swapfile ] && [ -z "$ROOT_IS_BTRFS" ] && [ $TOTAL_PHYSICAL_MEM -lt 1536000 ] && [ $AVAILABLE_DISK_SPACE -gt 5242880 ]; then
-    echo -e "${YELLOW}Adding a swap file to the system...${NC}"
+    print_status "Adding a swap file to the system"
     
     # Allocate and activate the swap file
     sudo fallocate -l 3G /swapfile
@@ -65,16 +82,16 @@ if [ -z "$SWAP_MOUNTED" ] && [ -z "$SWAP_IN_FSTAB" ] && [ ! -e /swapfile ] && [ 
         sudo swapon /swapfile
         echo "vm.swappiness=10" | sudo tee -a /etc/sysctl.conf
         echo "/swapfile  none swap sw 0  0" | sudo tee -a /etc/fstab
-        echo -e "${GREEN}Swap file added and activated.${NC}\n"
+        print_success "Swap file added and activated"
     else
-        echo -e "${RED}ERROR: Swap allocation failed.${NC}\n"
+        print_error "Swap allocation failed"
     fi
 fi
 
 # Check architecture
 ARCHITECTURE=$(uname -m)
 if [ "$ARCHITECTURE" != "x86_64" ]; then
-    if [ -z "$ARM" ]; then
+    if [ -z "${ARM:-}" ]; then
         echo -e "${RED}Yiimpool Installer only supports x86_64 architecture and will not work on any other architecture, like ARM or 32-bit OS.${NC}"
         echo -e "${RED}Your architecture is $ARCHITECTURE.${NC}\n"
         exit 1
@@ -82,11 +99,11 @@ if [ "$ARCHITECTURE" != "x86_64" ]; then
 fi
 
 # Set STORAGE_USER and STORAGE_ROOT to default values if not already set
-if [ -z "$STORAGE_USER" ]; then
+if [ -z "${STORAGE_USER:-}" ]; then
     STORAGE_USER=${DEFAULT_STORAGE_USER:-"crypto-data"}
 fi
-if [ -z "$STORAGE_ROOT" ]; then
+if [ -z "${STORAGE_ROOT:-}" ]; then
     STORAGE_ROOT=${DEFAULT_STORAGE_ROOT:-"/home/$STORAGE_USER"}
 fi
 
-echo -e "${GREEN}Pre-flight checks completed successfully.${NC}\n"
+print_success "Pre-flight checks completed"
