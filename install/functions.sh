@@ -137,9 +137,9 @@ function term_art() {
   echo
   echo -e "${BOLD_CYAN}This script will install:${NC}"
   echo
-  echo -e "  ${GREEN}•${NC} MySQL for database management"
-  echo -e "  ${GREEN}•${NC} Nginx web server with PHP for Yiimp operation"
-  echo -e "  ${GREEN}•${NC} MariaDB as the database backend"
+  echo -e "  ${GREEN}•${NC} MariaDB for database management"
+  echo -e "  ${GREEN}•${NC} Nginx web server"
+  echo -e "  ${GREEN}•${NC} PHP (and required extensions) for Yiimp"
   echo
   echo -e "${BOLD_CYAN}Version:${NC} ${GREEN}${VERSION:-"unknown"}${NC}"
   echo
