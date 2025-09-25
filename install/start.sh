@@ -15,6 +15,15 @@ GREEN=${GREEN:-"\033[0;32m"}
 RED=${RED:-"\033[0;31m"}
 NC=${NC:-"\033[0m"} # No Color
 
+# Enable strict mode and trap errors for safer execution
+set -euo pipefail
+print_error() {
+    read line file <<<$(caller)
+    echo "An error occurred in line $line of file $file:" >&2
+    sed "${line}q;d" "$file" >&2
+}
+trap print_error ERR
+
 # Recall the last settings used if we're running this a second time.
 if [ -f /etc/yiimpool.conf ]; then
     echo -e "${YELLOW}Loading previous configuration settings...${NC}\n"
